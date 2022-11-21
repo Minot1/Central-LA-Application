@@ -7,6 +7,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
+        <Route path="/instructor" element={<div></div>}></Route>
+        <Route path="/student" element={<div></div>}></Route>
       </Routes>
     </BrowserRouter>
   );
