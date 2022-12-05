@@ -51,4 +51,20 @@ class PostController extends Controller
     {
         return Post::where('title', 'Like', "%$key%")->get();
     }
+
+    function updatePost(Request $req, $id)
+    {
+        $post= Post::find($id);
+        $post->username=$req->input('username');
+        $post->faculty=$req->input('faculty');
+        $post->class=$req->input('class');
+        $post->deadline=$req->input('deadline');
+        $post->term=$req->input('term');
+        $post->title=$req->input('title');
+        $post->description=$req->input('description');
+        $post->questions=$req->input('questions');
+        $post->mingrade=$req->input('mingrade');
+        $post->save();
+        return $post;
+    }
 }

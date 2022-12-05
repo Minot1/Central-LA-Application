@@ -26,3 +26,4 @@ Route::get('listPost', [PostController::class, 'listPost']);
 Route::delete('deletePost/{id}', [PostController::class, 'deletePost']);
 Route::get('post/{id}', [PostController::class, 'getPost']);
 Route::get('search/{key}',[PostController::class, 'search']);
+Route::put('updatePost/{id}',[PostController::class, 'updatePost']);
