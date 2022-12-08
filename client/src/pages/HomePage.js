@@ -2,6 +2,8 @@ import {
   Box,
   Button,
   Grid,
+  Tab,
+  Tabs,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
@@ -13,12 +15,10 @@ import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
 
 function HomePage() {
-  const [alignment, setAlignment] = React.useState("all-ann");
+  const [value, setValue] = React.useState(0);
 
-  const handleAnnClick = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      setAlignment(newAlignment);
-    }
+  const handleAnnTableChange = (event, newValue) => {
+      setValue(newValue);
   };
 
   return (
@@ -26,19 +26,14 @@ function HomePage() {
       <Sidebar></Sidebar>
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
-        <Grid container direction="column" spacing={3}>
+        <Grid container direction="column" spacing={2}>
           <Grid item container direction="row" justifyContent="space-between">
             <Grid item></Grid>
             <Grid item>
-              <ToggleButtonGroup
-                exclusive
-                value={alignment}
-                onChange={handleAnnClick}
-                color="primary"
-              >
-                <ToggleButton value="all-ann">All Announcements</ToggleButton>
-                <ToggleButton value="my-ann">My Announcements</ToggleButton>
-              </ToggleButtonGroup>
+              <Tabs onChange={handleAnnTableChange} value={value}>
+                <Tab label="All Announcements"/>
+                <Tab label="My Announcements"/>
+              </Tabs>
             </Grid>
             <Grid item>
               <Button
