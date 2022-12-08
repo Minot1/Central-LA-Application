@@ -29,7 +29,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
 
-const drawerWidth = 240;
+const drawerWidth = 210;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
