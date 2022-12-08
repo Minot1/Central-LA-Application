@@ -13,7 +13,7 @@ function MockCAS() {
           spacing={5}
         >
           <Grid item>
-            <Button variant="contained" href="/instructor">Instructor Login</Button>
+            <Button variant="contained" href="/home">Instructor Login</Button>
           </Grid>
           <Grid item>
             <Button variant="contained" href="/student">Student Login</Button>

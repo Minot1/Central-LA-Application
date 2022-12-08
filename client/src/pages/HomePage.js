@@ -1,11 +1,26 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from "@mui/material";
 import React from "react";
 import AnnouncementTable from "../components/AnnouncementTable";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 
 function HomePage() {
+  const [alignment, setAlignment] = React.useState("all-ann");
+
+  const handleAnnClick = (event, newAlignment) => {
+    if (newAlignment !== null) {
+      setAlignment(newAlignment);
+    }
+  };
+
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar></Sidebar>
@@ -15,10 +30,22 @@ function HomePage() {
           <Grid item container direction="row" justifyContent="space-between">
             <Grid item></Grid>
             <Grid item>
-            <Typography>All Announcements - My Announcements</Typography>
+              <ToggleButtonGroup
+                exclusive
+                value={alignment}
+                onChange={handleAnnClick}
+                color="primary"
+              >
+                <ToggleButton value="all-ann">All Announcements</ToggleButton>
+                <ToggleButton value="my-ann">My Announcements</ToggleButton>
+              </ToggleButtonGroup>
             </Grid>
             <Grid item>
-              <Button variant="contained" startIcon={<AddIcon />} href="/create-announcement">
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                href="/create-announcement"
+              >
                 Add
               </Button>
             </Grid>
