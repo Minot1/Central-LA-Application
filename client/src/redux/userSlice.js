@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     username: "",
+    isInstructor: true,
 };
 
 const userSlice = createSlice({

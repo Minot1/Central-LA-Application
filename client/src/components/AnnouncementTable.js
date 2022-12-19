@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
 
 function AnnouncementTable(props) {
     // const rows = [
@@ -55,8 +55,8 @@ function AnnouncementTable(props) {
                         <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.mingrade}</TableCell>
                         <TableCell sx = {{borderBottom:"none"}} align="left">{row.description}</TableCell>
                         <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}} align="center">
-                            <Button sx = {{bgcolor: "#3786FB"}} variant="contained" startIcon={<VisibilityIcon />} href="#apply">
-                                INSPECT
+                            <Button variant="contained" startIcon={<EditIcon />}>
+                                Edit
                             </Button>
                         </TableCell>
                         </TableRow>
