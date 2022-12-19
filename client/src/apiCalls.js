@@ -11,8 +11,8 @@ const apiEndpoint = "http://localhost:8000/api"
 async function getAnnouncement(id) {
     try {
         const results = await axios.get(apiEndpoint + "/post/" + id);
-        console.log(results.data.questions);
-        return results.data;
+        console.log(results.data[0].questions);
+        return results.data[0];
     } catch (error) {
         
     }
