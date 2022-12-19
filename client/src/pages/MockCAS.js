@@ -1,14 +1,9 @@
 import React from "react";
 import { Button, Grid } from "@mui/material";
-import axios from 'axios'
 
 function MockCAS() {
 
   const casStr = "https://login.sabanciuniv.edu/cas/login?service=" + encodeURIComponent("")
-
-  function handleClick() {
-    
-  }
 
   return (
     <div>
@@ -24,7 +19,7 @@ function MockCAS() {
             <Button variant="contained" href="/home">Instructor Login</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" href="">Student Login</Button>
+            <Button variant="contained" href="#">Student Login</Button>
           </Grid>
         </Grid>
       </header>

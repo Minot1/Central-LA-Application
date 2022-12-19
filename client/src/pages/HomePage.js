@@ -8,14 +8,21 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import AnnouncementTable from "../components/AnnouncementTable";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
+import { getAllAnnouncements } from "../apiCalls";
 
 function HomePage() {
   const [value, setValue] = React.useState(0);
+  const [rows, setRows] = React.useState([]);
+
+  useEffect(() => {
+    getAllAnnouncements().then((results) => setRows(results));
+    console.log(rows);
+  }, []);
 
   const handleAnnTableChange = (event, newValue) => {
       setValue(newValue);
@@ -46,7 +53,7 @@ function HomePage() {
             </Grid>
           </Grid>
           <Grid item>
-            <AnnouncementTable></AnnouncementTable>
+            <AnnouncementTable rows={rows}></AnnouncementTable>
           </Grid>
         </Grid>
       </Box>
