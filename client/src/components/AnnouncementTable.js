@@ -26,7 +26,7 @@ function AnnouncementTable(props) {
     useEffect(() => {
         setRows(props.rows);
         console.log(rows)
-      });
+      }, [props.rows]);
       
     return(
         <TableContainer component={Paper}>

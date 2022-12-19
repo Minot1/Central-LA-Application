@@ -8,6 +8,16 @@ let casClient = new CasClient(casEndpoint, casOptions);
 
 const apiEndpoint = "http://localhost:8000/api"
 
+async function getAnnouncement(id) {
+    try {
+        const results = await axios.get(apiEndpoint + "/post/" + id);
+        console.log(results.data.questions);
+        return results.data;
+    } catch (error) {
+        
+    }
+}
+
 async function getAllAnnouncements() {
     try {
         const results = await axios.get(apiEndpoint + "/listPost");
@@ -33,4 +43,4 @@ function addAnnouncement(faculty, courseCode, term, minGrade, questions) {
     });
 }
 
-export { getAllAnnouncements, addAnnouncement };
+export { getAllAnnouncements, addAnnouncement, getAnnouncement };

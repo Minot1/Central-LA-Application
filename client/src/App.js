@@ -13,7 +13,7 @@ function App() {
         {/* <Route path="/instructor" element={<div><Sidebar></Sidebar></div>}></Route> */}
         <Route path="/home" element={<HomePage></HomePage>}></Route>
         <Route path="/create-announcement" element={<CreateAnnouncement></CreateAnnouncement>}></Route>
-        <Route path="/apply" element={<ApplyPage></ApplyPage>}></Route>
+        <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
       </Routes>
     </BrowserRouter>
   );

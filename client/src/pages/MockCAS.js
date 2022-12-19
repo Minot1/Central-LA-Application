@@ -19,7 +19,7 @@ function MockCAS() {
             <Button variant="contained" href="/home">Instructor Login</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" href="/apply">Student Login</Button>
+            <Button variant="contained" href="/apply/2">Student Login</Button>
           </Grid>
         </Grid>
       </header>
