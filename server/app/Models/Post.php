@@ -11,7 +11,7 @@ class Post extends Model
     protected $fillable = [
         "username",
         "faculty",
-        "class",
+        "courseCode",
         "deadline",
         "term",
         "title",

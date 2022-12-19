@@ -13,7 +13,7 @@ class ApplicationController extends Controller
         $application->username=$req->input('username');
         $application->name=$req->input('name');
         $application->student_id=$req->input('student_id');
-        $application->class=$req->input('class');
+        $application->grade=$req->input('grade');
         $application->faculty=$req->input('faculty');
         $application->transcript=$req->input('transcript');
         $application->working_hours=$req->input('working_hours');
@@ -30,7 +30,7 @@ class ApplicationController extends Controller
         $application->username=$req->input('username');
         $application->name=$req->input('name');
         $application->student_id=$req->input('student_id');
-        $application->class=$req->input('class');
+        $application->grade=$req->input('grade');
         $application->faculty=$req->input('faculty');
         $application->transcript=$req->input('transcript');
         $application->working_hours=$req->input('working_hours');
@@ -43,17 +43,32 @@ class ApplicationController extends Controller
 
     function listApplication()
     {
-        return Application::all();
+        $result = Application::all();
+        foreach($result as $row)
+        {
+            $row['answers']= json_decode($row['answers'],TRUE);
+        }
+        return $result;
     }
 
     function listStudentApplication($username)
     {
-        return Application::where('username', $username)->get();;
+        $result = Application::where('username', $username)->get();
+        foreach($result as $row)
+        {
+            $row['answers']= json_decode($row['answers'],TRUE);
+        }
+        return $result;
     }
 
     function listPostApplication($post_id)
     {
-        return Application::where('post_id', $post_id)->get();;
+        $result = Application::where('post_id', $post_id)->get();
+        foreach($result as $row)
+        {
+            $row['answers']= json_decode($row['answers'],TRUE);
+        }
+        return $result;
     }
 
     function deleteApplication($id)
@@ -71,6 +86,11 @@ class ApplicationController extends Controller
 
     function getApplication($id)
     {
-        return Application::find($id);
+        $result = Application::where('id', $id) ->get();
+        foreach($result as $row)
+        {
+            $row['answers']= json_decode($row['answers'],TRUE);
+        }
+        return $result;
     }
 }

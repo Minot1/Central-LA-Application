@@ -13,7 +13,7 @@ class PostController extends Controller
         $post= new Post;
         $post->username=$req->input('username');
         $post->faculty=$req->input('faculty');
-        $post->class=$req->input('class');
+        $post->courseCode=$req->input('courseCode');
         $post->deadline=$req->input('deadline');
         $post->term=$req->input('term');
         $post->title=$req->input('title');
@@ -26,7 +26,12 @@ class PostController extends Controller
 
     function listPost()
     {
-        return Post::all();
+        $result = Post::all();
+        foreach($result as $row)
+        {
+            $row['questions']= json_decode($row['questions'],TRUE);
+        }
+        return $result;
     }
 
     function deletePost($id)
@@ -44,12 +49,22 @@ class PostController extends Controller
 
     function getPost($id)
     {
-        return Post::find($id);
+        $result = Post::where('id', $id) ->get();
+        foreach($result as $row)
+        {
+            $row['questions']= json_decode($row['questions'],TRUE);
+        }
+        return $result;
     }
 
     function search($key)
     {
-        return Post::where('title', 'Like', "%$key%")->get();
+        $result = Post::where('title', 'Like', "%$key%")->get();
+        foreach($result as $row)
+        {
+            $row['questions']= json_decode($row['questions'],TRUE);
+        }
+        return $result;
     }
 
     function updatePost(Request $req, $id)
@@ -57,7 +72,7 @@ class PostController extends Controller
         $post= Post::find($id);
         $post->username=$req->input('username');
         $post->faculty=$req->input('faculty');
-        $post->class=$req->input('class');
+        $post->courseCode=$req->input('courseCode');
         $post->deadline=$req->input('deadline');
         $post->term=$req->input('term');
         $post->title=$req->input('title');
