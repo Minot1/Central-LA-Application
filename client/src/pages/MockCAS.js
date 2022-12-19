@@ -2,6 +2,9 @@ import React from "react";
 import { Button, Grid } from "@mui/material";
 
 function MockCAS() {
+
+  const casStr = "https://login.sabanciuniv.edu/cas/login?service=" + encodeURIComponent("")
+
   return (
     <div>
       <header className="App-header">
@@ -16,7 +19,7 @@ function MockCAS() {
             <Button variant="contained" href="/home">Instructor Login</Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" href="/student">Student Login</Button>
+            <Button variant="contained" href="/apply/2">Student Login</Button>
           </Grid>
         </Grid>
       </header>
