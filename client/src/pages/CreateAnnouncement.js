@@ -38,7 +38,6 @@ function CreateAnnouncement() {
       <Sidebar></Sidebar>
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
-        <Button variant="contained" href="/home">Go Back</Button>
         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 4, mt: 2 }}>
           <Typography variant='h3' sx={{ fontWeight: 'bold' }}>Create Announcement</Typography>
         </Grid>
@@ -46,7 +45,7 @@ function CreateAnnouncement() {
           <Grid item xs={6}>
             <Typography variant='h4' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Course Code for LAship:</Typography>
+              <Typography >Course Code:</Typography>
               <TextField id="outlined-required" label="Enter course code" variant="outlined" size="small" sx={{ m: 2 }} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
@@ -85,14 +84,14 @@ function CreateAnnouncement() {
                 ))}
               </TextField>
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Job Details:</Typography>
+            <Grid container direction="row" justifyContent="start" alignItems="flex-start">
+              <Typography paddingTop={3}>Job Details:</Typography>
               <TextField
                 placeholder="Enter Job Details..."
                 multiline
                 size="small"
-                maxRows={4}
-                sx={{ m: 2, width: 300 }}
+                rows={5}
+                sx={{ m: 2, width: 400 }}
               />
             </Grid>
           </Grid>
@@ -145,7 +144,7 @@ function CreateAnnouncement() {
         </Grid>
         <Grid container spacing={2} >
           <Grid item xs={8}>
-            <Typography variant='h4' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Application Questions for Students Details:</Typography>
+            <Typography variant='h4' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Question 1:</Typography>
               <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2 }} />

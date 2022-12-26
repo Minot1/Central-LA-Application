@@ -205,7 +205,7 @@ function Sidebar() {
             </Box>
           </ListItem>
           <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton>
+            <ListItemButton href="/home">
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <HomeIcon sx={{ color: "white" }} />
               </ListItemIcon>
@@ -255,7 +255,7 @@ function Sidebar() {
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton>
                   <ListItemText
-                    primary={"All Announcements"}
+                    primary={"- All Announcements"}
                     sx={{ textAlign: "center" }}
                   />
                 </ListItemButton>
@@ -263,7 +263,7 @@ function Sidebar() {
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton>
                   <ListItemText
-                    primary={"My Announcements"}
+                    primary={"- My Announcements"}
                     sx={{ textAlign: "center" }}
                   />
                 </ListItemButton>
