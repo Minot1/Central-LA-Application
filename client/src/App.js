@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateAnnouncement from "./pages/CreateAnnouncement";
 import ApplyPage from "./pages/ApplyPage";
+import ApplicantsPage from "./pages/ApplicantsPage";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/home" element={<HomePage></HomePage>}></Route>
         <Route path="/create-announcement" element={<CreateAnnouncement></CreateAnnouncement>}></Route>
         <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
+        <Route path="/applicants" element={<ApplicantsPage></ApplicantsPage>}></Route>
       </Routes>
     </BrowserRouter>
   );
