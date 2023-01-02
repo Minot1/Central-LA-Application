@@ -179,7 +179,7 @@ function Sidebar() {
                     ...(!sidebarOpen && { width: 38, height: 38 }),
                   }}
                   src={
-                    "https://m.media-amazon.com/images/M/MV5BMGIyYjNhOTUtM2UxNC00MjFlLTkwZGYtNDQ0MDhmNGNkYWNlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_.jpg"
+                    "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fillustrations%2Fplaceholder-image&psig=AOvVaw2wfM2StbhQiMuN3S_8-PLK&ust=1672766858605000&source=images&cd=vfe&ved=0CA8QjRxqFwoTCKiuraS0qfwCFQAAAAAdAAAAABAJ"
                   }
                 ></Avatar>
               </Box>
@@ -253,7 +253,7 @@ function Sidebar() {
           <Collapse in={listOpen} timeout="auto">
             <List>
               <ListItem sx={{ padding: "0px" }}>
-                <ListItemButton>
+                <ListItemButton href="/home">
                   <ListItemText
                     primary={"- All Announcements"}
                     sx={{ textAlign: "center" }}
@@ -264,6 +264,14 @@ function Sidebar() {
                 <ListItemButton>
                   <ListItemText
                     primary={"- My Announcements"}
+                    sx={{ textAlign: "center" }}
+                  />
+                </ListItemButton>
+              </ListItem>
+              <ListItem sx={{ padding: "0px" }}>
+                <ListItemButton href="/applicants">
+                  <ListItemText
+                    primary={"- Check Applications"}
                     sx={{ textAlign: "center" }}
                   />
                 </ListItemButton>

@@ -49,7 +49,7 @@ function AnnouncementTable(props) {
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                         <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}}align="left">{row.title}</TableCell>
-                        <TableCell sx={{borderBottom:"none"}} component="th" scope="row">{row.class}</TableCell>
+                        <TableCell sx={{borderBottom:"none"}} component="th" scope="row">{row.courseCode}</TableCell>
                         <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.username}</TableCell>
                         <TableCell sx={{borderBottom:"none"}} align="left">{row.deadline}</TableCell>
                         <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.mingrade}</TableCell>
