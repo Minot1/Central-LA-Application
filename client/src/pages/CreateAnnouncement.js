@@ -39,11 +39,11 @@ function CreateAnnouncement() {
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 4, mt: 2 }}>
-          <Typography variant='h3' sx={{ fontWeight: 'bold' }}>Create Announcement</Typography>
+          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>Create Announcement</Typography>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant='h4' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
+            <Typography variant='h5' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Course Code:</Typography>
               <TextField id="outlined-required" label="Enter course code" variant="outlined" size="small" sx={{ m: 2 }} />
@@ -100,7 +100,7 @@ function CreateAnnouncement() {
               backgroundColor: '#F2F2F2',
               p: 2,
             }}>
-              <Typography variant='h5' sx={{ fontWeight: 'bold' }}>Warnings:</Typography>
+              <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Warnings:</Typography>
               <List>
                 <ListItem>
                   <ListItemText primary="At most x questions can add on the application.">
@@ -144,7 +144,7 @@ function CreateAnnouncement() {
         </Grid>
         <Grid container spacing={2} >
           <Grid item xs={8}>
-            <Typography variant='h4' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
+            <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Question 1:</Typography>
               <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2 }} />

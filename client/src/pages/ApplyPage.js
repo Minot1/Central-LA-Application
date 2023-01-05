@@ -53,7 +53,7 @@ const ApplyPage = (props) => {
           spacing={3}
         >
           <Grid item>
-            <Typography variant="h4">{announcementInfo.class} LA Application</Typography>
+            <Typography variant="h4">{announcementInfo.courseCode} LA Application</Typography>
             <Divider></Divider>
           </Grid>
           <Grid item>
