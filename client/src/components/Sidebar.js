@@ -5,14 +5,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
-import {
-  Avatar,
-  Collapse,
-  IconButton,
-  styled,
-  Toolbar,
-  useTheme,
-} from "@mui/material";
+import { Avatar, Collapse, IconButton, styled, Toolbar, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import MuiAppBar from "@mui/material/AppBar";
@@ -209,10 +202,7 @@ function Sidebar() {
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <HomeIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText
-                primary={"Home"}
-                sx={{ opacity: sidebarOpen ? 1 : 0 }}
-              />
+              <ListItemText primary={"Home"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ padding: "0px" }}>
@@ -220,10 +210,7 @@ function Sidebar() {
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <SearchIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText
-                primary={"Search"}
-                sx={{ opacity: sidebarOpen ? 1 : 0 }}
-              />
+              <ListItemText primary={"Search"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
           <ListItem sx={{ padding: "0px" }}>
@@ -231,10 +218,7 @@ function Sidebar() {
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <NotificationsIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText
-                primary={"Notifications"}
-                sx={{ opacity: sidebarOpen ? 1 : 0 }}
-              />
+              <ListItemText primary={"Notifications"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
           <Divider sx={{ bgcolor: "#e0e0e0", margin: "3px" }} />
@@ -243,10 +227,7 @@ function Sidebar() {
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <CampaignIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText
-                primary={"Announcements"}
-                sx={{ opacity: sidebarOpen ? 1 : 0 }}
-              />
+              <ListItemText primary={"Announcements"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
               {sidebarOpen && (listOpen ? <ExpandLess /> : <ExpandMore />)}
             </ListItemButton>
           </ListItem>
@@ -254,26 +235,17 @@ function Sidebar() {
             <List>
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton href="/home">
-                  <ListItemText
-                    primary={"- All Announcements"}
-                    sx={{ textAlign: "center" }}
-                  />
+                  <ListItemText primary={"- All Announcements"} sx={{ textAlign: "center" }} />
                 </ListItemButton>
               </ListItem>
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton>
-                  <ListItemText
-                    primary={"- My Announcements"}
-                    sx={{ textAlign: "center" }}
-                  />
+                  <ListItemText primary={"- My Announcements"} sx={{ textAlign: "center" }} />
                 </ListItemButton>
               </ListItem>
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton href="/applicants">
-                  <ListItemText
-                    primary={"- Check Applications"}
-                    sx={{ textAlign: "center" }}
-                  />
+                  <ListItemText primary={"- Check Applications"} sx={{ textAlign: "center" }} />
                 </ListItemButton>
               </ListItem>
             </List>
@@ -284,10 +256,7 @@ function Sidebar() {
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <HistoryIcon sx={{ color: "white" }} />
               </ListItemIcon>
-              <ListItemText
-                primary={"History"}
-                sx={{ opacity: sidebarOpen ? 1 : 0 }}
-              />
+              <ListItemText primary={"History"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
         </List>

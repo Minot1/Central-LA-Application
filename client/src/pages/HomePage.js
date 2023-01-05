@@ -25,7 +25,7 @@ function HomePage() {
   }, []);
 
   const handleAnnTableChange = (event, newValue) => {
-      setValue(newValue);
+    setValue(newValue);
   };
 
   return (
@@ -38,16 +38,12 @@ function HomePage() {
             <Grid item></Grid>
             <Grid item>
               <Tabs onChange={handleAnnTableChange} value={value}>
-                <Tab label="All Announcements"/>
-                <Tab label="My Announcements"/>
+                <Tab label="All Announcements" />
+                <Tab label="My Announcements" />
               </Tabs>
             </Grid>
             <Grid item>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                href="/create-announcement"
-              >
+              <Button variant="contained" startIcon={<AddIcon />} href="/create-announcement">
                 Add
               </Button>
             </Grid>
