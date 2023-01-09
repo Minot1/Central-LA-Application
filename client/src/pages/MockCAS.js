@@ -3,7 +3,7 @@ import { Button, Grid } from "@mui/material";
 
 function MockCAS() {
 
-  const casStr = "https://login.sabanciuniv.edu/cas/login?service=" + encodeURIComponent("")
+  const casLoginBaseURL = "https://login.sabanciuniv.edu/cas/login?service=";
 
   return (
     <div>
@@ -20,6 +20,9 @@ function MockCAS() {
           </Grid>
           <Grid item>
             <Button variant="contained" href="/apply/2">Student Login</Button>
+          </Grid>
+          <Grid item>
+            <Button variant="contained" href={casLoginBaseURL + "http%3A%2F%2Fpro2-dev.sabanciuniv.edu"}>CAS Login</Button>
           </Grid>
         </Grid>
       </header>
