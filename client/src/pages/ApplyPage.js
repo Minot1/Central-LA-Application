@@ -20,17 +20,31 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
 const ApplyPage = (props) => {
-    const rows = [
-        { name: "Student ID:", val: "00026899" },
-        { name: "Name - Surname:", val: "Taner Dinçer" },
-        { name: "Admit term:", val: "2018-19 Fall" },
-        { name: "Faculty:", val: "FENS" },
-        { name: "Program:", val: "BSCS - Computer Science" },
-    ]
+  const rows = [
+    { name: "Student ID:", val: "00026899" },
+    { name: "Name - Surname:", val: "Taner Dinçer" },
+    { name: "Admit term:", val: "2018-19 Fall" },
+    { name: "Faculty:", val: "FENS" },
+    { name: "Program:", val: "BSCS - Computer Science" },
+  ]
 
   const [questions, setQuestions] = useState([]);
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const { id } = useParams();
+  const [filename, setFile] = useState(() => {
+    const initialFileName = "No File Uploaded"
+    return initialFileName;
+  });
+
+  const onFileChange = (e) => {
+    if (!e.target.files) {
+      return;
+    }
+    const file = e.target.files[0];
+    const { name } = file;
+    setFile(name);
+  }
+
 
   useEffect(() => {
     getAnnouncement(id).then((results) => setAnnouncementInfo(results));
@@ -57,22 +71,22 @@ const ApplyPage = (props) => {
             <Divider></Divider>
           </Grid>
           <Grid item>
-          <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500, border: 1.5, borderColor: "#cccccc" }} aria-label="simple table">
-        <TableBody>
-          {rows.map((row, index) => (
-            <TableRow
-              key={row.name}
-            >
-              <TableCell component="th" scope="row" align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>
-                {row.name}
-              </TableCell>
-              <TableCell align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>{row.val}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 500, border: 1.5, borderColor: "#cccccc" }} aria-label="simple table">
+                <TableBody>
+                  {rows.map((row, index) => (
+                    <TableRow
+                      key={row.name}
+                    >
+                      <TableCell component="th" scope="row" align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>{row.val}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
           <Grid item>
             <Typography variant="h5">Questions</Typography>
@@ -89,7 +103,7 @@ const ApplyPage = (props) => {
               <Grid item xs={2}>
               </Grid>
               <Grid item xs={2}>
-                  <Typography textAlign="center">{question}:</Typography>
+                <Typography textAlign="center">{question}:</Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField multiline fullWidth></TextField>
@@ -99,18 +113,56 @@ const ApplyPage = (props) => {
             </Grid>
           ))}
           <Grid item container
+            direction="rows"
+            alignItems="center"
+            justifyContent="center"
+            spacing={4}>
+            <Grid item xs={2}>
+            </Grid>
+            <Grid item xs={2}>
+              <Typography textAlign="center">Upload your transcript:</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid item container
               direction="rows"
-              alignItems="center"
-              justifyContent="center"
-              spacing={12}>
-                <Grid item>
-            <Button variant="contained" color="error" href="/">Cancel</Button>
+              >
+                <Button
+                  variant="contained"
+                  component="label"
+                >
+                  Upload File
+                  <input
+                    type="file"
+                    accept=".pdf"
+                    hidden
+                    onChange={onFileChange}
+                  />
+                </Button>
+                <Typography
+                  alignItems="center"
+                  justifyContent="center" textAlign="center"
+                  m={2}
+                  >
+                  {filename}
+                </Typography>
+              </Grid>
+            </Grid>
+            <Grid item xs={2}>
+            </Grid>
+          </Grid>
+          <Grid item container
+            direction="rows"
+            alignItems="center"
+            justifyContent="center"
+            spacing={12}>
+            <Grid item>
+              <Button variant="contained" color="error" href="/">Cancel</Button>
 
-                </Grid>
-                <Grid item>
-            <Button variant="contained" color="success">Submit</Button>
+            </Grid>
+            <Grid item>
+              <Button variant="contained" color="success">Submit</Button>
 
-                </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Box>
