@@ -16,13 +16,7 @@ function MockCAS() {
           spacing={5}
         >
           <Grid item>
-            <Button variant="contained" href="/home">Instructor Login</Button>
-          </Grid>
-          <Grid item>
-            <Button variant="contained" href="/apply/2">Student Login</Button>
-          </Grid>
-          <Grid item>
-            <Button variant="contained" href={casLoginBaseURL + "http%3A%2F%2Fpro2-dev.sabanciuniv.edu"}>CAS Login</Button>
+            <Button variant="contained" href="/home">Login with CAS</Button>
           </Grid>
         </Grid>
       </header>

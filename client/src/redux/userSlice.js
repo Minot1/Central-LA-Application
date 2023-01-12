@@ -6,6 +6,7 @@ const initialState = {
     currentUser: null,
     isLoading: false,
     isFailed: false,
+    isLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -19,15 +20,18 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.currentUser = action.payload;
       state.isFailed = false;
+      state.isLoggedIn = true;
     },
     failLogin: (state) => {
       state.isFailed = true;
       state.isLoading = false;
+      state.isLoggedIn = false;
     },
     logout: (state) => {
       state.currentUser = null;
       state.isLoading = false;
       state.isFailed = false;
+      state.isLoggedIn = false;
     }
   },
 });
