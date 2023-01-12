@@ -1,4 +1,4 @@
-import { Button, Box, Typography, Grid } from '@mui/material'
+import { Box, Typography, Grid } from '@mui/material'
 import React, { useEffect } from "react";
 import { getApplicationsByPost } from '../apiCalls';
 import AppBarHeader from '../components/AppBarHeader'
