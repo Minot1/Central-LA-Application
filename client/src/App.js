@@ -12,7 +12,8 @@ import { startLoginProcess, successLogin } from "./redux/userSlice";
 
 function App() {
   const [urlParams, setUrlParams] = useSearchParams();
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const isLoggedIn = true;
+  // const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
   const dispatch = useDispatch();
   const url = window.location.href;
 
@@ -37,8 +38,7 @@ function App() {
       <Routes>
         {isLoggedIn ? (
           <>
-        <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
-        {/* <Route path="/instructor" element={<div><Sidebar></Sidebar></div>}></Route> */}
+        <Route exact path="/" element={<HomePage></HomePage>}></Route>
         <Route path="/home" element={<HomePage></HomePage>}></Route>
         <Route path="/create-announcement" element={<CreateAnnouncement></CreateAnnouncement>}></Route>
         <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>

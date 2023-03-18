@@ -11,10 +11,12 @@ import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
 import { getAllAnnouncements } from "../apiCalls";
+import { useSelector } from "react-redux";
 
 function HomePage() {
   const [value, setValue] = React.useState(0);
   const [rows, setRows] = React.useState([]);
+  const isInstructor = useSelector((state) => state.user.isInstructor);
 
   useEffect(() => {
     getAllAnnouncements().then((results) => setRows(results));
@@ -36,17 +38,18 @@ function HomePage() {
             <Grid item>
               <Tabs onChange={handleAnnTableChange} value={value}>
                 <Tab label="All Announcements"/>
-                <Tab label="My Announcements"/>
+                {!isInstructor && <Tab label="My Applications"/>}
+                {isInstructor && <Tab label="My Announcements"/>}
               </Tabs>
             </Grid>
             <Grid item>
-              <Button
+              {isInstructor && <Button
                 variant="contained"
                 startIcon={<AddIcon />}
                 href="/create-announcement"
               >
                 Add
-              </Button>
+              </Button>}
             </Grid>
           </Grid>
           <Grid item>

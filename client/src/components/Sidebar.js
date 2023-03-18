@@ -28,6 +28,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 210;
 
@@ -91,6 +92,7 @@ function Sidebar() {
   const theme = useTheme();
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [listOpen, setListOpen] = React.useState(true);
+  const isInstructor = useSelector((state) => state.user.isInstructor);
 
   const handleListClick = () => {
     setListOpen(!listOpen);
@@ -199,7 +201,8 @@ function Sidebar() {
                   ...(!sidebarOpen && { display: "none" }),
                 }}
               >
-                Instructor
+                {isInstructor && "Instructor"}
+                {!isInstructor && "Student"}
               </Typography>
               {!sidebarOpen ? <Box sx={{ height: 91 }}></Box> : <div></div>}
             </Box>
@@ -263,19 +266,19 @@ function Sidebar() {
               <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton>
                   <ListItemText
-                    primary={"- My Announcements"}
+                    primary={isInstructor && "- My Announcements" || !isInstructor && "- My Applications"}
                     sx={{ textAlign: "center" }}
                   />
                 </ListItemButton>
               </ListItem>
-              <ListItem sx={{ padding: "0px" }}>
+              {isInstructor && <ListItem sx={{ padding: "0px" }}>
                 <ListItemButton href="/applicants">
                   <ListItemText
                     primary={"- Check Applications"}
                     sx={{ textAlign: "center" }}
                   />
                 </ListItemButton>
-              </ListItem>
+              </ListItem>}
             </List>
           </Collapse>
           <Divider sx={{ bgcolor: "#e0e0e0", margin: "3px" }} />
