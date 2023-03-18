@@ -25,7 +25,7 @@ async function getAllAnnouncements() {
 
 function addAnnouncement(faculty, courseCode, term, minGrade, questions) {
   var username = "instructor1";
-  var deadline = "2023/02/21";
+  var deadline = "2023/03/14";
   var title = "title test";
   axios.post(apiEndpoint + "/addPost", {
     username: username,

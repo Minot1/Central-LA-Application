@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
+import { useSelector } from "react-redux";
 
 function AnnouncementTable(props) {
     // const rows = [
@@ -22,6 +23,7 @@ function AnnouncementTable(props) {
     //     { id: 9, courseCode: 'HUM201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
     //   ];
     const [rows, setRows] = React.useState([]);
+    const isInstructor = useSelector((state) => state.user.isInstructor);
 
     useEffect(() => {
         setRows(props.rows);
@@ -55,9 +57,12 @@ function AnnouncementTable(props) {
                         <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.mingrade}</TableCell>
                         <TableCell sx = {{borderBottom:"none"}} align="left">{row.description}</TableCell>
                         <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}} align="center">
-                            <Button variant="contained" startIcon={<EditIcon />}>
+                            {isInstructor && <Button variant="contained" startIcon={<EditIcon />}>
                                 Edit
-                            </Button>
+                            </Button>}
+                            {!isInstructor && <Button variant="contained" href={"/apply/" + (index + 1)}>
+                                Apply
+                            </Button>}
                         </TableCell>
                         </TableRow>
                     ))}
