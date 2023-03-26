@@ -1,6 +1,7 @@
 import React from 'react'
 import AppBarHeader from '../components/AppBarHeader'
 import Sidebar from '../components/Sidebar'
+import AddQuestion from '../components/AddQuestion'
 import { Typography, Box, Button, Grid } from '@mui/material'
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -143,74 +144,7 @@ function CreateAnnouncement() {
           </Grid>
         </Grid>
         <Grid container spacing={2} >
-          <Grid item xs={8}>
-            <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Question 1:</Typography>
-              <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2 }} />
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue="Short Answer"
-                size="small"
-                sx={{ m: 2, width: 225 }}
-              >
-                {questionType.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button variant="contained" size="large" color="error">
-                <DeleteIcon fontSize="inherit" />
-              </Button>
-            </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Question 2:</Typography>
-              <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2 }} />
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue="Short Answer"
-                size="small"
-                sx={{ m: 2, width: 225 }}
-              >
-                {questionType.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button variant="contained" size="large" color="error">
-                <DeleteIcon fontSize="inherit" />
-              </Button>
-            </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Question 3:</Typography>
-              <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2 }} />
-              <TextField
-                id="outlined-select-currency"
-                select
-                defaultValue="Short Answer"
-                size="small"
-                sx={{ m: 2, width: 225 }}
-              >
-                {questionType.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <Button variant="contained" size="large" color="error">
-                <DeleteIcon fontSize="inherit" />
-              </Button>
-            </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Button variant="contained" size="large" startIcon={<AddCircleIcon />} sx={{ bgcolor: "#394263", my: 2 }}>
-                Add Question
-              </Button>
-            </Grid>
-          </Grid>
+          <AddQuestion /> 
           <Grid item xs={4}>
             <Box sx={{
               backgroundColor: '#F2F2F2',
