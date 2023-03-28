@@ -150,7 +150,7 @@ function CreateAnnouncement() {
               backgroundColor: '#F2F2F2',
               px: 2,
             }}>
-              <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Suggested Questions:</Typography>
+              <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
               <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
                 bgcolor: "#5FB3F6", my: 2, textTransform: "none", textAlign: "left", '&:hover': {
                   backgroundColor: '#84BFF7'
