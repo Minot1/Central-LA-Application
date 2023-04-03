@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [UserController::class, 'login']);
+Route::post('serviceValidate', [UserController::class, 'serviceValidate']);
 Route::post('addPost', [PostController::class, 'addPost']);
 Route::get('listPost', [PostController::class, 'listPost']);
 Route::delete('deletePost/{id}', [PostController::class, 'deletePost']);
