@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Application;
 
+
+
 class ApplicationController extends Controller
 {
     function addApplication(Request $req)
@@ -15,12 +17,19 @@ class ApplicationController extends Controller
         $application->student_id=$req->input('student_id');
         $application->grade=$req->input('grade');
         $application->faculty=$req->input('faculty');
-        $application->transcript=$req->input('transcript');
+        
+        $parser = new \Smalot\PdfParser\Parser();
+        $pdf = $req->file('pdf');
+        $pdff = $parser->parseFile($pdf->path());
+        $pdfFile = $pdff->getText();
+
+        $application->transcript=$pdfFile;
         $application->working_hours=$req->input('working_hours');
         $application->answers=$req->input('answers');
         $application->status=$req->input('status');
         $application->post_id=$req->input('post_id');
         $application->save();
+
         return $application;
     }
 
@@ -38,6 +47,7 @@ class ApplicationController extends Controller
         $application->status=$req->input('status');
         $application->post_id=$req->input('post_id');
         $application->save();
+
         return $application;
     }
 
@@ -48,6 +58,7 @@ class ApplicationController extends Controller
         {
             $row['answers']= json_decode($row['answers'],TRUE);
         }
+        
         return $result;
     }
 
