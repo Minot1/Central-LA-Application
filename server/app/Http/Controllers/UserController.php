@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
+use \Firebase\JWT\JWT;
 
 class UserController extends Controller
 {
@@ -24,7 +24,22 @@ class UserController extends Controller
         $ticket = $req->input('ticket');
         $serviceUrl = "http%3A%2F%2Flocalhost:3000%2Fhome";
         $res = Http::get("https://login.sabanciuniv.edu/cas/serviceValidate?service=$serviceUrl&ticket=$ticket");
-        error_log($res);
-        return $res;
+
+        $xml = simplexml_load_string($res, null, null, 'cas', true);
+        $json = json_encode($xml);
+        $array = json_decode($json,TRUE);
+
+        if(array_key_exists("authenticationFailure",$array)){
+            return $array;
+        }
+        else{
+        $jwt = JWT::encode([
+            'role' => $array["authenticationSuccess"]["attributes"]["ou"][2],
+            'iat' => time(),
+            "exp" => time() + 60 * 60 * 4
+        ], env('JWT_SECRET'),'RS256');
+        $array["JWT_TOKEN"] = $jwt;
+        return $array;
+        }
     }
 }
