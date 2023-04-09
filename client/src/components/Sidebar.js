@@ -29,6 +29,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const drawerWidth = 210;
 
@@ -93,6 +94,9 @@ function Sidebar() {
   const [sidebarOpen, setSidebarOpen] = React.useState(true);
   const [listOpen, setListOpen] = React.useState(true);
   const isInstructor = useSelector((state) => state.user.isInstructor);
+  const username = useSelector((state) => state.user.username);
+  const name = useSelector((state) => state.user.name);
+  const surname = useSelector((state) => state.user.surname);
 
   const handleListClick = () => {
     setListOpen(!listOpen);
@@ -192,7 +196,7 @@ function Sidebar() {
                   ...(!sidebarOpen && { display: "none" }),
                 }}
               >
-                Ad Soyad
+                {name} {surname}
               </Typography>
               <Typography
                 sx={{
@@ -208,7 +212,7 @@ function Sidebar() {
             </Box>
           </ListItem>
           <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton href="/home">
+            <ListItemButton as={Link} to="/home" style={{ textDecoration: 'none', color: "white" }}>
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <HomeIcon sx={{ color: "white" }} />
               </ListItemIcon>
@@ -256,7 +260,7 @@ function Sidebar() {
           <Collapse in={listOpen} timeout="auto">
             <List>
               <ListItem sx={{ padding: "0px" }}>
-                <ListItemButton href="/home">
+                <ListItemButton as={Link} to="/home" style={{ textDecoration: 'none', color: "white" }}>
                   <ListItemText
                     primary={"- All Announcements"}
                     sx={{ textAlign: "center" }}
@@ -272,7 +276,7 @@ function Sidebar() {
                 </ListItemButton>
               </ListItem>
               {isInstructor && <ListItem sx={{ padding: "0px" }}>
-                <ListItemButton href="/applicants">
+                <ListItemButton as={Link} to="/applicants" style={{ textDecoration: 'none' }}>
                   <ListItemText
                     primary={"- Check Applications"}
                     sx={{ textAlign: "center" }}

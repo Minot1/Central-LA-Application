@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Grid } from "@mui/material";
+import { Link } from "react-router-dom";
 
 function MockCAS() {
 
@@ -16,7 +17,7 @@ function MockCAS() {
           spacing={5}
         >
           <Grid item>
-            <Button variant="contained" href="/home">Login with CAS</Button>
+            <Button variant="contained" as={Link} to="/applicants" style={{ textDecoration: 'none' }}>Login with CAS</Button>
           </Grid>
         </Grid>
       </header>

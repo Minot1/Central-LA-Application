@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    name: "",
+    surname: "",
     username: "",
+    JwtToken: "",
     isInstructor: true,
-    currentUser: null,
     isLoading: false,
     isFailed: false,
     isLoggedIn: false,
@@ -18,9 +20,13 @@ const userSlice = createSlice({
     },
     successLogin: (state, action) => {
       state.isLoading = false;
-      state.currentUser = action.payload;
+      state.username = action.payload.username;
+      state.name = action.payload.name;
+      state.surname = action.payload.surname;
       state.isFailed = false;
       state.isLoggedIn = true;
+      state.isInstructor = action.payload.isInstructor;
+      state.JwtToken = action.payload.jwtToken;
     },
     failLogin: (state) => {
       state.isFailed = true;
@@ -28,7 +34,9 @@ const userSlice = createSlice({
       state.isLoggedIn = false;
     },
     logout: (state) => {
-      state.currentUser = null;
+      state.name = "";
+      state.surname = "";
+      state.username = "";
       state.isLoading = false;
       state.isFailed = false;
       state.isLoggedIn = false;

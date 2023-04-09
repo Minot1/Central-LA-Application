@@ -49,10 +49,11 @@ async function getApplicationsByPost(postID) {
   } catch (error) {}
 }
 
-async function validateLogin(ticket) {
+async function validateLogin(serviceUrl, ticket) {
   try {
     const result = await axios.post(
       apiEndpoint + "/serviceValidate", {
+        serviceUrl: serviceUrl,
         ticket: ticket,
       }
     );
