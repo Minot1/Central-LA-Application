@@ -9,6 +9,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import EditIcon from '@mui/icons-material/Edit';
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function AnnouncementTable(props) {
     // const rows = [
@@ -60,7 +61,7 @@ function AnnouncementTable(props) {
                             {isInstructor && <Button variant="contained" startIcon={<EditIcon />}>
                                 Edit
                             </Button>}
-                            {!isInstructor && <Button variant="contained" href={"/apply/" + (index + 1)}>
+                            {!isInstructor && <Button variant="contained" as={Link} to={"/apply/" + (index + 1)} style={{ textDecoration: 'none' }}>
                                 Apply
                             </Button>}
                         </TableCell>
