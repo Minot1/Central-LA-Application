@@ -51,11 +51,12 @@ function CreateAnnouncement() {
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Last Application Date:</Typography>
-              <TextField id="outlined-required" label="Enter last date" variant="outlined" size="small" sx={{ m: 2 }} />
+              <TextField id="outlined-required" label="Enter last date" variant="outlined" type="date" defaultValue={new Date()} InputLabelProps={{shrink: true}} size="small" sx={{ m: 2 }} />
+              <TextField id="outlined-required" label="Enter deadline" variant="outlined" type="time" defaultValue={new Date().toLocaleTimeString().replace(/(.*)\D\d+/, '$1')} InputLabelProps={{shrink: true}} size="small" sx={{ m: 2}} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Desired Latter Grade:</Typography>
-              <TextField
+              <Typography > Minimum Desired Letter Grade:</Typography>
+              <TextField  
                 id="outlined-select-currency"
                 select
                 defaultValue="A"
@@ -143,45 +144,8 @@ function CreateAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <Grid container spacing={2} >
-          <AddQuestion /> 
-          <Grid item xs={4}>
-            <Box sx={{
-              backgroundColor: '#F2F2F2',
-              px: 2,
-            }}>
-              <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
-              <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
-                bgcolor: "#5FB3F6", my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                  backgroundColor: '#84BFF7'
-                }
-              }}>
-                Explain in detail why you want to be an LA for this course:
-              </Button>
-              <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
-                bgcolor: "#2196F3", my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                  backgroundColor: '#84BFF7'
-                }
-              }}>
-                Explain in detail why you are qualified for the position:
-              </Button>
-              <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
-                bgcolor: "#5FB3F6", my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                  backgroundColor: '#84BFF7'
-                }
-              }}>
-                Previous teaching experiences:
-              </Button>
-              <Button variant="contained" size="large" fullWidth endIcon={<AddIcon />} sx={{
-                bgcolor: "#2196F3", my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                  backgroundColor: '#84BFF7'
-                }
-              }}>
-                Bu dersi alırken en sevdiğiniz konu neydi? Sizi en çok zorlayan konu neydi?
-              </Button>
-            </Box>
-          </Grid>
-        </Grid>
+        <AddQuestion /> 
+
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{p:4}}>
           <Button variant="contained" startIcon={<SendIcon /> } color="success" sx={{mx:2}}>
             Submit
