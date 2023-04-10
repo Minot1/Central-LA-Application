@@ -17,7 +17,7 @@ function MockCAS() {
           spacing={5}
         >
           <Grid item>
-            <Button variant="contained" as={Link} to="/applicants" style={{ textDecoration: 'none' }}>Login with CAS</Button>
+            <Button variant="contained" as={Link} to="/home" style={{ textDecoration: 'none' }}>Login with CAS</Button>
           </Grid>
         </Grid>
       </header>
