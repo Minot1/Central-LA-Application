@@ -52,31 +52,86 @@ const suggestedQuestions = [
 
 function AddQuestion() {
 
-    const [questions, setQuestions] = useState([1, 2, 3])
+    // const [questions, setQuestions] = useState([1, 2, 3])
 
-    function removeAndRefine(arr, num) {
-        const index = arr.indexOf(num); // get the index of the number to remove
-        if (index === -1) return arr; // if number not found, return original array
-        const refined = arr.slice(0, index).concat(arr.slice(index + 1)); // remove the number
-        // refine the array by decreasing subsequent numbers by 1
-        for (let i = index; i < refined.length; i++) {
-            refined[i] -= 1;
-        }
-        return refined;
-    }
+    // function removeAndRefine(arr, num) {
+    //     const index = arr.indexOf(num); // get the index of the number to remove
+    //     if (index === -1) return arr; // if number not found, return original array
+    //     const refined = arr.slice(0, index).concat(arr.slice(index + 1)); // remove the number
+    //     // refine the array by decreasing subsequent numbers by 1
+    //     for (let i = index; i < refined.length; i++) {
+    //         refined[i] -= 1;
+    //     }
+    //     return refined;
+    // }
+
+    // function addNewQuestion() {
+    //     const nextNum = (questions.length) + 1
+    //     setQuestions([...questions, nextNum])
+    // }
+
+    // function deleteQuestion(question, idx) {
+
+    //     //const newQuestionSet = question.filter((e, index) => { return idx !== index })
+    //     const number = idx + 1;
+    //     const newQuestionSet = removeAndRefine(question, number)
+    //     setQuestions(newQuestionSet)
+    // }
+
+    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Short Answer' }, { questionNumber: 2, mQuestion: "", mValue: 'Short Answer' }, { questionNumber: 3, mQuestion: "", mValue: 'Short Answer' }])
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
-        setQuestions([...questions, nextNum])
+        const nextQuestion = { questionNumber: nextNum, mQuestion: "", mValue: 'Short Answer' }
+        setQuestions([...questions, nextQuestion])
+    }
+
+    function removeQuestion(questions, questionNumberToRemove) {
+        // find the index of the question to remove
+        const indexToRemove = questions.findIndex(question => question.questionNumber === questionNumberToRemove);
+
+        if (indexToRemove === -1) {
+            // question with specified question number not found
+            return questions;
+        }
+
+        // create a copy of the array without the question to remove
+        const updatedQuestions = [...questions.slice(0, indexToRemove), ...questions.slice(indexToRemove + 1)];
+
+        // decrease questionNumber for subsequent questions
+        for (let i = indexToRemove; i < updatedQuestions.length; i++) {
+            updatedQuestions[i].questionNumber -= 1;
+        }
+
+        return updatedQuestions;
     }
 
     function deleteQuestion(question, idx) {
-
-        //const newQuestionSet = question.filter((e, index) => { return idx !== index })
-        const number = idx + 1;
-        const newQuestionSet = removeAndRefine(question, number)
+        const number = idx + 1
+        const newQuestionSet = removeQuestion(question, number)
         setQuestions(newQuestionSet)
     }
+
+    function handleInput(event, index) {
+        // const newValue = event.target.value;
+        // const inputName = event.target.name;
+
+        // setQuestions(prevQuestions => {
+        //     if(inputName==="questionMain") {
+        //         return {
+        //             questionNumber: prevQuestions.questionNumber, 
+        //             mQuestion: "", 
+        //             mValue: 
+        //         }
+        //     }
+        // })
+        const { name, value } = event.target;
+        const updatedQuestions = [...questions];
+        updatedQuestions[index] = { ...updatedQuestions[index], [name]: value };
+        setQuestions(updatedQuestions);
+    }
+
+    console.log(questions);
 
     return (
         <Grid container spacing={2} >
@@ -85,12 +140,13 @@ function AddQuestion() {
                 {questions.map((e, index) => {
                     return (
                         <Grid container direction="row" justifyContent="start" alignItems="center">
-                            <Typography >Question {questions[index]}:</Typography>
-                            <TextField id="outlined-required" label="" variant="outlined" size="small" sx={{ m: 2, width: 400 }} />
+                            <Typography >Question {questions[index].questionNumber}:</Typography>
+                            <TextField id="outlined-required" name="mQuestion" defaultValue={questions[index].mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 400 }} onChange={(event) => handleInput(event, index)} />
                             <TextField
                                 id="outlined-select-currency"
+                                name="mValue"
                                 select
-                                defaultValue="Short Answer"
+                                defaultValue={questions[index].mValue}
                                 size="small"
                                 sx={{ m: 2, width: 225 }}
                             >
@@ -122,7 +178,7 @@ function AddQuestion() {
                 }}>
                     <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
                     {suggestedQuestions.map((e, idx) => {
-                        return(
+                        return (
                             <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
                                 bgcolor: e.sBgColor, my: 2, textTransform: "none", textAlign: "left", '&:hover': {
                                     backgroundColor: '#84BFF7'
