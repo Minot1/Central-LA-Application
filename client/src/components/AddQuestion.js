@@ -61,29 +61,6 @@ function AddQuestion() {
         setQuestions([...questions, nextQuestion])
     }
 
-    // function handleDeleteQuestionV2(questionNumber) {
-    //     // Find the index of the question to be deleted
-    //     const indexToDelete = questions.findIndex((question) => question.questionNumber === questionNumber);
-
-    //     // If the question to be deleted is found
-    //     if (indexToDelete !== -1) {
-    //       // Create a copy of the questions array
-    //       const newQuestions = [...questions];
-
-    //       // Remove the question at the specified index
-    //       newQuestions.splice(indexToDelete, 1);
-
-    //       // Update the question numbers of the remaining questions
-    //       const updatedQuestions = newQuestions.map((question, index) => ({
-    //         ...question,
-    //         questionNumber: index + 1,
-    //       }));
-
-    //       // Set the updated questions array as the new state
-    //       setQuestions(updatedQuestions);
-    //     }
-    //   }
-
     function handleDeleteQuestion(questionNumber) {
         // Find the index of the question to be deleted
         const indexToDelete = questions.findIndex(
@@ -149,48 +126,58 @@ function AddQuestion() {
         const suggestedQuestionType = suggestedQuestions[index].sValue;
         const suggestedMultiple = suggestedQuestions[index].sMultiple;
 
-        const lastQuestion = questions[questions.length - 1];
-        const emptyQuestionIndex = questions.findIndex((q) => q.mQuestion.trim() === "");
-
-        console.log("its index " + emptyQuestionIndex) //for debugging button click
-
-        if (emptyQuestionIndex !== -1) {
-            if (suggestedMultiple.length === 0) {
-                const newQuestions = [...questions];
-                newQuestions[emptyQuestionIndex].mQuestion = suggestedQuestion;
-                newQuestions[emptyQuestionIndex].mValue = suggestedQuestionType;
-                if(newQuestions[emptyQuestionIndex]["mMultiple"]) {
-                    delete newQuestions[emptyQuestionIndex]["mMultiple"];
-                    setQuestions(newQuestions);
-                }
-                setQuestions(newQuestions);
-            }
-            else {
-                const newQuestionsMultiple = [...questions];
-                newQuestionsMultiple[emptyQuestionIndex].mQuestion = suggestedQuestion;
-                newQuestionsMultiple[emptyQuestionIndex].mValue = suggestedQuestionType;
-                newQuestionsMultiple[emptyQuestionIndex]["mMultiple"] = suggestedMultiple;
-                setQuestions(newQuestionsMultiple);
-            }
-        } else if (lastQuestion.length !== -1) {
-            if (suggestedMultiple.length === 0) {
-                const newQuestions = [...questions];
-                newQuestions[newQuestions.length - 1].mQuestion = suggestedQuestion;
-                newQuestions[newQuestions.length - 1].mValue = suggestedQuestionType;
-                if(newQuestions[newQuestions.length - 1]["mMultiple"]) {
-                    delete newQuestions[newQuestions.length - 1]["mMultiple"];
-                    setQuestions(newQuestions);
-                }
-                setQuestions(newQuestions);
-            }
-            else {
-                const newQuestionsMultiple = [...questions];
-                newQuestionsMultiple[newQuestionsMultiple.length - 1].mQuestion = suggestedQuestion;
-                newQuestionsMultiple[newQuestionsMultiple.length - 1].mValue = suggestedQuestionType;
-                newQuestionsMultiple[newQuestionsMultiple.length - 1]["mMultiple"] = suggestedMultiple;
-                setQuestions(newQuestionsMultiple);
-            }
+        if(suggestedMultiple.length === 0) {
+            const nextNum = (questions.length) + 1;
+            const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType }
+            setQuestions([...questions, nextQuestion])  
+        } else{
+            const nextNum = (questions.length) + 1;
+            const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType, mMultiple: suggestedMultiple }
+            setQuestions([...questions, nextQuestion]) 
         }
+
+        // const lastQuestion = questions[questions.length - 1];
+        // const emptyQuestionIndex = questions.findIndex((q) => q.mQuestion.trim() === "");
+
+        // console.log("its index " + emptyQuestionIndex) //for debugging button click
+
+        // if (emptyQuestionIndex !== -1) {
+        //     if (suggestedMultiple.length === 0) {
+        //         const newQuestions = [...questions];
+        //         newQuestions[emptyQuestionIndex].mQuestion = suggestedQuestion;
+        //         newQuestions[emptyQuestionIndex].mValue = suggestedQuestionType;
+        //         if(newQuestions[emptyQuestionIndex]["mMultiple"]) {
+        //             delete newQuestions[emptyQuestionIndex]["mMultiple"];
+        //             setQuestions(newQuestions);
+        //         }
+        //         setQuestions(newQuestions);
+        //     }
+        //     else {
+        //         const newQuestionsMultiple = [...questions];
+        //         newQuestionsMultiple[emptyQuestionIndex].mQuestion = suggestedQuestion;
+        //         newQuestionsMultiple[emptyQuestionIndex].mValue = suggestedQuestionType;
+        //         newQuestionsMultiple[emptyQuestionIndex]["mMultiple"] = suggestedMultiple;
+        //         setQuestions(newQuestionsMultiple);
+        //     }
+        // } else if (lastQuestion.length !== -1) {
+        //     if (suggestedMultiple.length === 0) {
+        //         const newQuestions = [...questions];
+        //         newQuestions[newQuestions.length - 1].mQuestion = suggestedQuestion;
+        //         newQuestions[newQuestions.length - 1].mValue = suggestedQuestionType;
+        //         if(newQuestions[newQuestions.length - 1]["mMultiple"]) {
+        //             delete newQuestions[newQuestions.length - 1]["mMultiple"];
+        //             setQuestions(newQuestions);
+        //         }
+        //         setQuestions(newQuestions);
+        //     }
+        //     else {
+        //         const newQuestionsMultiple = [...questions];
+        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mQuestion = suggestedQuestion;
+        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mValue = suggestedQuestionType;
+        //         newQuestionsMultiple[newQuestionsMultiple.length - 1]["mMultiple"] = suggestedMultiple;
+        //         setQuestions(newQuestionsMultiple);
+        //     }
+        // }
 
 
     }
