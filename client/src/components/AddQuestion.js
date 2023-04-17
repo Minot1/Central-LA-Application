@@ -152,13 +152,17 @@ function AddQuestion() {
         const lastQuestion = questions[questions.length - 1];
         const emptyQuestionIndex = questions.findIndex((q) => q.mQuestion.trim() === "");
 
-        //console.log("its index " + emptyQuestionIndex) //for debugging button click
+        console.log("its index " + emptyQuestionIndex) //for debugging button click
 
         if (emptyQuestionIndex !== -1) {
             if (suggestedMultiple.length === 0) {
                 const newQuestions = [...questions];
                 newQuestions[emptyQuestionIndex].mQuestion = suggestedQuestion;
                 newQuestions[emptyQuestionIndex].mValue = suggestedQuestionType;
+                if(newQuestions[emptyQuestionIndex]["mMultiple"]) {
+                    delete newQuestions[emptyQuestionIndex]["mMultiple"];
+                    setQuestions(newQuestions);
+                }
                 setQuestions(newQuestions);
             }
             else {
@@ -191,7 +195,7 @@ function AddQuestion() {
 
     }
 
-    //console.log(questions); //for debugging questions
+    console.log(questions); //for debugging questions
 
     return (
         <Grid container spacing={2} >
