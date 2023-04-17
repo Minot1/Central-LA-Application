@@ -34,7 +34,7 @@ function App() {
             username: result.authenticationSuccess.attributes.cn, 
             name: result.authenticationSuccess.attributes.givenName, 
             surname: result.authenticationSuccess.attributes.sn,
-            isInstructor: result.authenticationSuccess.attributes.ou[2] != "student",
+            isInstructor: result.authenticationSuccess.attributes.ou[2] == "student",
           }));
         });
         // dispatch(successLogin({username: "aa", name: "bb", surname: "cc"}));
