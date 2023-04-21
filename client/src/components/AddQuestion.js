@@ -8,8 +8,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
+import CancelIcon from '@mui/icons-material/Cancel';
+import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
+
 
 const questionType = [
     { value: 'Short Answer', label: 'Short Answer' },
@@ -94,22 +95,6 @@ function AddQuestion() {
     }
 
     function handleInput(event, index) {
-        // const newValue = event.target.value;
-        // const inputName = event.target.name;
-
-        // setQuestions(prevQuestions => {
-        //     if(inputName==="questionMain") {
-        //         return {
-        //             questionNumber: prevQuestions.questionNumber, 
-        //             mQuestion: "", 
-        //             mValue: 
-        //         }
-        //     }
-        // })
-        // const { name, value } = event.target;
-        // const updatedQuestions = [...questions];
-        // updatedQuestions[index] = { ...updatedQuestions[index], [name]: value };
-        // setQuestions(updatedQuestions);
         const { name, value } = event.target;
         setQuestions(prevQuestions => {
             return prevQuestions.map((question, i) => {
@@ -135,54 +120,11 @@ function AddQuestion() {
             const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType, mMultiple: suggestedMultiple }
             setQuestions([...questions, nextQuestion]) 
         }
-
-        // const lastQuestion = questions[questions.length - 1];
-        // const emptyQuestionIndex = questions.findIndex((q) => q.mQuestion.trim() === "");
-
         // console.log("its index " + emptyQuestionIndex) //for debugging button click
-
-        // if (emptyQuestionIndex !== -1) {
-        //     if (suggestedMultiple.length === 0) {
-        //         const newQuestions = [...questions];
-        //         newQuestions[emptyQuestionIndex].mQuestion = suggestedQuestion;
-        //         newQuestions[emptyQuestionIndex].mValue = suggestedQuestionType;
-        //         if(newQuestions[emptyQuestionIndex]["mMultiple"]) {
-        //             delete newQuestions[emptyQuestionIndex]["mMultiple"];
-        //             setQuestions(newQuestions);
-        //         }
-        //         setQuestions(newQuestions);
-        //     }
-        //     else {
-        //         const newQuestionsMultiple = [...questions];
-        //         newQuestionsMultiple[emptyQuestionIndex].mQuestion = suggestedQuestion;
-        //         newQuestionsMultiple[emptyQuestionIndex].mValue = suggestedQuestionType;
-        //         newQuestionsMultiple[emptyQuestionIndex]["mMultiple"] = suggestedMultiple;
-        //         setQuestions(newQuestionsMultiple);
-        //     }
-        // } else if (lastQuestion.length !== -1) {
-        //     if (suggestedMultiple.length === 0) {
-        //         const newQuestions = [...questions];
-        //         newQuestions[newQuestions.length - 1].mQuestion = suggestedQuestion;
-        //         newQuestions[newQuestions.length - 1].mValue = suggestedQuestionType;
-        //         if(newQuestions[newQuestions.length - 1]["mMultiple"]) {
-        //             delete newQuestions[newQuestions.length - 1]["mMultiple"];
-        //             setQuestions(newQuestions);
-        //         }
-        //         setQuestions(newQuestions);
-        //     }
-        //     else {
-        //         const newQuestionsMultiple = [...questions];
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mQuestion = suggestedQuestion;
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mValue = suggestedQuestionType;
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1]["mMultiple"] = suggestedMultiple;
-        //         setQuestions(newQuestionsMultiple);
-        //     }
-        // }
-
 
     }
 
-    console.log(questions); //for debugging questions
+    //console.log(questions); //for debugging questions
 
     return (
         <Grid container spacing={2} >
@@ -190,7 +132,7 @@ function AddQuestion() {
                 <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
                 {questions.map((question, index) => {
                     return (
-                        <Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber}>
+                        <Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber} >
                             <Typography >Question {question.questionNumber}:</Typography>
                             <TextField id="outlined-required" name="mQuestion" value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 400 }} onChange={(event) => handleInput(event, index)} />
                             <TextField
@@ -211,6 +153,24 @@ function AddQuestion() {
                             <Button variant="contained" size="large" color="error" onClick={() => handleDeleteQuestion(question.questionNumber)}>
                                 <DeleteIcon fontSize="inherit" />
                             </Button>
+                            <Grid item xs={10} sx={{backgroundColor: '#F5F5F5', px: 2}}>
+                                <Grid container direction="row" justifyContent="start" alignItems="center" > 
+                                    <Typography >Choice 1:</Typography> 
+                                    <TextField id="outlined-required" name="mMultiple" value= "" label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} /> 
+                                    <Button variant="contained" size="large" sx={{ bgcolor: "#b50b0b", '&:hover': {
+                                    backgroundColor: '#e60e0e'
+                                } }}>
+                                        <CancelIcon fontSize="inherit" />
+                                    </Button> 
+                                </Grid> 
+                                <Grid container direction="row" justifyContent="start" alignItems="center"> 
+                                    <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{ bgcolor: "#2196F3", my: 2, '&:hover': {
+                                    backgroundColor: '#84BFF7'
+                                } }}  >
+                                        Add Choice
+                                    </Button>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     );
                 })}
