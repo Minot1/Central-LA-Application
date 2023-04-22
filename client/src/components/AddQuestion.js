@@ -111,14 +111,14 @@ function AddQuestion() {
         const suggestedQuestionType = suggestedQuestions[index].sValue;
         const suggestedMultiple = suggestedQuestions[index].sMultiple;
 
-        if(suggestedMultiple.length === 0) {
+        if (suggestedMultiple.length === 0) {
             const nextNum = (questions.length) + 1;
             const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType }
-            setQuestions([...questions, nextQuestion])  
-        } else{
+            setQuestions([...questions, nextQuestion])
+        } else {
             const nextNum = (questions.length) + 1;
             const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType, mMultiple: suggestedMultiple }
-            setQuestions([...questions, nextQuestion]) 
+            setQuestions([...questions, nextQuestion])
         }
         // console.log("its index " + emptyQuestionIndex) //for debugging button click
 
@@ -153,24 +153,32 @@ function AddQuestion() {
                             <Button variant="contained" size="large" color="error" onClick={() => handleDeleteQuestion(question.questionNumber)}>
                                 <DeleteIcon fontSize="inherit" />
                             </Button>
-                            <Grid item xs={10} sx={{backgroundColor: '#F5F5F5', px: 2}}>
-                                <Grid container direction="row" justifyContent="start" alignItems="center" > 
-                                    <Typography >Choice 1:</Typography> 
-                                    <TextField id="outlined-required" name="mMultiple" value= "" label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} /> 
-                                    <Button variant="contained" size="large" sx={{ bgcolor: "#b50b0b", '&:hover': {
-                                    backgroundColor: '#e60e0e'
-                                } }}>
-                                        <CancelIcon fontSize="inherit" />
-                                    </Button> 
-                                </Grid> 
-                                <Grid container direction="row" justifyContent="start" alignItems="center"> 
-                                    <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{ bgcolor: "#2196F3", my: 2, '&:hover': {
-                                    backgroundColor: '#84BFF7'
-                                } }}  >
-                                        Add Choice
-                                    </Button>
+
+                            {
+                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: '#F5F5F5', px: 2 }}>
+                                    <Grid container direction="row" justifyContent="start" alignItems="center" >
+                                        <Typography >Choice 1:</Typography>
+                                        <TextField id="outlined-required" name="mMultiple" value="" label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} />
+                                        <Button variant="contained" size="large" sx={{
+                                            bgcolor: "#b50b0b", '&:hover': {
+                                                backgroundColor: '#e60e0e'
+                                            }
+                                        }}>
+                                            <CancelIcon fontSize="inherit" />
+                                        </Button>
+                                    </Grid>
+                                    <Grid container direction="row" justifyContent="start" alignItems="center">
+                                        <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{
+                                            bgcolor: "#2196F3", my: 2, '&:hover': {
+                                                backgroundColor: '#84BFF7'
+                                            }
+                                        }}  >
+                                            Add Choice
+                                        </Button>
+                                    </Grid>
                                 </Grid>
-                            </Grid>
+                            }
+
                         </Grid>
                     );
                 })}
@@ -198,7 +206,7 @@ function AddQuestion() {
 
                             }} onClick={() => handleButtonClick(idx)
                             }
-                            disabled={questions.length === 0}
+                                disabled={questions.length === 0}
                             >
                                 {e.sQuestion}
                             </Button>
