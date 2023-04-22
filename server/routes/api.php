@@ -23,16 +23,25 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('login', [UserController::class, 'login']);
 Route::post('serviceValidate', [UserController::class, 'serviceValidate']);
-Route::post('addPost', [PostController::class, 'addPost']);
-Route::get('listPost', [PostController::class, 'listPost']);
-Route::delete('deletePost/{id}', [PostController::class, 'deletePost']);
-Route::get('post/{id}', [PostController::class, 'getPost']);
-Route::get('search/{key}',[PostController::class, 'search']);
-Route::put('updatePost/{id}',[PostController::class, 'updatePost']);
-Route::post('addApplication', [ApplicationController::class, 'addApplication']);
-Route::put('updateApplication/{id}',[ApplicationController::class, 'updateApplication']);
-Route::get('listApplication', [ApplicationController::class, 'listApplication']);
-Route::delete('deleteApplication/{id}', [ApplicationController::class, 'deleteApplication']);
-Route::get('application/{id}', [ApplicationController::class, 'getApplication']);
-Route::get('listStudentApplication/{username}', [ApplicationController::class, 'listStudentApplication']);
-Route::get('listPostApplication/{post_id}', [ApplicationController::class, 'listPostApplication']);
+
+Route::middleware(['jwt'])->group(function(){
+    Route::get('listPost', [PostController::class, 'listPost']);
+    Route::get('post/{id}', [PostController::class, 'getPost']);
+    Route::get('search/{key}',[PostController::class, 'search']);
+    Route::get('listApplication', [ApplicationController::class, 'listApplication']);
+    Route::get('application/{id}', [ApplicationController::class, 'getApplication']);
+    Route::get('listStudentApplication/{username}', [ApplicationController::class, 'listStudentApplication']);
+});
+
+Route::middleware(['jwt.student'])->group(function(){
+    Route::post('addApplication', [ApplicationController::class, 'addApplication']);
+    Route::put('updateApplication/{id}',[ApplicationController::class, 'updateApplication']);
+    Route::delete('deleteApplication/{id}', [ApplicationController::class, 'deleteApplication']);
+});
+
+Route::middleware(['jwt.instructor'])->group(function(){
+    Route::post('addPost', [PostController::class, 'addPost']);
+    Route::delete('deletePost/{id}', [PostController::class, 'deletePost']);
+    Route::put('updatePost/{id}',[PostController::class, 'updatePost']);
+    Route::get('listPostApplication/{post_id}', [ApplicationController::class, 'listPostApplication']);
+});
