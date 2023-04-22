@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Instructor;
+use App\Models\Student;
 use \Firebase\JWT\JWT;
 
 class UserController extends Controller
@@ -33,13 +35,35 @@ class UserController extends Controller
             return $array;
         }
         else{
-        $jwt = JWT::encode([
-            'role' => $array["authenticationSuccess"]["attributes"]["ou"][2],
-            'iat' => time(),
-            "exp" => time() + 60 * 60 * 4
-        ], env('JWT_SECRET'),'RS256');
-        $array["JWT_TOKEN"] = $jwt;
-        return $array;
+            $role = $array["authenticationSuccess"]["attributes"]["ou"][2];
+            if($role == 'student'){
+                $result= Student::where('student_username', $array["authenticationSuccess"]["user"])->value('student_username');
+                $date = date_create()->format('Y-m-d H:i:s');
+                if(!$result)
+                {
+                    $newStudent= new Student;
+                    $newStudent->student_username=$array["authenticationSuccess"]["user"];
+                    $newStudent->name=$array["authenticationSuccess"]["attributes"]["displayName"];
+                    $newStudent->created_at=$date;
+                    $newStudent->updated_at=$date;
+                    $newStudent->save();
+                }
+                else{
+                    $student= Student::where('student_username', $array["authenticationSuccess"]["user"])->update(["updated_at"=>$date]);
+                }
+            }
+            //instructor response needed
+            //else{
+                //instructor response needed
+            //}
+
+            $jwt = JWT::encode([
+                'role' => $role,
+                'iat' => time(),
+                "exp" => time() + 60 * 60 * 4
+            ], env('JWT_SECRET'),'RS256');
+            $array["JWT_TOKEN"] = $jwt;
+            return $array;
         }
     }
 }
