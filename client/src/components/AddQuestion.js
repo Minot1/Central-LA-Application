@@ -221,7 +221,7 @@ function AddQuestion() {
                     return (
                         <Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber} >
                             <Typography >Question {question.questionNumber}:</Typography>
-                            <TextField id="outlined-required" name="mQuestion" value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 400 }} onChange={(event) => handleInput(event, index)} />
+                            <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450 }} onChange={(event) => handleInput(event, index)} />
                             <TextField
                                 id="outlined-select-currency"
                                 name="mValue"
@@ -246,7 +246,7 @@ function AddQuestion() {
                                     {question.mMultiple.map((multiple, idx) => {
                                         return (<Grid container direction="row" justifyContent="start" alignItems="center" >
                                             <Typography >Choice {(idx + 1)}:</Typography>
-                                            <TextField id="outlined-required" name="mMultiple" value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
+                                            <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
                                             <Button variant="contained" size="large" sx={{
                                                 bgcolor: "#b50b0b", '&:hover': {
                                                     backgroundColor: '#e60e0e'
