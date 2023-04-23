@@ -227,30 +227,66 @@ function AddQuestion() {
     //         return updatedQuestions;
     //     });
     // }
+
+    // function handleOnDragEndToChoice(result) {
+    //     //console.log(result)
+    //     if (!result.destination) {
+    //         return;
+    //     }
+
+    //     const sourceIndex = result.source.index;
+    //     const destinationIndex = result.destination.index;
+
+    //     setQuestions(prevQuestions => {
+    //         const updatedQuestions = [...prevQuestions];
+    //         const sourceQuestionNumber = parseInt(result.draggableId);
+    //         const destinationQuestionNumber = parseInt(result.destination.droppableId);
+
+    //         // If the source and destination questions are the same
+    //         if (sourceQuestionNumber === destinationQuestionNumber) {
+    //             // Update the order of the choices within the same question
+    //             const questionIndex = updatedQuestions.findIndex(q => q.questionNumber === sourceQuestionNumber);
+    //             const question = updatedQuestions[questionIndex];
+    //             const [removed] = question.mMultiple.splice(sourceIndex, 1);
+    //             question.mMultiple.splice(destinationIndex, 0, removed);
+    //             updatedQuestions[questionIndex] = question;
+    //         } else {
+    //             // Update the order of the choices between two different questions
+    //             const sourceQuestionIndex = updatedQuestions.findIndex(q => q.questionNumber === sourceQuestionNumber);
+    //             const destinationQuestionIndex = updatedQuestions.findIndex(q => q.questionNumber === destinationQuestionNumber);
+    //             const sourceQuestion = updatedQuestions[sourceQuestionIndex];
+    //             const destinationQuestion = updatedQuestions[destinationQuestionIndex];
+    //             const [removed] = sourceQuestion.mMultiple.splice(sourceIndex, 1);
+    //             destinationQuestion.mMultiple.splice(destinationIndex, 0, removed);
+    //             updatedQuestions[sourceQuestionIndex] = sourceQuestion;
+    //             updatedQuestions[destinationQuestionIndex] = destinationQuestion;
+    //         }
+    //         return updatedQuestions;
+    //     });
+    // }
     function handleOnDragEnd(result) {
         if (!result.destination) {
             return;
         }
-    
+
         setQuestions(prevQuestions => {
             const updatedQuestions = Array.from(prevQuestions);
             const [removed] = updatedQuestions.splice(result.source.index, 1);
             updatedQuestions.splice(result.destination.index, 0, removed);
-    
+
             const updatedQuestionsWithNumbers = updatedQuestions.map((question, index) => {
                 return {
                     ...question,
                     questionNumber: index + 1
                 }
             });
-    
+
             return updatedQuestionsWithNumbers;
         });
     }
-        
 
-    console.log(questions); //for debugging questions
-
+    console.log(questions); //for debugging questions 
+    //sx={{backgroundColor: snapshot.isDraggingOver ? "yellow" : "white"}} // maybe add for background of droppable part
     return (
         <Grid container spacing={2} >
             <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -261,16 +297,19 @@ function AddQuestion() {
                             {questions.map((question, index) => {
                                 return (
                                     <Draggable key={question.questionNumber} draggableId={question.questionNumber.toString()} index={index}>
-                                        {(provided) => (<Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
+                                        {(provided, snapshot) => (<Grid container direction="row" justifyContent="start" alignItems="center" sx={{ backgroundColor: snapshot.isDragging && "#394263", color: snapshot.isDragging && "white" }} key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
                                             <Typography >Question {question.questionNumber}:</Typography>
-                                            <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450 }} onChange={(event) => handleInput(event, index)} />
+                                            <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
+                                                onChange={(event) => handleInput(event, index)} />
                                             <TextField
                                                 id="outlined-select-currency"
                                                 name="mValue"
                                                 select
                                                 value={question.mValue}
                                                 size="small"
-                                                sx={{ m: 2, width: 225 }}
+                                                sx={{
+                                                    m: 2, width: 225, "& .MuiSelect-select": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" }
+                                                }}
                                                 onChange={(event) => handleInput(event, index)}
                                             >
                                                 {questionType.map((option) => (
@@ -284,11 +323,12 @@ function AddQuestion() {
                                             </Button>
 
                                             {
-                                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: '#F5F5F5', px: 2 }}>
+                                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: snapshot.isDragging ? '#4D5571' : '#F5F5F5', px: 2 }}>
                                                     {question.mMultiple.map((multiple, idx) => {
                                                         return (<Grid container direction="row" justifyContent="start" alignItems="center" >
                                                             <Typography >Choice {(idx + 1)}:</Typography>
-                                                            <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
+                                                            <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
+                                                                onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
                                                             <Button variant="contained" size="large" sx={{
                                                                 bgcolor: "#b50b0b", '&:hover': {
                                                                     backgroundColor: '#e60e0e'
@@ -313,7 +353,7 @@ function AddQuestion() {
                                     </Draggable>
                                 );
                             })}
-                            {provided.placeholder}  
+                            {provided.placeholder}
                             <Grid container direction="row" justifyContent="start" alignItems="center">
                                 {questions.length < 10 &&
                                     <Button variant="contained" size="large" startIcon={<AddCircleIcon />} sx={{ bgcolor: "#394263", my: 2 }} onClick={addNewQuestion} >
