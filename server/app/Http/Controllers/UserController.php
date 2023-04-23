@@ -24,7 +24,7 @@ class UserController extends Controller
 
     function serviceValidate(Request $req){
         $ticket = $req->input('ticket');
-        $serviceUrl = $req->input('serviceUrl');
+        $serviceUrl = "http%3A%2F%2Flocalhost:3000%2Fhome";
         $res = Http::get("https://login.sabanciuniv.edu/cas/serviceValidate?service=$serviceUrl&ticket=$ticket");
 
         $xml = simplexml_load_string($res, null, null, 'cas', true);
@@ -65,5 +65,17 @@ class UserController extends Controller
             $array["JWT_TOKEN"] = $jwt;
             return $array;
         }
+    }
+
+    function instructors()
+    {
+        $instructors = Instructor::all();
+        return $instructors;
+    }
+
+    function students()
+    {
+        $students = Student::all();
+        return $students;
     }
 }
