@@ -6,8 +6,8 @@ let casOptions = { version: constant.CAS_VERSION_2_0 };
 
 let casClient = new CasClient(casEndpoint, casOptions);
 
-// const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
-const apiEndpoint = "http://localhost:8000/api"
+const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
+// const apiEndpoint = "http://localhost:8000/api"
 
 async function getAnnouncement(id) {
   try {
