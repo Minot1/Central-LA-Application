@@ -26,7 +26,7 @@ class UserController extends Controller
         $ticket = $req->input('ticket');
         $serviceUrl = $req->input('serviceUrl');
         $res = Http::get("https://login.sabanciuniv.edu/cas/serviceValidate?service=$serviceUrl&ticket=$ticket");
-        $xml = simplexml_load_string($res, null, null, 'cas', true);
+        $xml = simplexml_load_string($res, null, 0, 'cas', true);
         $json = json_encode($xml);
         $array = json_decode($json,TRUE);
 
