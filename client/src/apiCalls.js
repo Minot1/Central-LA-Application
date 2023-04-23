@@ -6,14 +6,14 @@ let casOptions = { version: constant.CAS_VERSION_2_0 };
 
 let casClient = new CasClient(casEndpoint, casOptions);
 
-//const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
+// const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
 const apiEndpoint = "http://localhost:8000/api"
 
 async function getAnnouncement(id) {
   try {
     const results = await axios.get(apiEndpoint + "/post/" + id);
-    console.log(results.data[0].questions);
-    return results.data[0];
+    console.log(results.data.questions);
+    return results.data;
   } catch (error) {}
 }
 
@@ -57,6 +57,8 @@ async function validateLogin(serviceUrl, ticket) {
         ticket: ticket,
       }
     );
+    console.log(result);
+    console.log(result.data);
     return result.data;
   } catch (error) {
     

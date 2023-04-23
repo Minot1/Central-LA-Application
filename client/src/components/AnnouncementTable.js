@@ -61,7 +61,7 @@ function AnnouncementTable(props) {
                             {isInstructor && <Button variant="contained" startIcon={<EditIcon />}>
                                 Edit
                             </Button>}
-                            {!isInstructor && <Button variant="contained" as={Link} to={"/apply/" + (index + 1)} style={{ textDecoration: 'none' }}>
+                            {!isInstructor && <Button variant="contained" as={Link} to={"/apply/" + (row.id)} style={{ textDecoration: 'none' }}>
                                 Apply
                             </Button>}
                         </TableCell>

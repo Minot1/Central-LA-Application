@@ -47,10 +47,12 @@ const ApplyPage = (props) => {
 
   useEffect(() => {
     getAnnouncement(id).then((results) => setAnnouncementInfo(results));
+    console.log("here");
   }, [id]);
 
   useEffect(() => {
     setQuestions(announcementInfo.questions);
+    console.log("there");
   }, [announcementInfo]);
 
   return (
@@ -102,7 +104,7 @@ const ApplyPage = (props) => {
               <Grid item xs={2}>
               </Grid>
               <Grid item xs={2}>
-                <Typography textAlign="center">{question}:</Typography>
+                <Typography textAlign="center">{question.question}:</Typography>
               </Grid>
               <Grid item xs={6}>
                 <TextField multiline fullWidth></TextField>
