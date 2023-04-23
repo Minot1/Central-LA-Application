@@ -8,8 +8,9 @@ import ListItemText from '@mui/material/ListItemText';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
+import CancelIcon from '@mui/icons-material/Cancel';
+import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
+
 
 const questionType = [
     { value: 'Short Answer', label: 'Short Answer' },
@@ -45,7 +46,7 @@ const suggestedQuestions = [
     {
         sValue: 'Multiple Choice',
         sQuestion: 'Soru saatine hazırlık için hangi günü/günleri özellikle kullanmayı düşünüyorsunuz?',
-        sMultiple: ["Monday", "Tuesday", "Wendesday", "Thursday", "Friday"],
+        sMultiple: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
         sBgColor: "#5FB3F6",
     },
 
@@ -53,11 +54,11 @@ const suggestedQuestions = [
 
 function AddQuestion() {
 
-    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Short Answer' }, { questionNumber: 2, mQuestion: "", mValue: 'Short Answer' }, { questionNumber: 3, mQuestion: "", mValue: 'Short Answer' }])
+    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }])
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
-        const nextQuestion = { questionNumber: nextNum, mQuestion: "", mValue: 'Short Answer' }
+        const nextQuestion = { questionNumber: nextNum, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }
         setQuestions([...questions, nextQuestion])
     }
 
@@ -93,95 +94,123 @@ function AddQuestion() {
         }
     }
 
-    function handleInput(event, index) {
-        // const newValue = event.target.value;
-        // const inputName = event.target.name;
+    // function handleInput(event, index) {
+    //     const { name, value } = event.target;
+    //     setQuestions(prevQuestions => {
+    //         return prevQuestions.map((question, i) => {
+    //             if (i === index) {
+    //                 return { ...question, [name]: value };
+    //             }
+    //             return question;
+    //         });
+    //     });
+    // }
 
-        // setQuestions(prevQuestions => {
-        //     if(inputName==="questionMain") {
-        //         return {
-        //             questionNumber: prevQuestions.questionNumber, 
-        //             mQuestion: "", 
-        //             mValue: 
-        //         }
-        //     }
-        // })
-        // const { name, value } = event.target;
-        // const updatedQuestions = [...questions];
-        // updatedQuestions[index] = { ...updatedQuestions[index], [name]: value };
-        // setQuestions(updatedQuestions);
+    function handleInput(event, index) {
         const { name, value } = event.target;
+        if (name === 'mValue' && !['Short Answer', 'Long Answer', 'Multiple Choice'].includes(value)) {
+            return;
+        }
         setQuestions(prevQuestions => {
             return prevQuestions.map((question, i) => {
                 if (i === index) {
-                    return { ...question, [name]: value };
+                    const mMultiple = (name === 'mValue' && value !== 'Multiple Choice') ? ['', ''] : question.mMultiple;
+                    return { ...question, [name]: value, mMultiple };
                 }
                 return question;
             });
         });
     }
-
+    
+      
     function handleButtonClick(index) {
         const suggestedQuestion = suggestedQuestions[index].sQuestion;
         const suggestedQuestionType = suggestedQuestions[index].sValue;
         const suggestedMultiple = suggestedQuestions[index].sMultiple;
 
-        if(suggestedMultiple.length === 0) {
+        if (suggestedMultiple.length === 0) {
             const nextNum = (questions.length) + 1;
-            const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType }
-            setQuestions([...questions, nextQuestion])  
-        } else{
+            const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType, mMultiple: ["", ""] }
+            setQuestions([...questions, nextQuestion])
+        } else {
             const nextNum = (questions.length) + 1;
             const nextQuestion = { questionNumber: nextNum, mQuestion: suggestedQuestion, mValue: suggestedQuestionType, mMultiple: suggestedMultiple }
-            setQuestions([...questions, nextQuestion]) 
+            setQuestions([...questions, nextQuestion])
         }
-
-        // const lastQuestion = questions[questions.length - 1];
-        // const emptyQuestionIndex = questions.findIndex((q) => q.mQuestion.trim() === "");
-
         // console.log("its index " + emptyQuestionIndex) //for debugging button click
-
-        // if (emptyQuestionIndex !== -1) {
-        //     if (suggestedMultiple.length === 0) {
-        //         const newQuestions = [...questions];
-        //         newQuestions[emptyQuestionIndex].mQuestion = suggestedQuestion;
-        //         newQuestions[emptyQuestionIndex].mValue = suggestedQuestionType;
-        //         if(newQuestions[emptyQuestionIndex]["mMultiple"]) {
-        //             delete newQuestions[emptyQuestionIndex]["mMultiple"];
-        //             setQuestions(newQuestions);
-        //         }
-        //         setQuestions(newQuestions);
-        //     }
-        //     else {
-        //         const newQuestionsMultiple = [...questions];
-        //         newQuestionsMultiple[emptyQuestionIndex].mQuestion = suggestedQuestion;
-        //         newQuestionsMultiple[emptyQuestionIndex].mValue = suggestedQuestionType;
-        //         newQuestionsMultiple[emptyQuestionIndex]["mMultiple"] = suggestedMultiple;
-        //         setQuestions(newQuestionsMultiple);
-        //     }
-        // } else if (lastQuestion.length !== -1) {
-        //     if (suggestedMultiple.length === 0) {
-        //         const newQuestions = [...questions];
-        //         newQuestions[newQuestions.length - 1].mQuestion = suggestedQuestion;
-        //         newQuestions[newQuestions.length - 1].mValue = suggestedQuestionType;
-        //         if(newQuestions[newQuestions.length - 1]["mMultiple"]) {
-        //             delete newQuestions[newQuestions.length - 1]["mMultiple"];
-        //             setQuestions(newQuestions);
-        //         }
-        //         setQuestions(newQuestions);
-        //     }
-        //     else {
-        //         const newQuestionsMultiple = [...questions];
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mQuestion = suggestedQuestion;
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1].mValue = suggestedQuestionType;
-        //         newQuestionsMultiple[newQuestionsMultiple.length - 1]["mMultiple"] = suggestedMultiple;
-        //         setQuestions(newQuestionsMultiple);
-        //     }
-        // }
-
 
     }
 
+    function addChoiceToQuestion(questions, questionNumber) {
+        const updatedQuestions = [...questions]; // create a copy of the original array
+        
+        // find the index of the question with the specified questionNumber
+        const questionIndex = updatedQuestions.findIndex((q) => q.questionNumber === questionNumber);
+        
+        if (questionIndex !== -1) { // if the question exists
+          const updatedChoices = [...updatedQuestions[questionIndex].mMultiple]; // create a copy of the original choices array
+          updatedChoices.push(""); // add the new choice to the end of the array
+          
+          // update the question's choices array with the new choices array
+          updatedQuestions[questionIndex] = {
+            ...updatedQuestions[questionIndex],
+            mMultiple: updatedChoices
+          };
+        }
+        
+        return updatedQuestions; // return the updated array
+    }
+
+    function handleAddChoice(questionNumber) {
+        const updatedQuestions = addChoiceToQuestion(questions, questionNumber);
+        setQuestions(updatedQuestions);
+    }
+
+    function deleteChoice(questionNumber, choiceIndex) {
+        setQuestions(prevQuestions => {
+          // Find the question by its number
+          const question = prevQuestions.find(q => q.questionNumber === questionNumber);
+          
+          // Make a copy of the question object and its choices array
+          const updatedQuestion = {...question};
+          const updatedChoices = [...updatedQuestion.mMultiple];
+          
+          // Remove the choice at the given index
+          updatedChoices.splice(choiceIndex, 1);
+          
+          // Update the question object with the new choices array
+          updatedQuestion.mMultiple = updatedChoices;
+          
+          // Find the index of the question in the previous questions array
+          const questionIndex = prevQuestions.indexOf(question);
+          
+          // Make a copy of the previous questions array
+          const updatedQuestions = [...prevQuestions];
+          
+          // Update the question at the correct index with the new question object
+          updatedQuestions[questionIndex] = updatedQuestion;
+          
+          // Return the updated questions array
+          return updatedQuestions;
+        });
+    }
+
+    function handleInputChoice(questionNumber, choiceIndex, newValue) {
+        const newQuestions = questions.map((question) => {
+          if (question.questionNumber === questionNumber) {
+            const newMultiple = question.mMultiple.map((choice, index) => {
+              if (index === choiceIndex) {
+                return newValue;
+              }
+              return choice;
+            });
+            return { ...question, mMultiple: newMultiple };
+          }
+          return question;
+        });
+        setQuestions(newQuestions);
+    }
+        
     console.log(questions); //for debugging questions
 
     return (
@@ -190,9 +219,9 @@ function AddQuestion() {
                 <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
                 {questions.map((question, index) => {
                     return (
-                        <Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber}>
+                        <Grid container direction="row" justifyContent="start" alignItems="center" key={question.questionNumber} >
                             <Typography >Question {question.questionNumber}:</Typography>
-                            <TextField id="outlined-required" name="mQuestion" value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 400 }} onChange={(event) => handleInput(event, index)} />
+                            <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450 }} onChange={(event) => handleInput(event, index)} />
                             <TextField
                                 id="outlined-select-currency"
                                 name="mValue"
@@ -211,6 +240,34 @@ function AddQuestion() {
                             <Button variant="contained" size="large" color="error" onClick={() => handleDeleteQuestion(question.questionNumber)}>
                                 <DeleteIcon fontSize="inherit" />
                             </Button>
+
+                            {
+                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: '#F5F5F5', px: 2 }}>
+                                    {question.mMultiple.map((multiple, idx) => {
+                                        return (<Grid container direction="row" justifyContent="start" alignItems="center" >
+                                            <Typography >Choice {(idx + 1)}:</Typography>
+                                            <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300 }} onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
+                                            <Button variant="contained" size="large" sx={{
+                                                bgcolor: "#b50b0b", '&:hover': {
+                                                    backgroundColor: '#e60e0e'
+                                                }
+                                            }} onClick={() => deleteChoice(question.questionNumber, idx)}>
+                                                <CancelIcon fontSize="inherit" />
+                                            </Button>
+                                        </Grid>)
+                                    })}
+                                    <Grid container direction="row" justifyContent="start" alignItems="center">
+                                        <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{
+                                            bgcolor: "#2196F3", my: 2, '&:hover': {
+                                                backgroundColor: '#84BFF7'
+                                            }
+                                        }} onClick={() => handleAddChoice(question.questionNumber)} >
+                                            Add Choice
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+                            }
+
                         </Grid>
                     );
                 })}
@@ -238,7 +295,7 @@ function AddQuestion() {
 
                             }} onClick={() => handleButtonClick(idx)
                             }
-                            disabled={questions.length === 0}
+                                disabled={questions.length === 0}
                             >
                                 {e.sQuestion}
                             </Button>
