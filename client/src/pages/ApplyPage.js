@@ -28,6 +28,7 @@ const ApplyPage = (props) => {
   ]
 
   const [questions, setQuestions] = useState([]);
+  const [questionsAndAnswers, setQuestionsAndAnswers] = useState({});
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const { id } = useParams();
   const [filename, setFile] = useState(() => {
@@ -44,13 +45,42 @@ const ApplyPage = (props) => {
     setFile(name);
   }
 
+  const onAnswerChange = (e, question) => {
+    e.preventDefault();
+    let temp = questionsAndAnswers;
+    for (const [q, a] of Object.entries(temp)){
+      if (q === question) {
+        temp[q] = e.target.value;
+      }
+    }
+    console.log(temp);
+    setQuestionsAndAnswers(temp);
+  }
 
   useEffect(() => {
     getAnnouncement(id).then((results) => setAnnouncementInfo(results));
   }, [id]);
 
   useEffect(() => {
+    var temp = {};
+    if (questions !== undefined) {
+      for (let index = 0; index < questions.length; index++) {
+        const element = questions[index];
+        temp[element] = "";
+      }
+      setQuestionsAndAnswers(temp);
+    }
+  }, [questions]);
+
+  useEffect(() => {
     setQuestions(announcementInfo.questions);
+    if (announcementInfo.questions !== undefined) {
+      let temp = questionsAndAnswers;
+      announcementInfo.questions.map((q) => {
+        temp[q] = "";
+      });
+      setQuestionsAndAnswers(temp);
+    }
   }, [announcementInfo]);
 
   return (
@@ -105,7 +135,7 @@ const ApplyPage = (props) => {
                 <Typography textAlign="center">{question}:</Typography>
               </Grid>
               <Grid item xs={6}>
-                <TextField multiline fullWidth></TextField>
+                <TextField name={question} value={questionsAndAnswers.question} onChange={(e) => {onAnswerChange(e, question)}} multiline fullWidth></TextField>
               </Grid>
               <Grid item xs={2}>
               </Grid>
