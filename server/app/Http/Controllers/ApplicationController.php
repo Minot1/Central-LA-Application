@@ -39,7 +39,7 @@ class ApplicationController extends Controller
             $answer->answer = $ans["answer"];
             $answer->save();
         }
-        return $application;
+        return ["result"=>"Application has been added"];
     }
 
     function updateApplication(Request $req, $id)
@@ -68,7 +68,11 @@ class ApplicationController extends Controller
         $answers = Answer::where('application_id',$application_id)->get();
         $answers = json_decode($answers,TRUE);
         $result["answers"] = $answers;
+        
+        $student = Student::where('student_username',$result["student_username"])->value("name");
+        $result["student_name"] = $student;
         $result = json_encode($result,TRUE);
+
         return $result;
     }
 
@@ -81,6 +85,9 @@ class ApplicationController extends Controller
             
             $answers = json_decode($answers,TRUE);
             $result["answers"] = $answers;
+
+            $student = Student::where('student_username',$result["student_username"])->value("name");
+            $result["student_name"] = $student;
         }
         $results = json_encode($results,TRUE);
         return $results;
@@ -95,6 +102,9 @@ class ApplicationController extends Controller
             
             $answers = json_decode($answers,TRUE);
             $result["answers"] = $answers;
+
+            $student = Student::where('student_username',$result["student_username"])->value("name");
+            $result["student_name"] = $student;
         }
         $results = json_encode($results,TRUE);
         return $results;
@@ -109,6 +119,9 @@ class ApplicationController extends Controller
             
             $answers = json_decode($answers,TRUE);
             $result["answers"] = $answers;
+
+            $student = Student::where('student_username',$result["student_username"])->value("name");
+            $result["student_name"] = $student;
         }
         $results = json_encode($results,TRUE);
         return $results;
@@ -134,6 +147,8 @@ class ApplicationController extends Controller
         $answers = Answer::where('application_id',$result["id"])->get();
         $answers = json_decode($answers,TRUE);
         $result["answers"] = $answers;
+        $student = Student::where('student_username',$result["student_username"])->value("name");
+        $result["student_name"] = $student;
         $result = json_encode($result,TRUE);
         return $result;
     }

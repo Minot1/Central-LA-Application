@@ -50,9 +50,11 @@ class PostController extends Controller
         $results = json_decode($results,TRUE);
         foreach ($results as &$result){
             $questions = Question::where('post_id',$result["id"])->get();
-            
             $questions = json_decode($questions,TRUE);
             $result["questions"] = $questions;
+
+            $instructor = Instructor::where('instructor_username',$result["instructor_username"])->value("name");
+            $result["instructor_name"] = $instructor;
         }
         $results = json_encode($results,TRUE);
         return $results;
@@ -78,6 +80,8 @@ class PostController extends Controller
         $questions = Question::where('post_id',$result["id"])->get();
         $questions = json_decode($questions,TRUE);
         $result["questions"] = $questions;
+        $instructor = Instructor::where('instructor_username',$result["instructor_username"])->value("name");
+        $result["instructor_name"] = $instructor;
         $result = json_encode($result,TRUE);
         return $result;
     }
@@ -95,6 +99,9 @@ class PostController extends Controller
             
             $questions = json_decode($questions,TRUE);
             $result["questions"] = $questions;
+
+            $instructor = Instructor::where('instructor_username',$result["instructor_username"])->value("name");
+            $result["instructor_name"] = $instructor;
         }
         $results = json_encode($results,TRUE);
         return $results;
@@ -130,6 +137,8 @@ class PostController extends Controller
         $questions = Question::where('post_id',$result["id"])->get();
         $questions = json_decode($questions,TRUE);
         $result["questions"] = $questions;
+        $instructor = Instructor::where('instructor_username',$result["instructor_username"])->value("name");
+        $result["instructor_name"] = $instructor;
         $result = json_encode($result,TRUE);
         return $result;
     }
