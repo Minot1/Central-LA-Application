@@ -26,6 +26,7 @@ function App() {
         // parse and get the ticket
         const ticket = urlParams.get("ticket");
         console.log(ticket);
+        console.log("serviceUrl: ", encodeURIComponent(path));
         // send it to backend
         validateLogin(encodeURIComponent(path), ticket).then(result => {
           console.log(result);
