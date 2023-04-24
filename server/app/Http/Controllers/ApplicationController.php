@@ -137,4 +137,22 @@ class ApplicationController extends Controller
         $result = json_encode($result,TRUE);
         return $result;
     }
+
+    function getGrade(Request $req, $id)
+    {
+        $application = Application::find($id);
+        $transcript = $application->transcript;
+        $lines = explode("\n", $transcript);
+        $grade = null;
+
+        foreach ($lines as $line) {
+            if (strpos($line, $req->courceCode) !== false) {
+                $columns = explode("\t", substr($line,strpos($line, $req->courceCode)));
+                $grade = $columns[4];
+                break;
+            }
+        }
+
+        return $grade;
+    }
 }
