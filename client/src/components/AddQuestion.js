@@ -14,32 +14,32 @@ import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate
 
 
 const questionType = [
-    { value: 'Short Answer', label: 'Short Answer' },
-    { value: 'Long Answer', label: 'Long Answer' },
+    { value: 'Text Answer', label: 'Text Answer' },
+    { value: 'Numeric Answer', label: 'Numeric Answer' },
     { value: 'Multiple Choice', label: 'Multiple Choice' },
 ]
 
 const suggestedQuestions = [
     {
-        sValue: 'Long Answer',
+        sValue: 'Numeric Answer',
         sQuestion: 'Explain in detail why you want to be an LA for this course',
         sMultiple: [],
         sBgColor: "#5FB3F6",
     },
     {
-        sValue: 'Long Answer',
+        sValue: 'Numeric Answer',
         sQuestion: 'Explain in detail why you are qualified for the position',
         sMultiple: [],
         sBgColor: "#2196F3",
     },
     {
-        sValue: 'Short Answer',
+        sValue: 'Text Answer',
         sQuestion: 'Previous teaching experiences',
         sMultiple: [],
         sBgColor: "#5FB3F6",
     },
     {
-        sValue: 'Long Answer',
+        sValue: 'Numeric Answer',
         sQuestion: 'Bu dersi alırken en sevdiğiniz konu neydi? Sizi en çok zorlayan konu neydi?',
         sMultiple: [],
         sBgColor: "#2196F3",
@@ -55,11 +55,11 @@ const suggestedQuestions = [
 
 function AddQuestion() {
 
-    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }])
+    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }])
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
-        const nextQuestion = { questionNumber: nextNum, mQuestion: "", mValue: 'Short Answer', mMultiple: ["", ""] }
+        const nextQuestion = { questionNumber: nextNum, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }
         setQuestions([...questions, nextQuestion])
     }
 
@@ -95,21 +95,9 @@ function AddQuestion() {
         }
     }
 
-    // function handleInput(event, index) {
-    //     const { name, value } = event.target;
-    //     setQuestions(prevQuestions => {
-    //         return prevQuestions.map((question, i) => {
-    //             if (i === index) {
-    //                 return { ...question, [name]: value };
-    //             }
-    //             return question;
-    //         });
-    //     });
-    // }
-
     function handleInput(event, index) {
         const { name, value } = event.target;
-        if (name === 'mValue' && !['Short Answer', 'Long Answer', 'Multiple Choice'].includes(value)) {
+        if (name === 'mValue' && !['Text Answer', 'Numeric Answer', 'Multiple Choice'].includes(value)) {
             return;
         }
         setQuestions(prevQuestions => {
@@ -212,58 +200,6 @@ function AddQuestion() {
         setQuestions(newQuestions);
     }
 
-    // function handleOnDragEnd(result) {
-    //     if (!result.destination) {
-    //         return;
-    //     }
-
-    //     const sourceIndex = result.source.index;
-    //     const destinationIndex = result.destination.index;
-
-    //     setQuestions(prevQuestions => {
-    //         const updatedQuestions = [...prevQuestions];
-    //         const [removed] = updatedQuestions.splice(sourceIndex, 1);
-    //         updatedQuestions.splice(destinationIndex, 0, removed);
-    //         return updatedQuestions;
-    //     });
-    // }
-
-    // function handleOnDragEndToChoice(result) {
-    //     //console.log(result)
-    //     if (!result.destination) {
-    //         return;
-    //     }
-
-    //     const sourceIndex = result.source.index;
-    //     const destinationIndex = result.destination.index;
-
-    //     setQuestions(prevQuestions => {
-    //         const updatedQuestions = [...prevQuestions];
-    //         const sourceQuestionNumber = parseInt(result.draggableId);
-    //         const destinationQuestionNumber = parseInt(result.destination.droppableId);
-
-    //         // If the source and destination questions are the same
-    //         if (sourceQuestionNumber === destinationQuestionNumber) {
-    //             // Update the order of the choices within the same question
-    //             const questionIndex = updatedQuestions.findIndex(q => q.questionNumber === sourceQuestionNumber);
-    //             const question = updatedQuestions[questionIndex];
-    //             const [removed] = question.mMultiple.splice(sourceIndex, 1);
-    //             question.mMultiple.splice(destinationIndex, 0, removed);
-    //             updatedQuestions[questionIndex] = question;
-    //         } else {
-    //             // Update the order of the choices between two different questions
-    //             const sourceQuestionIndex = updatedQuestions.findIndex(q => q.questionNumber === sourceQuestionNumber);
-    //             const destinationQuestionIndex = updatedQuestions.findIndex(q => q.questionNumber === destinationQuestionNumber);
-    //             const sourceQuestion = updatedQuestions[sourceQuestionIndex];
-    //             const destinationQuestion = updatedQuestions[destinationQuestionIndex];
-    //             const [removed] = sourceQuestion.mMultiple.splice(sourceIndex, 1);
-    //             destinationQuestion.mMultiple.splice(destinationIndex, 0, removed);
-    //             updatedQuestions[sourceQuestionIndex] = sourceQuestion;
-    //             updatedQuestions[destinationQuestionIndex] = destinationQuestion;
-    //         }
-    //         return updatedQuestions;
-    //     });
-    // }
     function handleOnDragEnd(result) {
         if (!result.destination) {
             return;
@@ -286,7 +222,7 @@ function AddQuestion() {
     }
 
     console.log(questions); //for debugging questions 
-    //sx={{backgroundColor: snapshot.isDraggingOver ? "yellow" : "white"}} // maybe add for background of droppable part
+    
     return (
         <Grid container spacing={2} >
             <DragDropContext onDragEnd={handleOnDragEnd}>
@@ -297,7 +233,7 @@ function AddQuestion() {
                             {questions.map((question, index) => {
                                 return (
                                     <Draggable key={question.questionNumber} draggableId={question.questionNumber.toString()} index={index}>
-                                        {(provided, snapshot) => (<Grid container direction="row" justifyContent="start" alignItems="center" sx={{ backgroundColor: snapshot.isDragging && "#394263", color: snapshot.isDragging && "white" }} key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
+                                        {(provided, snapshot) => (<Grid container direction="row" justifyContent="start" alignItems="center" sx={{ px: 1, backgroundColor: snapshot.isDragging && "#4D5571", color: snapshot.isDragging && "white" }} key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
                                             <Typography >Question {question.questionNumber}:</Typography>
                                             <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
                                                 onChange={(event) => handleInput(event, index)} />
@@ -323,7 +259,7 @@ function AddQuestion() {
                                             </Button>
 
                                             {
-                                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: snapshot.isDragging ? '#4D5571' : '#F5F5F5', px: 2 }}>
+                                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: snapshot.isDragging ? '#6A759C' : '#F5F5F5', px: 2 }}>
                                                     {question.mMultiple.map((multiple, idx) => {
                                                         return (<Grid container direction="row" justifyContent="start" alignItems="center" >
                                                             <Typography >Choice {(idx + 1)}:</Typography>
@@ -355,7 +291,7 @@ function AddQuestion() {
                             })}
                             {provided.placeholder}
                             <Grid container direction="row" justifyContent="start" alignItems="center">
-                                {questions.length < 10 &&
+                                {questions.length < 20 &&
                                     <Button variant="contained" size="large" startIcon={<AddCircleIcon />} sx={{ bgcolor: "#394263", my: 2 }} onClick={addNewQuestion} >
                                         Add Question
                                     </Button>
@@ -385,7 +321,6 @@ function AddQuestion() {
 
                             }} onClick={() => handleButtonClick(idx)
                             }
-                                disabled={questions.length === 0}
                             >
                                 {e.sQuestion}
                             </Button>
