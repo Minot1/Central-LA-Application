@@ -1,6 +1,11 @@
 import "./App.css";
 import MockCAS from "./pages/MockCAS";
-import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useSearchParams,
+} from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateAnnouncement from "./pages/CreateAnnouncement";
 import ApplyPage from "./pages/ApplyPage";
@@ -17,7 +22,7 @@ function App() {
   const isLoading = useSelector((state) => state.user.isLoading);
   const dispatch = useDispatch();
   const url = window.location.href;
-  let path = window.location.href.split('?')[0]
+  let path = window.location.href.split("?")[0];
 
   useEffect(() => {
     if (!isLoggedIn && !isLoading) {
@@ -28,15 +33,18 @@ function App() {
         console.log(ticket);
         console.log("serviceUrl: ", encodeURIComponent(path));
         // send it to backend
-        validateLogin(encodeURIComponent(path), ticket).then(result => {
+        validateLogin(encodeURIComponent(path), ticket).then((result) => {
           console.log(result);
-          dispatch(successLogin({
-            jwtToken: result.JWT_TOKEN,
-            username: result.authenticationSuccess.attributes.cn, 
-            name: result.authenticationSuccess.attributes.givenName, 
-            surname: result.authenticationSuccess.attributes.sn,
-            isInstructor: result.authenticationSuccess.attributes.ou[2] != "student",
-          }));
+          dispatch(
+            successLogin({
+              jwtToken: result.JWT_TOKEN,
+              username: result.authenticationSuccess.attributes.cn,
+              name: result.authenticationSuccess.attributes.givenName,
+              surname: result.authenticationSuccess.attributes.sn,
+              isInstructor:
+                result.authenticationSuccess.attributes.ou[1] == "academic",
+            })
+          );
         });
         // dispatch(successLogin({username: "aa", name: "bb", surname: "cc"}));
         // check the response
@@ -49,22 +57,28 @@ function App() {
   }, []);
 
   return (
-      <Routes>
-        {isLoggedIn ? (
-          <>
-        <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
-        <Route path="/home" element={<HomePage></HomePage>}></Route>
-        <Route path="/create-announcement" element={<CreateAnnouncement></CreateAnnouncement>}></Route>
-        <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
-        <Route path="/applicants" element={<ApplicantsPage></ApplicantsPage>}></Route>
+    <Routes>
+      {isLoggedIn ? (
+        <>
+          <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
+          <Route path="/home" element={<HomePage></HomePage>}></Route>
+          <Route
+            path="/create-announcement"
+            element={<CreateAnnouncement></CreateAnnouncement>}
+          ></Route>
+          <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
+          <Route
+            path="/applicants"
+            element={<ApplicantsPage></ApplicantsPage>}
+          ></Route>
         </>
-        ) : (
-          <>
+      ) : (
+        <>
           <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
           <Route path="*" element={<LoginCAS></LoginCAS>}></Route>
-          </>
-        )}
-      </Routes>
+        </>
+      )}
+    </Routes>
   );
 }
 
