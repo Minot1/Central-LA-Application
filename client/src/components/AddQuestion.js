@@ -221,7 +221,7 @@ function AddQuestion() {
         });
     }
 
-    console.log(questions); //for debugging questions 
+    //console.log(questions); //for debugging questions 
     
     return (
         <Grid container spacing={2} >
