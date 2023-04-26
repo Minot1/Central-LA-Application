@@ -48,8 +48,9 @@ function CreateAnnouncement() {
   const [inputAuthValue, setAuthInputValue] = React.useState("");
 
   //used in autocomplete for keeping value and input value
-  const handleAuthAdd = (newValue) => {
+  function handleAuthAdd(newValue) {
     if (newValue !== null) {
+      
       const selectedUser = authUsers.find(user => user.display_name === newValue);
       setAuthPeople([...authPeople, selectedUser]);
     }
@@ -57,13 +58,35 @@ function CreateAnnouncement() {
     setAuthInputValue("");
   };
 
-  const handleAuthDelete = (userToDelete) => {
+  function handleAuthDelete(userToDelete) {
     const updatedAuthPeople = authPeople.filter(
       (user) => user.username !== userToDelete.username
     );
-    console.log(updatedAuthPeople)
+    // console.log(updatedAuthPeople)
     setAuthPeople(updatedAuthPeople);
   };
+
+  function filterOptions(options, { inputValue }) {
+    const filtered = options.filter((option) => {
+      if (authPeople.some((person) => person.display_name === option)) {
+        return false; // filter out if already in authPeople
+      }
+      return option.toLowerCase().includes(inputValue.toLowerCase());
+    });
+    
+    // sort the filtered options based on their match with the input value
+    const inputValueLowerCase = inputValue.toLowerCase();
+    filtered.sort((a, b) => {
+      const aIndex = a.toLowerCase().indexOf(inputValueLowerCase);
+      const bIndex = b.toLowerCase().indexOf(inputValueLowerCase);
+      if (aIndex !== bIndex) {
+        return aIndex - bIndex;
+      }
+      return a.localeCompare(b);
+    });
+  
+    return filtered;
+  }
 
   console.log(authPeople)
 
@@ -138,30 +161,22 @@ function CreateAnnouncement() {
                   options={authUsers.map((authUser) => {
                     return authUser.display_name
                   })}
-                  // filterOptions={(options, { inputValue, selectedValue }) => {
-                  //   if (inputValue !== null && selectedValue !== null) {
-                  //     return options.filter((option) => {
-                  //       const displayValue = option.display_name
-                  //       const inputVal = inputValue
-                  //       const isSelected = selectedValue.findIndex((val) => val.username === option.username) !== -1;
-
-                  //       return displayValue.indexOf(inputVal) !== -1 && !isSelected;
-                  //     })
-                  //   }
-                  // }
-                  // }
+                  filterOptions={filterOptions}
                   value={authValue}
                   inputValue={inputAuthValue}
                   onInputChange={(event, newInputValue) => {
-                    setAuthInputValue(newInputValue);
+                    if(newInputValue !== null) {
+                      setAuthInputValue(newInputValue);
+                    }
+                    
                   }}
-                  onChange={(event, newValue) => { handleAuthAdd(newValue) }}
+                  onChange={(event, newValue) => { if (newValue !==null) handleAuthAdd(newValue) }}
                   renderInput={(params) => <TextField {...params} multiline size="small" sx={{ mx: 2, mt: 1, mb: 2, width: 300 }} />}
 
                 />
-                {authPeople.length > 0 && authPeople.map((authPerson) => {
+                {authPeople.length > 0 && authPeople.map((authPerson, index) => {
                   return (<Chip key={authPerson.username} label={authPerson.display_name} variant="outlined"
-                    avatar={<Avatar alignItems="center" sx={{ backgroundColor: "#4D5571" }}>
+                    avatar={<Avatar sx={{ backgroundColor: index % 2 === 0 ? "#6A759C" : "#4D5571" }}>
                       <Typography fontSize="small" sx={{ color: "white" }}>
                         {authPerson.display_name.split(' ')[0][0]}
                       </Typography>
