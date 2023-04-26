@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import AppBarHeader from '../components/AppBarHeader'
 import Sidebar from '../components/Sidebar'
 import AddQuestion from '../components/AddQuestion'
@@ -11,6 +11,8 @@ import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -26,15 +28,10 @@ function CreateAnnouncement() {
     { value: 'B-', label: 'B-' },
     { value: 'C+', label: 'C+' },
   ];
-  const workHour = [
+  const WorkHour = [
     { value: '5 Hours', label: '5 Hours' },
     { value: '10 Hours', label: '10 Hours' },
   ]
-  const questionType = [
-    { value: 'Short Answer', label: 'Short Answer' },
-    { value: 'Long Answer', label: 'Long Answer' },
-  ]
-
   const authUsers = [
     { display_name: "Murat Karaca", username: "muratkaraca" },
     { display_name: "Taner Dincer", username: "tanerd" },
@@ -50,7 +47,7 @@ function CreateAnnouncement() {
   //used in autocomplete for keeping value and input value
   function handleAuthAdd(newValue) {
     if (newValue !== null) {
-      
+
       const selectedUser = authUsers.find(user => user.display_name === newValue);
       setAuthPeople([...authPeople, selectedUser]);
     }
@@ -73,7 +70,7 @@ function CreateAnnouncement() {
       }
       return option.toLowerCase().includes(inputValue.toLowerCase());
     });
-    
+
     // sort the filtered options based on their match with the input value
     const inputValueLowerCase = inputValue.toLowerCase();
     filtered.sort((a, b) => {
@@ -84,11 +81,38 @@ function CreateAnnouncement() {
       }
       return a.localeCompare(b);
     });
-  
+
     return filtered;
   }
 
-  console.log(authPeople)
+  //console.log(authPeople) //for debugging authPeople
+
+  const [announcementDetails, setAnnouncementDetails] = useState({
+    courseCode: "",
+    lastApplicationDate: new Date().toLocaleDateString('en-CA'),
+    lastApplicationTime: new Date().toLocaleTimeString().replace(/(.*)\D\d+/, "$1"),
+    letterGrade: "A",
+    workHours: "5 Hours",
+    jobDetails: "",
+    authInstructor: authPeople,
+  });
+
+  useEffect(() => {
+    setAnnouncementDetails((prevDetails) => ({
+      ...prevDetails,
+      authInstructor: authPeople,
+    }));
+  }, [authPeople]);
+
+  function handleInput(event) {
+    const { name, value } = event.target;
+    setAnnouncementDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: value,
+    }));
+  };
+
+  console.log(announcementDetails) //for debugging announcement details
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -103,21 +127,23 @@ function CreateAnnouncement() {
             <Typography variant='h5' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Course Code:</Typography>
-              <TextField id="outlined-required" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} sx={{ m: 2, width: 350 }} />
+              <TextField id="outlined-required" name="courseCode" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} sx={{ m: 2, width: 350 }} value={announcementDetails.courseCode} onChange={handleInput} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Last Application Date:</Typography>
-              <TextField id="outlined-required" label="Enter last date" variant="outlined" type="date" defaultValue={new Date()} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} />
-              <TextField id="outlined-required" label="Enter deadline" variant="outlined" type="time" defaultValue={new Date().toLocaleTimeString().replace(/(.*)\D\d+/, '$1')} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} />
+              <TextField id="outlined-required" name="lastApplicationDate" label="Enter last date" variant="outlined" type="date" value={announcementDetails.lastApplicationDate} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} onChange={handleInput} />
+              <TextField id="outlined-required" name="lastApplicationTime" label="Enter deadline" variant="outlined" type="time" value={announcementDetails.lastApplicationTime} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} onChange={handleInput} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography > Minimum Desired Letter Grade:</Typography>
               <TextField
                 id="outlined-select-currency"
+                name="letterGrade"
                 select
-                defaultValue="A"
+                value={announcementDetails.letterGrade}
                 size="small"
                 sx={{ m: 2, width: 225 }}
+                onChange={handleInput}
               >
                 {grades.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -130,12 +156,14 @@ function CreateAnnouncement() {
               <Typography >Work Hours:</Typography>
               <TextField
                 id="outlined-select-currency"
+                name="workHours"
                 select
-                defaultValue="5 Hours"
+                value={announcementDetails.workHours}
                 size="small"
                 sx={{ m: 2, width: 225 }}
+                onChange={handleInput}
               >
-                {workHour.map((option) => (
+                {WorkHour.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
@@ -146,11 +174,14 @@ function CreateAnnouncement() {
               <Typography paddingTop={3}>Job Details:</Typography>
               <TextField
                 placeholder="Enter Job Details..."
+                name="jobDetails"
+                value={announcementDetails.jobDetails}
                 multiline
                 size="small"
                 rows={5}
                 maxRows={20}
                 sx={{ m: 2, width: 400 }}
+                onChange={handleInput}
               />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="flex-start">
@@ -165,12 +196,12 @@ function CreateAnnouncement() {
                   value={authValue}
                   inputValue={inputAuthValue}
                   onInputChange={(event, newInputValue) => {
-                    if(newInputValue !== null) {
+                    if (newInputValue !== null) {
                       setAuthInputValue(newInputValue);
                     }
-                    
+
                   }}
-                  onChange={(event, newValue) => { if (newValue !==null) handleAuthAdd(newValue) }}
+                  onChange={(event, newValue) => { if (newValue !== null) handleAuthAdd(newValue) }}
                   renderInput={(params) => <TextField {...params} multiline size="small" sx={{ mx: 2, mt: 1, mb: 2, width: 300 }} />}
 
                 />
@@ -195,40 +226,40 @@ function CreateAnnouncement() {
               <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Warnings:</Typography>
               <List>
                 <ListItem>
-                  <ListItemText primary="At most x questions can add on the application.">
-                  </ListItemText>
+                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                    <FiberManualRecordIcon fontSize="inherit" />
+                  </ListItemIcon>
+                  <ListItemText primary="At most (20) questions can add on the application." />
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="These information come automatically to you:">
-                  </ListItemText>
+                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                    <FiberManualRecordIcon fontSize="inherit" />
+                  </ListItemIcon>
+                  <ListItemText primary="These information come automatically to you:" />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="1) Name">
-                  </ListItemText>
+                  <ListItemText secondary="1) Name" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="2) ID">
-                  </ListItemText>
+                  <ListItemText secondary="2) ID" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="3) Term">
-                  </ListItemText>
+                  <ListItemText secondary="3) Term" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="4) Previous Grade">
-                  </ListItemText>
+                  <ListItemText secondary="4) Previous Grade" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="5) Class">
-                  </ListItemText>
+                  <ListItemText secondary="5) Class" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="6) GPA">
-                  </ListItemText>
+                  <ListItemText secondary="6) GPA" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
                 </ListItem>
                 <ListItem>
-                  <ListItemText primary="Please do not add these as questions.">
-                  </ListItemText>
+                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                    <FiberManualRecordIcon fontSize="inherit" />
+                  </ListItemIcon>
+                  <ListItemText primary="Please do not add these as questions." />
                 </ListItem>
               </List>
             </Box>
