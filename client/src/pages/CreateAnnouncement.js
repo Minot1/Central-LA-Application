@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AppBarHeader from '../components/AppBarHeader'
 import Sidebar from '../components/Sidebar'
 import AddQuestion from '../components/AddQuestion'
 import { Typography, Box, Button, Grid } from '@mui/material'
 import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import Chip from '@mui/material/Chip';
 import MenuItem from '@mui/material/MenuItem';
+import Avatar from '@mui/material/Avatar';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,9 +17,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 
-
 function CreateAnnouncement() {
-
   const grades = [
     { value: 'A', label: 'A' },
     { value: 'A-', label: 'A-' },
@@ -34,6 +35,61 @@ function CreateAnnouncement() {
     { value: 'Long Answer', label: 'Long Answer' },
   ]
 
+  const authUsers = [
+    { display_name: "Murat Karaca", username: "muratkaraca" },
+    { display_name: "Taner Dincer", username: "tanerd" },
+    { display_name: "Melih Gursoy", username: "melihg" },
+    { display_name: "Baha Ersoy", username: "bersoy" },
+    { display_name: "Cem Kaya", username: "cemkaya" },
+  ]
+
+  const [authPeople, setAuthPeople] = useState([]); //used for send request as selected from list
+  const [authValue, setAuthValue] = useState("");
+  const [inputAuthValue, setAuthInputValue] = React.useState("");
+
+  //used in autocomplete for keeping value and input value
+  function handleAuthAdd(newValue) {
+    if (newValue !== null) {
+      
+      const selectedUser = authUsers.find(user => user.display_name === newValue);
+      setAuthPeople([...authPeople, selectedUser]);
+    }
+    setAuthValue("");
+    setAuthInputValue("");
+  };
+
+  function handleAuthDelete(userToDelete) {
+    const updatedAuthPeople = authPeople.filter(
+      (user) => user.username !== userToDelete.username
+    );
+    // console.log(updatedAuthPeople)
+    setAuthPeople(updatedAuthPeople);
+  };
+
+  function filterOptions(options, { inputValue }) {
+    const filtered = options.filter((option) => {
+      if (authPeople.some((person) => person.display_name === option)) {
+        return false; // filter out if already in authPeople
+      }
+      return option.toLowerCase().includes(inputValue.toLowerCase());
+    });
+    
+    // sort the filtered options based on their match with the input value
+    const inputValueLowerCase = inputValue.toLowerCase();
+    filtered.sort((a, b) => {
+      const aIndex = a.toLowerCase().indexOf(inputValueLowerCase);
+      const bIndex = b.toLowerCase().indexOf(inputValueLowerCase);
+      if (aIndex !== bIndex) {
+        return aIndex - bIndex;
+      }
+      return a.localeCompare(b);
+    });
+  
+    return filtered;
+  }
+
+  console.log(authPeople)
+
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar></Sidebar>
@@ -47,16 +103,16 @@ function CreateAnnouncement() {
             <Typography variant='h5' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Course Code:</Typography>
-              <TextField id="outlined-required" label="Enter course code" variant="outlined" size="small" sx={{ m: 2 }} />
+              <TextField id="outlined-required" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} sx={{ m: 2, width: 350 }} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Last Application Date:</Typography>
-              <TextField id="outlined-required" label="Enter last date" variant="outlined" type="date" defaultValue={new Date()} InputLabelProps={{shrink: true}} size="small" sx={{ m: 2 }} />
-              <TextField id="outlined-required" label="Enter deadline" variant="outlined" type="time" defaultValue={new Date().toLocaleTimeString().replace(/(.*)\D\d+/, '$1')} InputLabelProps={{shrink: true}} size="small" sx={{ m: 2}} />
+              <TextField id="outlined-required" label="Enter last date" variant="outlined" type="date" defaultValue={new Date()} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} />
+              <TextField id="outlined-required" label="Enter deadline" variant="outlined" type="time" defaultValue={new Date().toLocaleTimeString().replace(/(.*)\D\d+/, '$1')} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography > Minimum Desired Letter Grade:</Typography>
-              <TextField  
+              <TextField
                 id="outlined-select-currency"
                 select
                 defaultValue="A"
@@ -93,8 +149,42 @@ function CreateAnnouncement() {
                 multiline
                 size="small"
                 rows={5}
+                maxRows={20}
                 sx={{ m: 2, width: 400 }}
               />
+            </Grid>
+            <Grid container direction="row" justifyContent="start" alignItems="flex-start">
+              <Typography sx={{ my: 2 }}>Authorized Instructor(s):</Typography>
+              <Grid item xs={6} direction="column" justifyContent="center" alignItems="flex-start">
+                <Autocomplete
+                  id="controllable-states-demo"
+                  options={authUsers.map((authUser) => {
+                    return authUser.display_name
+                  })}
+                  filterOptions={filterOptions}
+                  value={authValue}
+                  inputValue={inputAuthValue}
+                  onInputChange={(event, newInputValue) => {
+                    if(newInputValue !== null) {
+                      setAuthInputValue(newInputValue);
+                    }
+                    
+                  }}
+                  onChange={(event, newValue) => { if (newValue !==null) handleAuthAdd(newValue) }}
+                  renderInput={(params) => <TextField {...params} multiline size="small" sx={{ mx: 2, mt: 1, mb: 2, width: 300 }} />}
+
+                />
+                {authPeople.length > 0 && authPeople.map((authPerson, index) => {
+                  return (<Chip key={authPerson.username} label={authPerson.display_name} variant="outlined"
+                    avatar={<Avatar sx={{ backgroundColor: index % 2 === 0 ? "#6A759C" : "#4D5571" }}>
+                      <Typography fontSize="small" sx={{ color: "white" }}>
+                        {authPerson.display_name.split(' ')[0][0]}
+                      </Typography>
+                    </Avatar>}
+                    sx={{ m: 1 }}
+                    onDelete={() => handleAuthDelete(authPerson)} />);
+                })}
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={6}>
@@ -144,13 +234,13 @@ function CreateAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <AddQuestion /> 
+        <AddQuestion />
 
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{p:4}}>
-          <Button variant="contained" startIcon={<SendIcon /> } color="success" sx={{mx:2}}>
+        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
+          <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ mx: 2 }}>
             Submit
           </Button>
-          <Button variant="contained" startIcon={<CloseIcon /> } color="error" sx={{mx:2}}>
+          <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }}>
             Cancel
           </Button>
         </Grid>
