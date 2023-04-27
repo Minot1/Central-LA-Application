@@ -130,6 +130,7 @@ class ApplicationController extends Controller
     function deleteApplication($id)
     {
         $result= Application::where('id', $id) ->delete();
+        $answers = Answers::where('application_id',$result["$id"])->delete();
         if($result)
         {
           return ["result"=>"Application has been deleted"];

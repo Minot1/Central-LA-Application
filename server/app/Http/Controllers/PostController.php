@@ -17,6 +17,7 @@ class PostController extends Controller
         $post->faculty=$req->input('faculty');
         $post->courseCode=$req->input('courseCode');
         $post->deadline=$req->input('deadline');
+        $post->workingHour=$req->input('workingHour');
         $post->term=$req->input('term');
         $post->title=$req->input('title');
         $post->description=$req->input('description');
@@ -113,6 +114,7 @@ class PostController extends Controller
         $post->faculty=$req->input('faculty');
         $post->courseCode=$req->input('courseCode');
         $post->deadline=$req->input('deadline');
+        $post->workingHour=$req->input('workingHour');
         $post->term=$req->input('term');
         $post->title=$req->input('title');
         $post->description=$req->input('description');
