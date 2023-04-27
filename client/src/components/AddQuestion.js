@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, Grid } from '@mui/material'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TextField from '@mui/material/TextField';
@@ -11,6 +12,9 @@ import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
+import SendIcon from '@mui/icons-material/Send';
+import CloseIcon from '@mui/icons-material/Close';
+import {addAnnouncement} from "../apiCalls"
 
 
 const questionType = [
@@ -53,9 +57,10 @@ const suggestedQuestions = [
 
 ]
 
-function AddQuestion() {
+function AddQuestion(props) {
 
     const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }])
+    const navigate = useNavigate();
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
@@ -110,7 +115,6 @@ function AddQuestion() {
             });
         });
     }
-
 
     function handleButtonClick(index) {
         const suggestedQuestion = suggestedQuestions[index].sQuestion;
@@ -222,114 +226,127 @@ function AddQuestion() {
     }
 
     //console.log(questions); //for debugging questions 
-    
+    // const combinedDateTime = props.AnnouncementDetails.lastApplicationDate + " " + props.AnnouncementDetails.lastApplicationTime + ":00";
+    // const combinedDate = new Date(combinedDateTime);
+    // console.log(combinedDate)
+    // console.log(combinedDateTime)
+    //console.log(typeof props.AnnouncementDetails.lastApplicationDate)
+
     return (
-        <Grid container spacing={2} >
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId="questions">
-                    {(provided) => (
-                        <Grid item xs={8} {...provided.droppableProps} ref={provided.innerRef}>
-                            <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
-                            {questions.map((question, index) => {
-                                return (
-                                    <Draggable key={question.questionNumber} draggableId={question.questionNumber.toString()} index={index}>
-                                        {(provided, snapshot) => (<Grid container direction="row" justifyContent="start" alignItems="center" sx={{ px: 1, backgroundColor: snapshot.isDragging && "#4D5571", color: snapshot.isDragging && "white" }} key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
-                                            <Typography >Question {question.questionNumber}:</Typography>
-                                            <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
-                                                onChange={(event) => handleInput(event, index)} />
-                                            <TextField
-                                                id="outlined-select-currency"
-                                                name="mValue"
-                                                select
-                                                value={question.mValue}
-                                                size="small"
-                                                sx={{
-                                                    m: 2, width: 225, "& .MuiSelect-select": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" }
-                                                }}
-                                                onChange={(event) => handleInput(event, index)}
-                                            >
-                                                {questionType.map((option) => (
-                                                    <MenuItem key={option.value} value={option.value}>
-                                                        {option.label}
-                                                    </MenuItem>
-                                                ))}
-                                            </TextField>
-                                            <Button variant="contained" size="large" color="error" onClick={() => handleDeleteQuestion(question.questionNumber)}>
-                                                <DeleteIcon fontSize="inherit" />
-                                            </Button>
-
-                                            {
-                                                question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: snapshot.isDragging ? '#6A759C' : '#F5F5F5', px: 2 }}>
-                                                    {question.mMultiple.map((multiple, idx) => {
-                                                        return (<Grid container direction="row" justifyContent="start" alignItems="center" >
-                                                            <Typography >Choice {(idx + 1)}:</Typography>
-                                                            <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
-                                                                onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
-                                                            <Button variant="contained" size="large" sx={{
-                                                                bgcolor: "#b50b0b", '&:hover': {
-                                                                    backgroundColor: '#e60e0e'
+        <div>
+            <Grid container spacing={2} >
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId="questions">
+                        {(provided) => (
+                            <Grid item xs={8} {...provided.droppableProps} ref={provided.innerRef}>
+                                <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold' }} >Additional Questions for Students:</Typography>
+                                {questions.map((question, index) => {
+                                    return (
+                                        <Draggable key={question.questionNumber} draggableId={question.questionNumber.toString()} index={index}>
+                                            {(provided, snapshot) => (<Grid container direction="row" justifyContent="start" alignItems="center" sx={{ px: 1, backgroundColor: snapshot.isDragging && "#4D5571", color: snapshot.isDragging && "white" }} key={question.questionNumber} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}  >
+                                                <Typography >Question {question.questionNumber}:</Typography>
+                                                <TextField id="outlined-required" name="mQuestion" multiline maxRows={20} value={question.mQuestion} label="" variant="outlined" size="small" sx={{ m: 2, width: 450, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
+                                                    onChange={(event) => handleInput(event, index)} />
+                                                <TextField
+                                                    id="outlined-select-currency"
+                                                    name="mValue"
+                                                    select
+                                                    value={question.mValue}
+                                                    size="small"
+                                                    sx={{
+                                                        m: 2, width: 225, "& .MuiSelect-select": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" }
+                                                    }}
+                                                    onChange={(event) => handleInput(event, index)}
+                                                >
+                                                    {questionType.map((option) => (
+                                                        <MenuItem key={option.value} value={option.value}>
+                                                            {option.label}
+                                                        </MenuItem>
+                                                    ))}
+                                                </TextField>
+                                                <Button variant="contained" size="large" color="error" onClick={() => handleDeleteQuestion(question.questionNumber)}>
+                                                    <DeleteIcon fontSize="inherit" />
+                                                </Button>
+                                                {
+                                                    question.mValue === "Multiple Choice" && <Grid item xs={10} sx={{ backgroundColor: snapshot.isDragging ? '#6A759C' : '#F5F5F5', px: 2 }}>
+                                                        {question.mMultiple.map((multiple, idx) => {
+                                                            return (<Grid container direction="row" justifyContent="start" alignItems="center" >
+                                                                <Typography >Choice {(idx + 1)}:</Typography>
+                                                                <TextField id="outlined-required" name="mMultiple" multiline maxRows={20} value={multiple} label="" variant="outlined" size="small" sx={{ m: 2, width: 300, "& .MuiOutlinedInput-input": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" } }}
+                                                                    onChange={(event) => handleInputChoice(question.questionNumber, idx, event.target.value)} />
+                                                                <Button variant="contained" size="large" sx={{
+                                                                    bgcolor: "#b50b0b", '&:hover': {
+                                                                        backgroundColor: '#e60e0e'
+                                                                    }
+                                                                }} onClick={() => deleteChoice(question.questionNumber, idx)}>
+                                                                    <CancelIcon fontSize="inherit" />
+                                                                </Button>
+                                                            </Grid>)
+                                                        })}
+                                                        <Grid container direction="row" justifyContent="start" alignItems="center">
+                                                            <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{
+                                                                bgcolor: "#2196F3", my: 2, '&:hover': {
+                                                                    backgroundColor: '#84BFF7'
                                                                 }
-                                                            }} onClick={() => deleteChoice(question.questionNumber, idx)}>
-                                                                <CancelIcon fontSize="inherit" />
+                                                            }} onClick={() => handleAddChoice(question.questionNumber)} >
+                                                                Add Choice
                                                             </Button>
-                                                        </Grid>)
-                                                    })}
-                                                    <Grid container direction="row" justifyContent="start" alignItems="center">
-                                                        <Button variant="contained" size="large" startIcon={<ControlPointDuplicateIcon />} sx={{
-                                                            bgcolor: "#2196F3", my: 2, '&:hover': {
-                                                                backgroundColor: '#84BFF7'
-                                                            }
-                                                        }} onClick={() => handleAddChoice(question.questionNumber)} >
-                                                            Add Choice
-                                                        </Button>
+                                                        </Grid>
                                                     </Grid>
-                                                </Grid>
-                                            }
-                                        </Grid>)}
-                                    </Draggable>
-                                );
-                            })}
-                            {provided.placeholder}
-                            <Grid container direction="row" justifyContent="start" alignItems="center">
-                                {questions.length < 20 &&
-                                    <Button variant="contained" size="large" startIcon={<AddCircleIcon />} sx={{ bgcolor: "#394263", my: 2 }} onClick={addNewQuestion} >
-                                        Add Question
-                                    </Button>
-                                }
+                                                }
+                                            </Grid>)}
+                                        </Draggable>
+                                    );
+                                })}
+                                {provided.placeholder}
+                                <Grid container direction="row" justifyContent="start" alignItems="center">
+                                    {questions.length < 20 &&
+                                        <Button variant="contained" size="large" startIcon={<AddCircleIcon />} sx={{ bgcolor: "#394263", my: 2 }} onClick={addNewQuestion} >
+                                            Add Question
+                                        </Button>
+                                    }
 
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    )
+                        )}
+                    </Droppable>
+                </DragDropContext>
+                <Grid item xs={4}>
+                    <Box sx={{
+                        backgroundColor: '#F2F2F2',
+                        px: 2,
+                    }}>
+                        <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
+                        {suggestedQuestions.map((e, idx) => {
+                            return (
+                                <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
+                                    bgcolor: e.sBgColor, my: 2, textTransform: "none", textAlign: "left", '&:hover': {
+                                        backgroundColor: '#84BFF7'
+                                    }
 
-                    }
-                </Droppable>
-
-            </DragDropContext>
-
-            <Grid item xs={4}>
-                <Box sx={{
-                    backgroundColor: '#F2F2F2',
-                    px: 2,
-                }}>
-                    <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
-                    {suggestedQuestions.map((e, idx) => {
-                        return (
-                            <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
-                                bgcolor: e.sBgColor, my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                                    backgroundColor: '#84BFF7'
+                                }} onClick={() => handleButtonClick(idx)
                                 }
-
-                            }} onClick={() => handleButtonClick(idx)
-                            }
-                            >
-                                {e.sQuestion}
-                            </Button>
-                        );
-                    })}
-                </Box>
+                                >
+                                    {e.sQuestion}
+                                </Button>
+                            );
+                        })}
+                    </Box>
+                </Grid>
             </Grid>
-        </Grid>
+            <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
+                <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
+                            addAnnouncement(props.AnnouncementDetails.courseCode, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
+                            navigate('/home', { replace: true })
+                        }}>
+                    Submit
+                </Button>
+                <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }} onClick={() => navigate('/home', { replace: true })}>
+                    Cancel
+                </Button>
+            </Grid>
 
+        </div>
 
     );
 }

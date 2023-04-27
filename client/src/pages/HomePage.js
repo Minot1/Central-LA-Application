@@ -21,7 +21,7 @@ function HomePage() {
   useEffect(() => {
     getAllAnnouncements().then((results) => setRows(results));
     console.log(rows);
-  }, []);
+  }, []); //needs to be fixed
 
   const handleAnnTableChange = (event, newValue) => {
       setValue(newValue);

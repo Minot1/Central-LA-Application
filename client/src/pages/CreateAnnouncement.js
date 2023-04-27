@@ -16,8 +16,7 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import SendIcon from '@mui/icons-material/Send';
-import CloseIcon from '@mui/icons-material/Close';
+
 
 function CreateAnnouncement() {
   const grades = [
@@ -112,7 +111,7 @@ function CreateAnnouncement() {
     }));
   };
 
-  console.log(announcementDetails) //for debugging announcement details
+  //console.log(announcementDetails) //for debugging announcement details
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -265,16 +264,7 @@ function CreateAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <AddQuestion />
-
-        <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
-          <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ mx: 2 }}>
-            Submit
-          </Button>
-          <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }}>
-            Cancel
-          </Button>
-        </Grid>
+        <AddQuestion AnnouncementDetails = {announcementDetails}/>
       </Box>
     </Box>
   )

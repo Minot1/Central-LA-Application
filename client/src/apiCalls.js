@@ -24,19 +24,34 @@ async function getAllAnnouncements() {
   } catch (error) {}
 }
 
-function addAnnouncement(faculty, courseCode, term, minGrade, questions) {
-  var username = "instructor1";
-  var deadline = "2023/03/14";
-  var title = "title test";
+function addAnnouncement(courseCode, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
+  const username = "instructor2";
+  const faculty = "FENS";
+  const term = "Fall 2022";
+  const title = "title test";
+
+  const deadline = lastApplicationDate + " " + lastApplicationTime + ":00";
+  const transformedQuestions = questions.map((question) => ({
+    type: question.mValue,
+    ranking: question.questionNumber,
+    question: question.mQuestion,
+    multiple_choices: question.mValue === "Multiple Choice" ? question.mMultiple : [],
+  }));
+  console.log(letterGrade);
+  const authInstructor_userNames = auth_instructors.map((user) => user.username);
+
   axios.post(apiEndpoint + "/addPost", {
-    username: username,
+    instructor_username: username,
     faculty: faculty,
     courseCode: courseCode,
+    deadline: deadline,
     term: term,
     title: title,
-    minGrade: minGrade,
-    questions: questions,
-    deadline: deadline,
+    description: details,
+    auth_instructors: authInstructor_userNames,
+    mingrade: letterGrade,
+    questions: transformedQuestions,
+    
   });
 }
 
