@@ -341,7 +341,7 @@ function AddQuestion(props) {
                         }}>
                     Submit
                 </Button>
-                <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }}>
+                <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }} onClick={() => navigate('/home', { replace: true })}>
                     Cancel
                 </Button>
             </Grid>
