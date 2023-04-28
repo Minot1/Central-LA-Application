@@ -58,7 +58,7 @@ function AnnouncementTable(props) {
                         <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.mingrade}</TableCell>
                         <TableCell sx = {{borderBottom:"none"}} align="left">{row.description}</TableCell>
                         <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}} align="center">
-                            {isInstructor && <Button variant="contained" startIcon={<EditIcon />}>
+                            {isInstructor && <Button variant="contained" as={Link} to={"/edit-announcement/" + (row.id)} startIcon={<EditIcon />}>
                                 Edit
                             </Button>}
                             {!isInstructor && <Button variant="contained" as={Link} to={"/apply/" + (row.id)} style={{ textDecoration: 'none' }}>

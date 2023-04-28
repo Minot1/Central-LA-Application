@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { Typography, Box, Button, Grid } from '@mui/material'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -9,9 +9,9 @@ import AddIcon from '@mui/icons-material/Add';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
-import SendIcon from '@mui/icons-material/Send';
+import UpdateIcon from '@mui/icons-material/Update';
 import CloseIcon from '@mui/icons-material/Close';
-import {addAnnouncement} from "../apiCalls"
+import {updateAnnouncement} from "../apiCalls"
 
 
 const questionType = [
@@ -54,10 +54,15 @@ const suggestedQuestions = [
 
 ]
 
-function AddQuestion(props) {
+function EditQuestion(props) {
 
-    const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }])
+    const [questions, setQuestions] = useState([])   
     const navigate = useNavigate();
+
+    useEffect(() => {
+        setQuestions([...props.getQuestions]);
+      }, [props.getQuestions]);
+    
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
@@ -222,12 +227,7 @@ function AddQuestion(props) {
         });
     }
 
-    //console.log(questions); //for debugging questions 
-    // const combinedDateTime = props.AnnouncementDetails.lastApplicationDate + " " + props.AnnouncementDetails.lastApplicationTime + ":00";
-    // const combinedDate = new Date(combinedDateTime);
-    // console.log(combinedDate)
-    // console.log(combinedDateTime)
-    //console.log(typeof props.AnnouncementDetails.lastApplicationDate)
+    console.log(questions); //for debugging questions 
 
     return (
         <div>
@@ -248,7 +248,7 @@ function AddQuestion(props) {
                                                     id="outlined-select-currency"
                                                     name="mValue"
                                                     select
-                                                    value={question.mValue}
+                                                    value={question.mValue ?? null}
                                                     size="small"
                                                     sx={{
                                                         m: 2, width: 225, "& .MuiSelect-select": { color: snapshot.isDragging && "white" }, "& fieldset": { borderColor: snapshot.isDragging && "white" }
@@ -332,11 +332,11 @@ function AddQuestion(props) {
                 </Grid>
             </Grid>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
-                <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
-                            addAnnouncement(props.AnnouncementDetails.courseCode, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
+                <Button variant="contained" startIcon={<UpdateIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
+                            updateAnnouncement(props.postID, props.userDetails.instructor_username, props.AnnouncementDetails.courseCode, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
                             navigate('/home', { replace: true })
                         }}>
-                    Submit
+                    Update
                 </Button>
                 <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }} onClick={() => navigate('/home', { replace: true })}>
                     Cancel
@@ -348,4 +348,4 @@ function AddQuestion(props) {
     );
 }
 
-export default AddQuestion;
+export default EditQuestion;
