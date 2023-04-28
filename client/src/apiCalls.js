@@ -47,6 +47,7 @@ function addAnnouncement(courseCode, lastApplicationDate, lastApplicationTime, l
     deadline: deadline,
     term: term,
     title: title,
+    workingHour: workHours,
     description: details,
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,
@@ -54,6 +55,39 @@ function addAnnouncement(courseCode, lastApplicationDate, lastApplicationTime, l
     
   });
 }
+
+function updateAnnouncement(id, username, courseCode, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
+  const faculty = "FENS";
+  const term = "Fall 2022";
+  const title = "title update test";
+
+  const deadline = lastApplicationDate + " " + lastApplicationTime + ":00";
+  const transformedQuestions = questions.map((question) => ({
+    type: question.mValue,
+    ranking: question.questionNumber,
+    question: question.mQuestion,
+    multiple_choices: question.mValue === "Multiple Choice" ? question.mMultiple : [],
+  }));
+  console.log(letterGrade);
+  const authInstructor_userNames = auth_instructors.map((user) => user.username);
+
+  axios.put(apiEndpoint + "/updatePost/" + id, {
+    instructor_username: username,
+    faculty: faculty,
+    courseCode: courseCode,
+    deadline: deadline,
+    term: term,
+    title: title,
+    workingHour: workHours,
+    description: details,
+    auth_instructors: authInstructor_userNames,
+    mingrade: letterGrade,
+    questions: transformedQuestions,
+    
+  });
+}
+
+
 
 async function getApplicationsByPost(postID) {
   try {
@@ -80,6 +114,7 @@ export {
   getAllAnnouncements,
   addAnnouncement,
   getAnnouncement,
+  updateAnnouncement,
   getApplicationsByPost,
   validateLogin,
 };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom';
 import AppBarHeader from '../components/AppBarHeader'
 import Sidebar from '../components/Sidebar'
-import AddQuestion from '../components/AddQuestion'
+import EditQuestion from '../components/EditQuestion'
 import { Typography, Box, Button, Grid } from '@mui/material'
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -13,8 +14,9 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import {getAnnouncement} from "../apiCalls"
 
-function CreateAnnouncement() {
+function EditAnnouncement() {
   const grades = [
     { value: 'A', label: 'A' },
     { value: 'A-', label: 'A-' },
@@ -82,15 +84,47 @@ function CreateAnnouncement() {
 
   //console.log(authPeople) //for debugging authPeople
 
-  const [announcementDetails, setAnnouncementDetails] = useState({
-    courseCode: "",
-    lastApplicationDate: new Date().toLocaleDateString('en-CA'),
-    lastApplicationTime: new Date().toLocaleTimeString().replace(/(.*)\D\d+/, "$1"),
-    letterGrade: "A",
-    workHours: "5 Hours",
-    jobDetails: "",
-    authInstructor: authPeople,
-  });
+  const [announcementDetails, setAnnouncementDetails] = useState({});
+  const [UserDetails, setUserDetails] = useState({});
+  const [GetQuestions, setGetQuestions] = useState([]);
+
+  const { id } = useParams(); //for taking post id 
+  useEffect(() => {
+    getAnnouncement(id).then((results) => {
+        const deadline = results.deadline.split(' ')
+        const PostResult = {
+            courseCode: results.courseCode,
+            lastApplicationDate: deadline[0],
+            lastApplicationTime: deadline[1],
+            letterGrade: results.mingrade,
+            workHours: results.workingHour,
+            jobDetails: results.description,
+            authInstructor: authPeople, //change there JSON.parse(results.auth_instructors)
+        }
+
+        const UserResult = {
+            instructor_username: results.instructor_username,
+            faculty: results.faculty,
+            term: results.term,
+        } //temp it will be replaced
+
+        const QuestionsResult = results.questions;
+        const transformedResultQuestions = QuestionsResult.map((question) => {
+            return{
+                questionNumber: question.ranking,
+                mQuestion: question.question,
+                mValue: question.type,
+                mMultiple: question.multiple_choices === "[]" ? ["", ""] : JSON.parse(question.multiple_choices),
+            }
+        });
+
+        setAnnouncementDetails(PostResult)
+        setGetQuestions([...transformedResultQuestions])
+        setUserDetails(UserResult)
+    });
+  }, [id]);
+
+  //getInstructor fnc lazım
 
   useEffect(() => {
     setAnnouncementDetails((prevDetails) => ({
@@ -106,7 +140,8 @@ function CreateAnnouncement() {
       [name]: value,
     }));
   };
-
+  
+  
   //console.log(announcementDetails) //for debugging announcement details
 
   return (
@@ -115,14 +150,14 @@ function CreateAnnouncement() {
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 4, mt: 2 }}>
-          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>Create Announcement</Typography>
+          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>Edit Announcement</Typography>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <Typography variant='h5' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Course Code:</Typography>
-              <TextField id="outlined-required" name="courseCode" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} sx={{ m: 2, width: 350 }} value={announcementDetails.courseCode} onChange={handleInput} />
+              <TextField id="outlined-required" name="courseCode" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} InputLabelProps={{ shrink: true }} sx={{ m: 2, width: 350 }} value={announcementDetails.courseCode} onChange={handleInput} />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
               <Typography >Last Application Date:</Typography>
@@ -135,7 +170,7 @@ function CreateAnnouncement() {
                 id="outlined-select-currency"
                 name="letterGrade"
                 select
-                value={announcementDetails.letterGrade}
+                value={announcementDetails.letterGrade ?? null}
                 size="small"
                 sx={{ m: 2, width: 225 }}
                 onChange={handleInput}
@@ -153,7 +188,7 @@ function CreateAnnouncement() {
                 id="outlined-select-currency"
                 name="workHours"
                 select
-                value={announcementDetails.workHours}
+                value={announcementDetails.workHours ?? null}
                 size="small"
                 sx={{ m: 2, width: 225 }}
                 onChange={handleInput}
@@ -260,10 +295,10 @@ function CreateAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <AddQuestion AnnouncementDetails = {announcementDetails}/>
+        <EditQuestion AnnouncementDetails = {announcementDetails} getQuestions = {GetQuestions} userDetails = {UserDetails} postID = {id} />
       </Box>
     </Box>
   )
 }
 
-export default CreateAnnouncement
+export default EditAnnouncement

@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateAnnouncement from "./pages/CreateAnnouncement";
+import EditAnnouncement from "./pages/EditAnnouncement";
 import ApplyPage from "./pages/ApplyPage";
 import ApplicantsPage from "./pages/ApplicantsPage";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,7 +43,7 @@ function App() {
               name: result.authenticationSuccess.attributes.givenName,
               surname: result.authenticationSuccess.attributes.sn,
               isInstructor:
-                result.authenticationSuccess.attributes.ou[1] == "academic",
+                result.authenticationSuccess.attributes.ou[2] == "student", //result.authenticationSuccess.attributes.ou[1] == "academic"
             })
           );
         });
@@ -66,6 +67,7 @@ function App() {
             path="/create-announcement"
             element={<CreateAnnouncement></CreateAnnouncement>}
           ></Route>
+          <Route path="/edit-announcement/:id" element={<EditAnnouncement></EditAnnouncement>}></Route>
           <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
           <Route
             path="/applicants"
