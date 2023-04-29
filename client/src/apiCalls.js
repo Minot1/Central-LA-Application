@@ -24,11 +24,18 @@ async function getAllAnnouncements() {
   } catch (error) {}
 }
 
-function addAnnouncement(courseCode, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
-  const username = "instructor2";
+async function getAllInstructor() {
+  try {
+    const results = await axios.get(apiEndpoint + "/instructors");
+    return results.data;
+  } catch (error) {}
+}
+
+function addAnnouncement(courseCode, username, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
+  const mockUserName = "instructor1"
   const faculty = "FENS";
   const term = "Fall 2022";
-  const title = "title test";
+  const title = "title add test";
 
   const deadline = lastApplicationDate + " " + lastApplicationTime + ":00";
   const transformedQuestions = questions.map((question) => ({
@@ -41,7 +48,7 @@ function addAnnouncement(courseCode, lastApplicationDate, lastApplicationTime, l
   const authInstructor_userNames = auth_instructors.map((user) => user.username);
 
   axios.post(apiEndpoint + "/addPost", {
-    instructor_username: username,
+    instructor_username: mockUserName,
     faculty: faculty,
     courseCode: courseCode,
     deadline: deadline,
@@ -61,14 +68,14 @@ function updateAnnouncement(id, username, courseCode, lastApplicationDate, lastA
   const term = "Fall 2022";
   const title = "title update test";
 
-  const deadline = lastApplicationDate + " " + lastApplicationTime + ":00";
+  const deadline = lastApplicationDate + " " + lastApplicationTime;
   const transformedQuestions = questions.map((question) => ({
     type: question.mValue,
     ranking: question.questionNumber,
     question: question.mQuestion,
     multiple_choices: question.mValue === "Multiple Choice" ? question.mMultiple : [],
   }));
-  console.log(letterGrade);
+  console.log(deadline);
   const authInstructor_userNames = auth_instructors.map((user) => user.username);
 
   axios.put(apiEndpoint + "/updatePost/" + id, {
@@ -83,11 +90,9 @@ function updateAnnouncement(id, username, courseCode, lastApplicationDate, lastA
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,
     questions: transformedQuestions,
-    
+
   });
 }
-
-
 
 async function getApplicationsByPost(postID) {
   try {
