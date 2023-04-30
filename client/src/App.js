@@ -1,11 +1,6 @@
 import "./App.css";
 import MockCAS from "./pages/MockCAS";
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  useSearchParams,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateAnnouncement from "./pages/CreateAnnouncement";
 import EditAnnouncement from "./pages/EditAnnouncement";
@@ -16,6 +11,7 @@ import LoginCAS from "./pages/LoginCAS";
 import { useEffect } from "react";
 import { startLoginProcess, successLogin } from "./redux/userSlice";
 import { validateLogin } from "./apiCalls";
+import CourseApplicantsPage from "./pages/CourseApplicantsPage";
 
 function App() {
   const [urlParams, setUrlParams] = useSearchParams();
@@ -42,8 +38,7 @@ function App() {
               username: result.authenticationSuccess.attributes.cn,
               name: result.authenticationSuccess.attributes.givenName,
               surname: result.authenticationSuccess.attributes.sn,
-              isInstructor:
-                result.authenticationSuccess.attributes.ou[2] == "student", //result.authenticationSuccess.attributes.ou[1] == "academic"
+              isInstructor: result.authenticationSuccess.attributes.ou[2] == "student", //result.authenticationSuccess.attributes.ou[1] == "academic"
             })
           );
         });
@@ -63,16 +58,11 @@ function App() {
         <>
           <Route exact path="/" element={<MockCAS></MockCAS>}></Route>
           <Route path="/home" element={<HomePage></HomePage>}></Route>
-          <Route
-            path="/create-announcement"
-            element={<CreateAnnouncement></CreateAnnouncement>}
-          ></Route>
+          <Route path="/create-announcement" element={<CreateAnnouncement></CreateAnnouncement>}></Route>
           <Route path="/edit-announcement/:id" element={<EditAnnouncement></EditAnnouncement>}></Route>
           <Route path="/apply/:id" element={<ApplyPage></ApplyPage>}></Route>
-          <Route
-            path="/applicants"
-            element={<ApplicantsPage></ApplicantsPage>}
-          ></Route>
+          <Route path="/applicants" element={<CourseApplicantsPage></CourseApplicantsPage>}></Route>
+          <Route path="/application-of/:postId" element={<ApplicantsPage></ApplicantsPage>}></Route>
         </>
       ) : (
         <>

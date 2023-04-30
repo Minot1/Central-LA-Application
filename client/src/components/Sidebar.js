@@ -276,7 +276,7 @@ function Sidebar() {
                 </ListItemButton>
               </ListItem>
               {isInstructor && <ListItem sx={{ padding: "0px" }}>
-                <ListItemButton as={Link} to="/applicants" style={{ textDecoration: 'none' }}>
+                <ListItemButton as={Link} to="/applicants" style={{ textDecoration: 'none', color: "white" }}>
                   <ListItemText
                     primary={"- Check Applications"}
                     sx={{ textAlign: "center" }}

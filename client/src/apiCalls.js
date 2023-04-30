@@ -9,10 +9,24 @@ let casClient = new CasClient(casEndpoint, casOptions);
 // const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
 const apiEndpoint = "http://localhost:8000/api";
 
+async function applyToPost(postId, username, answers) {
+  try {
+    const results = await axios.post(apiEndpoint + "/addApplication", {
+      student_username: username,
+      working_hours: 10,
+      post_id: postId,
+      answers: answers,
+      status: "applied",
+      grade: 3,
+      faculty: "FENS",
+    });
+    return results.data;
+  } catch (error) {}
+}
+
 async function getAnnouncement(id) {
   try {
     const results = await axios.get(apiEndpoint + "/post/" + id);
-    console.log(results.data.questions);
     return results.data;
   } catch (error) {}
 }
@@ -32,7 +46,7 @@ async function getAllInstructors() {
 }
 
 function addAnnouncement(courseCode, username, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
-  const mockUserName = "instructor1"
+  const mockUserName = "instructor1";
   const faculty = "FENS";
   const term = "Fall 2022";
   const title = "title add test";
@@ -59,7 +73,6 @@ function addAnnouncement(courseCode, username, lastApplicationDate, lastApplicat
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,
     questions: transformedQuestions,
-    
   });
 }
 
@@ -90,15 +103,12 @@ function updateAnnouncement(id, username, courseCode, lastApplicationDate, lastA
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,
     questions: transformedQuestions,
-
   });
 }
 
 async function getApplicationsByPost(postID) {
   try {
-    const results = await axios.get(
-      apiEndpoint + "/listPostApplication/" + postID
-    );
+    const results = await axios.get(apiEndpoint + "/listPostApplication/" + postID);
     return results.data;
   } catch (error) {}
 }
@@ -115,12 +125,4 @@ async function validateLogin(serviceUrl, ticket) {
   } catch (error) {}
 }
 
-export {
-  getAllAnnouncements,
-  getAllInstructors,
-  addAnnouncement,
-  getAnnouncement,
-  updateAnnouncement,
-  getApplicationsByPost,
-  validateLogin,
-};
+export { getAllAnnouncements, getAllInstructors, applyToPost, addAnnouncement, getAnnouncement, updateAnnouncement, getApplicationsByPost, validateLogin };
