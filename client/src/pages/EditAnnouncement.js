@@ -1,54 +1,54 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom';
-import AppBarHeader from '../components/AppBarHeader'
-import Sidebar from '../components/Sidebar'
-import EditQuestion from '../components/EditQuestion'
-import { Typography, Box, Button, Grid } from '@mui/material'
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import Chip from '@mui/material/Chip';
-import MenuItem from '@mui/material/MenuItem';
-import Avatar from '@mui/material/Avatar';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import {getAnnouncement, getAllInstructors} from "../apiCalls"
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import AppBarHeader from "../components/AppBarHeader";
+import Sidebar from "../components/Sidebar";
+import EditQuestion from "../components/EditQuestion";
+import { Typography, Box, Grid } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
+import MenuItem from "@mui/material/MenuItem";
+import Avatar from "@mui/material/Avatar";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
+import { getAnnouncement, getAllInstructors } from "../apiCalls";
 
 function EditAnnouncement() {
   const grades = [
-    { value: 'A', label: 'A' },
-    { value: 'A-', label: 'A-' },
-    { value: 'B+', label: 'B+' },
-    { value: 'B', label: 'B' },
-    { value: 'B-', label: 'B-' },
-    { value: 'C+', label: 'C+' },
+    { value: "A", label: "A" },
+    { value: "A-", label: "A-" },
+    { value: "B+", label: "B+" },
+    { value: "B", label: "B" },
+    { value: "B-", label: "B-" },
+    { value: "C+", label: "C+" },
   ];
   const WorkHour = [
-    { value: '5 Hours', label: '5 Hours' },
-    { value: '10 Hours', label: '10 Hours' },
-  ]
+    { value: "5 Hours", label: "5 Hours" },
+    { value: "10 Hours", label: "10 Hours" },
+  ];
   const authUsers = [
     { display_name: "Murat Karaca", username: "muratkaraca" },
     { display_name: "Taner Dincer", username: "tanerd" },
     { display_name: "Melih Gursoy", username: "melihg" },
     { display_name: "Baha Ersoy", username: "bersoy" },
     { display_name: "Cem Kaya", username: "cemkaya" },
-  ]
+  ];
 
   const [authUsersList, setAuthUserList] = useState([]); //get instructors from database
   const [authPeople, setAuthPeople] = useState([]); //used for send request as selected from list
-  const [authValue, setAuthValue] = useState("");// for autocomplete
-  const [inputAuthValue, setAuthInputValue] = useState("");// for autocomplete
+  const [authValue, setAuthValue] = useState(""); // for autocomplete
+  const [inputAuthValue, setAuthInputValue] = useState(""); // for autocomplete
 
   //get all instructors
   useEffect(() => {
     getAllInstructors().then((results) => {
       const transformedResults = results.map((instructor) => {
-        const [lastName, firstName] = instructor.name.split(',');
+        const [lastName, firstName] = instructor.name.split(",");
         const displayName = firstName.trim() + " " + lastName.trim();
-        
+
         return {
           display_name: displayName,
           username: instructor.instructor_username,
@@ -57,25 +57,22 @@ function EditAnnouncement() {
       setAuthUserList(transformedResults);
     });
   }, []);
-  
+
   //used in autocomplete for keeping value and input value
   function handleAuthAdd(newValue) {
     if (newValue !== null) {
-
-      const selectedUser = authUsersList.find(user => user.display_name === newValue);
+      const selectedUser = authUsersList.find((user) => user.display_name === newValue);
       setAuthPeople([...authPeople, selectedUser]);
     }
     setAuthValue("");
     setAuthInputValue("");
-  };
+  }
 
   function handleAuthDelete(userToDelete) {
-    const updatedAuthPeople = authPeople.filter(
-      (user) => user.username !== userToDelete.username
-    );
+    const updatedAuthPeople = authPeople.filter((user) => user.username !== userToDelete.username);
     // console.log(updatedAuthPeople)
     setAuthPeople(updatedAuthPeople);
-  };
+  }
 
   function filterOptions(options, { inputValue }) {
     const filtered = options.filter((option) => {
@@ -105,53 +102,53 @@ function EditAnnouncement() {
   const [UserDetails, setUserDetails] = useState({});
   const [GetQuestions, setGetQuestions] = useState([]);
 
-  const { id } = useParams(); //for taking post id 
+  const { id } = useParams(); //for taking post id
   useEffect(() => {
     getAnnouncement(id).then((results) => {
-        const deadline = results.deadline.split(' ');
-        const authInstructors = JSON.parse(results.auth_instructors);
+      const deadline = results.deadline.split(" ");
+      const authInstructors = JSON.parse(results.auth_instructors);
 
-        const FindAuthPeople = authInstructors.reduce((people, instructor) => {
-          const user = authUsersList.find((authUser) => authUser.username === instructor);
-    
-          if (user) {
-            people.push(user);
-          }
-    
-          return people;
-        }, []);
+      const FindAuthPeople = authInstructors.reduce((people, instructor) => {
+        const user = authUsersList.find((authUser) => authUser.username === instructor);
 
-        console.log(FindAuthPeople)
-        const PostResult = {
-            courseCode: results.courseCode,
-            lastApplicationDate: deadline[0],
-            lastApplicationTime: deadline[1],
-            letterGrade: results.mingrade,
-            workHours: results.workingHour,
-            jobDetails: results.description,
-            authInstructor: FindAuthPeople, //change there JSON.parse(results.auth_instructors) //completely follow different approach
+        if (user) {
+          people.push(user);
         }
 
-        const UserResult = {
-            instructor_username: results.instructor_username,
-            faculty: results.faculty,
-            term: results.term,
-        } //temp it will be replaced
+        return people;
+      }, []);
 
-        const QuestionsResult = results.questions;
-        const transformedResultQuestions = QuestionsResult.map((question) => {
-            return{
-                questionNumber: question.ranking,
-                mQuestion: question.question,
-                mValue: question.type,
-                mMultiple: question.multiple_choices === "[]" ? ["", ""] : JSON.parse(question.multiple_choices),
-            }
-        });
+      console.log(FindAuthPeople);
+      const PostResult = {
+        courseCode: results.courseCode,
+        lastApplicationDate: deadline[0],
+        lastApplicationTime: deadline[1],
+        letterGrade: results.mingrade,
+        workHours: results.workingHour,
+        jobDetails: results.description,
+        authInstructor: FindAuthPeople, //change there JSON.parse(results.auth_instructors) //completely follow different approach
+      };
 
-        setAuthPeople(FindAuthPeople);
-        setAnnouncementDetails(PostResult)
-        setGetQuestions([...transformedResultQuestions])
-        setUserDetails(UserResult)
+      const UserResult = {
+        instructor_username: results.instructor_username,
+        faculty: results.faculty,
+        term: results.term,
+      }; //temp it will be replaced
+
+      const QuestionsResult = results.questions;
+      const transformedResultQuestions = QuestionsResult.map((question) => {
+        return {
+          questionNumber: question.ranking,
+          mQuestion: question.question,
+          mValue: question.type,
+          mMultiple: question.multiple_choices === "[]" ? ["", ""] : JSON.parse(question.multiple_choices),
+        };
+      });
+
+      setAuthPeople(FindAuthPeople);
+      setAnnouncementDetails(PostResult);
+      setGetQuestions([...transformedResultQuestions]);
+      setUserDetails(UserResult);
     });
   }, [id, authUsersList]);
 
@@ -169,10 +166,9 @@ function EditAnnouncement() {
       ...prevDetails,
       [name]: value,
     }));
-  };
-  
-  
-  console.log(announcementDetails) //for debugging announcement details
+  }
+
+  console.log(announcementDetails); //for debugging announcement details
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -180,22 +176,60 @@ function EditAnnouncement() {
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
         <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 4, mt: 2 }}>
-          <Typography variant='h4' sx={{ fontWeight: 'bold' }}>Edit Announcement</Typography>
+          <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+            Edit Announcement
+          </Typography>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant='h5' sx={{ textDecoration: 'underline', marginY: 2, fontWeight: 'bold' }} >Announcement Details:</Typography>
+            <Typography variant="h5" sx={{ textDecoration: "underline", marginY: 2, fontWeight: "bold" }}>
+              Announcement Details:
+            </Typography>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Course Code:</Typography>
-              <TextField id="outlined-required" name="courseCode" label="Enter course code" variant="outlined" size="small" multiline maxRows={20} InputLabelProps={{ shrink: true }} sx={{ m: 2, width: 350 }} value={announcementDetails.courseCode} onChange={handleInput} />
+              <Typography>Course Code:</Typography>
+              <TextField
+                id="outlined-required"
+                name="courseCode"
+                label="Enter course code"
+                variant="outlined"
+                size="small"
+                multiline
+                maxRows={20}
+                InputLabelProps={{ shrink: true }}
+                sx={{ m: 2, width: 350 }}
+                value={announcementDetails.courseCode}
+                onChange={handleInput}
+              />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Last Application Date:</Typography>
-              <TextField id="outlined-required" name="lastApplicationDate" label="Enter last date" variant="outlined" type="date" value={announcementDetails.lastApplicationDate} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} onChange={handleInput} />
-              <TextField id="outlined-required" name="lastApplicationTime" label="Enter deadline" variant="outlined" type="time" value={announcementDetails.lastApplicationTime} InputLabelProps={{ shrink: true }} size="small" sx={{ m: 2 }} onChange={handleInput} />
+              <Typography>Last Application Date:</Typography>
+              <TextField
+                id="outlined-required"
+                name="lastApplicationDate"
+                label="Enter last date"
+                variant="outlined"
+                type="date"
+                value={announcementDetails.lastApplicationDate}
+                InputLabelProps={{ shrink: true }}
+                size="small"
+                sx={{ m: 2 }}
+                onChange={handleInput}
+              />
+              <TextField
+                id="outlined-required"
+                name="lastApplicationTime"
+                label="Enter deadline"
+                variant="outlined"
+                type="time"
+                value={announcementDetails.lastApplicationTime}
+                InputLabelProps={{ shrink: true }}
+                size="small"
+                sx={{ m: 2 }}
+                onChange={handleInput}
+              />
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography > Minimum Desired Letter Grade:</Typography>
+              <Typography> Minimum Desired Letter Grade:</Typography>
               <TextField
                 id="outlined-select-currency"
                 name="letterGrade"
@@ -213,7 +247,7 @@ function EditAnnouncement() {
               </TextField>
             </Grid>
             <Grid container direction="row" justifyContent="start" alignItems="center">
-              <Typography >Work Hours:</Typography>
+              <Typography>Work Hours:</Typography>
               <TextField
                 id="outlined-select-currency"
                 name="workHours"
@@ -250,7 +284,7 @@ function EditAnnouncement() {
                 <Autocomplete
                   id="controllable-states-demo"
                   options={authUsersList.map((authUser) => {
-                    return authUser.display_name
+                    return authUser.display_name;
                   })}
                   filterOptions={filterOptions}
                   value={authValue}
@@ -259,64 +293,77 @@ function EditAnnouncement() {
                     if (newInputValue !== null) {
                       setAuthInputValue(newInputValue);
                     }
-
                   }}
-                  onChange={(event, newValue) => { if (newValue !== null) handleAuthAdd(newValue) }}
+                  onChange={(event, newValue) => {
+                    if (newValue !== null) handleAuthAdd(newValue);
+                  }}
                   renderInput={(params) => <TextField {...params} multiline size="small" sx={{ mx: 2, mt: 1, mb: 2, width: 300 }} />}
-
                 />
-                {authPeople.length > 0 && authPeople.map((authPerson, index) => {
-                  return (<Chip key={authPerson.username} label={authPerson.display_name} variant="outlined"
-                    avatar={<Avatar sx={{ backgroundColor: index % 2 === 0 ? "#6A759C" : "#4D5571" }}>
-                      <Typography fontSize="small" sx={{ color: "white" }}>
-                        {authPerson.display_name.split(' ')[0][0]}
-                      </Typography>
-                    </Avatar>}
-                    sx={{ m: 1 }}
-                    onDelete={() => handleAuthDelete(authPerson)} />);
-                })}
+                {authPeople.length > 0 &&
+                  authPeople.map((authPerson, index) => {
+                    return (
+                      <Chip
+                        key={authPerson.username}
+                        label={authPerson.display_name}
+                        variant="outlined"
+                        avatar={
+                          <Avatar sx={{ backgroundColor: index % 2 === 0 ? "#6A759C" : "#4D5571" }}>
+                            <Typography fontSize="small" sx={{ color: "white" }}>
+                              {authPerson.display_name.split(" ")[0][0]}
+                            </Typography>
+                          </Avatar>
+                        }
+                        sx={{ m: 1 }}
+                        onDelete={() => handleAuthDelete(authPerson)}
+                      />
+                    );
+                  })}
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={6}>
-            <Box sx={{
-              backgroundColor: '#F2F2F2',
-              p: 2,
-            }}>
-              <Typography variant='h6' sx={{ fontWeight: 'bold' }}>Warnings:</Typography>
+            <Box
+              sx={{
+                backgroundColor: "#F2F2F2",
+                p: 2,
+              }}
+            >
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                Warnings:
+              </Typography>
               <List>
                 <ListItem>
-                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                  <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
                   <ListItemText primary="At most (20) questions can add on the application." />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                  <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
                   <ListItemText primary="These information come automatically to you:" />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="1) Name" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
+                  <ListItemText secondary="1) Name" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="2) ID" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }} />
+                  <ListItemText secondary="2) ID" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="3) Term" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
+                  <ListItemText secondary="3) Term" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="4) Previous Grade" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
+                  <ListItemText secondary="4) Previous Grade" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="5) Class" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
+                  <ListItemText secondary="5) Class" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="6) GPA" secondaryTypographyProps={{ component: 'span', variant: 'body2', sx: { pl: '24px' } }}/>
+                  <ListItemText secondary="6) GPA" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemIcon sx={{ minWidth: 'unset', marginRight: '8px' }}>
+                  <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
                   <ListItemText primary="Please do not add these as questions." />
@@ -325,10 +372,10 @@ function EditAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <EditQuestion AnnouncementDetails = {announcementDetails} getQuestions = {GetQuestions} userDetails = {UserDetails} postID = {id} />
+        <EditQuestion AnnouncementDetails={announcementDetails} getQuestions={GetQuestions} userDetails={UserDetails} postID={id} />
       </Box>
     </Box>
-  )
+  );
 }
 
-export default EditAnnouncement
+export default EditAnnouncement;
