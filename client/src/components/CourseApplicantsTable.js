@@ -7,10 +7,12 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import React from "react";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 function CourseApplicantsTable(props) {
+  const navigate = useNavigate();
+
   return (
     <>
       <TableContainer component={Paper}>
@@ -37,7 +39,7 @@ function CourseApplicantsTable(props) {
                     {row.deadline}
                   </TableCell>
                   <TableCell sx={{ borderBottom: "none" }} align="center">
-                    <Button variant="contained" as={Link} to={"/application-of/" + row.id} style={{ textDecoration: "none" }} endIcon={<ChevronRightIcon />}>
+                    <Button variant="contained" onClick={() => navigate("/application-of/" + row.id, { replace: true })} endIcon={<ChevronRightIcon />}>
                       Check Applicants
                     </Button>
                   </TableCell>
