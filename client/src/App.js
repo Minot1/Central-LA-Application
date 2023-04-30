@@ -1,6 +1,6 @@
 import "./App.css";
 import MockCAS from "./pages/MockCAS";
-import { BrowserRouter, Routes, Route, useSearchParams } from "react-router-dom";
+import { Routes, Route, useSearchParams } from "react-router-dom";
 import HomePage from "./pages/HomePage";
 import CreateAnnouncement from "./pages/CreateAnnouncement";
 import EditAnnouncement from "./pages/EditAnnouncement";
@@ -23,7 +23,7 @@ function App() {
 
   useEffect(() => {
     if (!isLoggedIn && !isLoading) {
-      if (url.indexOf("?ticket=") != -1 || url.indexOf("&ticket=") != -1) {
+      if (url.indexOf("?ticket=") !== -1 || url.indexOf("&ticket=") !== -1) {
         dispatch(startLoginProcess());
         // parse and get the ticket
         const ticket = urlParams.get("ticket");
@@ -38,7 +38,7 @@ function App() {
               username: result.authenticationSuccess.attributes.cn,
               name: result.authenticationSuccess.attributes.givenName,
               surname: result.authenticationSuccess.attributes.sn,
-              isInstructor: result.authenticationSuccess.attributes.ou[2] == "student", //result.authenticationSuccess.attributes.ou[1] == "academic"
+              isInstructor: result.authenticationSuccess.attributes.ou[2] === "student", //result.authenticationSuccess.attributes.ou[1] == "academic"
             })
           );
         });

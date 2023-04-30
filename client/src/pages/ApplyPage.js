@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
 import { Typography, Box, Button, Grid, Divider, TextField } from "@mui/material";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { applyToPost, getAnnouncement } from "../apiCalls";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -100,10 +100,10 @@ const ApplyPage = (props) => {
                 <TableBody>
                   {rows.map((row, index) => (
                     <TableRow key={row.name}>
-                      <TableCell component="th" scope="row" align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>
+                      <TableCell component="th" scope="row" align="center" sx={index % 2 === 0 && { backgroundColor: "#f2f2f2" }}>
                         {row.name}
                       </TableCell>
-                      <TableCell align="center" sx={index % 2 == 0 && { backgroundColor: "#f2f2f2" }}>
+                      <TableCell align="center" sx={index % 2 === 0 && { backgroundColor: "#f2f2f2" }}>
                         {row.val}
                       </TableCell>
                     </TableRow>

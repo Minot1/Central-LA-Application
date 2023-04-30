@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import CourseApplicantsTable from "../components/CourseApplicantsTable";
 import AppBarHeader from "../components/AppBarHeader";
-import { Typography, Box, Button, Grid } from "@mui/material";
+import { Box } from "@mui/material";
 import Sidebar from "../components/Sidebar";
 import { getAllAnnouncements } from "../apiCalls";
 
