@@ -227,7 +227,7 @@ function EditQuestion(props) {
         });
     }
 
-    console.log(questions); //for debugging questions 
+    //console.log(questions); //for debugging questions 
 
     return (
         <div>
@@ -334,7 +334,7 @@ function EditQuestion(props) {
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
                 <Button variant="contained" startIcon={<UpdateIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
                             updateAnnouncement(props.postID, props.userDetails.instructor_username, props.AnnouncementDetails.courseCode, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
-                            navigate('/home', { replace: true })
+                            navigate('/home', {replace: true, state: { updatedAnnouncement: true } })
                         }}>
                     Update
                 </Button>

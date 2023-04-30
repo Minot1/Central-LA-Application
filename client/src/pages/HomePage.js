@@ -5,25 +5,53 @@ import {
   Tab,
   Tabs,
 } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AnnouncementTable from "../components/AnnouncementTable";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
 import { getAllAnnouncements } from "../apiCalls";
 import { useSelector } from "react-redux";
+import { useLocation } from 'react-router-dom';
 
 function HomePage() {
-  const [value, setValue] = React.useState(0);
-  const [rows, setRows] = React.useState([]);
+  const location = useLocation();
+  const [updated, setUpdated] = useState(false);
+
+  const [value, setValue] = useState(0);
+  const [rows, setRows] = useState([]);
   const isInstructor = useSelector((state) => state.user.isInstructor);
 
-  useEffect(() => {
-    getAllAnnouncements().then((results) => setRows(results));
-    console.log(rows);
-  }, []); //needs to be fixed
+  // useEffect(() => {
+  //   getAllAnnouncements().then((results) => setRows(results));
+  //   console.log(rows);
+  // }, []); //needs to be fixed
 
-  const handleAnnTableChange = (event, newValue) => {
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        // Fetch the announcements data here using your API function
+        const announcements = await getAllAnnouncements();
+
+        // If the location state includes updatedAnnouncement and the update status is false, update the rows state
+        if (location.state && location.state.updatedAnnouncement && !updated) {
+          // Update the rows state with the updated data or refetch the announcements data
+          setRows(announcements);
+          setUpdated(true); // Set the update status to true
+        } else {
+          // Set the rows state with the fetched data
+          setRows(announcements);
+        }
+      } catch (error) {
+        // Handle the error here
+        console.error('Failed to fetch announcements:', error);
+      }
+    };
+
+    fetchAnnouncements();
+  }, [location, updated]); // Include the updated status in the dependencies
+
+  const handleAnnouncementTableChange = (event, newValue) => {
       setValue(newValue);
   };
 
@@ -36,7 +64,7 @@ function HomePage() {
           <Grid item container direction="row" justifyContent="space-between">
             <Grid item></Grid>
             <Grid item>
-              <Tabs onChange={handleAnnTableChange} value={value}>
+              <Tabs onChange={handleAnnouncementTableChange} value={value}>
                 <Tab label="All Announcements"/>
                 {!isInstructor && <Tab label="My Applications"/>}
                 {isInstructor && <Tab label="My Announcements"/>}
@@ -53,7 +81,7 @@ function HomePage() {
             </Grid>
           </Grid>
           <Grid item>
-            <AnnouncementTable rows={rows}></AnnouncementTable>
+            <AnnouncementTable rows={rows} tabValue = {value}></AnnouncementTable>
           </Grid>
         </Grid>
       </Box>

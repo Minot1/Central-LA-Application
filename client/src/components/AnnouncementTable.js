@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -23,51 +23,131 @@ function AnnouncementTable(props) {
     //     { id: 8, courseCode: 'CS301', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "10", details: "lorem ipsum"},
     //     { id: 9, courseCode: 'HUM201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
     //   ];
-    const [rows, setRows] = React.useState([]);
+    const [rows, setRows] = useState([]);
+    const [tabValue, setTabValue] = useState(props.tabValue)
     const isInstructor = useSelector((state) => state.user.isInstructor);
+    //const userDisplayName = useSelector((state) => state.user.name);
+    //const userDisplayName = "Instructor One" //mock data
+    //const userName = useSelector((state) => state.user.username);
+    const userName = "instructor1" //mock data
+
 
     useEffect(() => {
-        setRows(props.rows);
-        console.log(rows)
-      }, [props.rows]);
-      
-    return(
+        const modifiedRows = props.rows.map(row => {
+            // Split the instructor_name string by comma
+            const [lastName, firstName] = row.instructor_name.split(',');
+
+            // Rearrange the name format
+            const modifiedInstructorName = firstName.trim() + " " + lastName.trim();
+
+            // Return the modified row object
+            return {
+                ...row,
+                instructor_name: modifiedInstructorName
+            };
+        });
+
+        setRows(modifiedRows);
+        //console.log(rows);
+    }, [props.rows]);
+
+    useEffect(() => {
+        setTabValue(props.tabValue)
+    }, [props.tabValue])
+
+    console.log(rows)
+
+    return (
         <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 600}} aria-label="simple table">
+            <Table sx={{ minWidth: 600 }} aria-label="simple table">
                 <TableHead>
-                    <TableRow sx = {{bgcolor: "#eeeeee"}}>
+                    <TableRow sx={{ bgcolor: "#eeeeee" }}>
                         <TableCell align="left">Title</TableCell>
                         <TableCell>Course Code</TableCell>
                         <TableCell align="left">Instructors</TableCell>
-                        <TableCell align="left">Last Application Date</TableCell>
-                        <TableCell align="left">Desired Latter Grade</TableCell>
+                        <TableCell align="left">Last Application Date/Time </TableCell>
+                        <TableCell align="left">Desired Letter Grade</TableCell>
                         <TableCell align="left">Details</TableCell>
                         <TableCell align="left"></TableCell>
                     </TableRow>
                 </TableHead>
-                <TableBody>
-                    {rows.map((row, index) => (
-                        <TableRow
-                        key={index + 1}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                        <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}}align="left">{row.title}</TableCell>
-                        <TableCell sx={{borderBottom:"none"}} component="th" scope="row">{row.courseCode}</TableCell>
-                        <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.username}</TableCell>
-                        <TableCell sx={{borderBottom:"none"}} align="left">{row.deadline}</TableCell>
-                        <TableCell sx = {{bgcolor: "#FAFAFA", borderBottom:"none"}} align="left">{row.mingrade}</TableCell>
-                        <TableCell sx = {{borderBottom:"none"}} align="left">{row.description}</TableCell>
-                        <TableCell sx={{bgcolor: "#FAFAFA", borderBottom:"none"}} align="center">
-                            {isInstructor && <Button variant="contained" as={Link} to={"/edit-announcement/" + (row.id)} startIcon={<EditIcon />}>
-                                Edit
-                            </Button>}
-                            {!isInstructor && <Button variant="contained" as={Link} to={"/apply/" + (row.id)} style={{ textDecoration: 'none' }}>
-                                Apply
-                            </Button>}
-                        </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
+                {
+                    isInstructor ? <TableBody>
+                        {rows
+                            .filter(row => tabValue === 1 ? row.instructor_username === userName : true)
+                            .map((row, index) => (
+                                <TableRow
+                                    key={index + 1}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.title}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} component="th" scope="row">{row.courseCode}</TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.instructor_name}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} align="left">
+                                    {row.deadline ? (
+                                            <>
+                                                {new Date(row.deadline).toLocaleDateString("en-CA", {
+                                                    day: "2-digit",
+                                                    month: "2-digit",
+                                                    year: "numeric",
+                                                })} /{" "}
+                                                {new Date(row.deadline).toLocaleTimeString([], {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
+                                            </>
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.mingrade}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} align="left">{row.description}</TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
+                                        {row.instructor_username === userName && <Button variant="contained" as={Link} to={"/edit-announcement/" + (row.id)} style={{ textDecoration: 'none' }} startIcon={<EditIcon />}>
+                                            Edit
+                                        </Button>}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                    </TableBody> : <TableBody>
+                        {rows
+                            // .filter(row => tabValue === 1 ? row.student_username === userName : true) //to be continued, student'in hangi posta kayıt oldugu lazim (belki vardır)
+                            .map((row, index) => (
+                                <TableRow
+                                    key={index + 1}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.title}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} component="th" scope="row">{row.courseCode}</TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.instructor_name}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} align="left">
+                                        {row.deadline ? (
+                                            <>
+                                                {new Date(row.deadline).toLocaleDateString("en-CA", {
+                                                    day: "2-digit",
+                                                    month: "2-digit",
+                                                    year: "numeric",
+                                                })} /{" "}
+                                                {new Date(row.deadline).toLocaleTimeString([], {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                })}
+                                            </>
+                                        ) : (
+                                            "N/A"
+                                        )}
+                                    </TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">{row.mingrade}</TableCell>
+                                    <TableCell sx={{ borderBottom: "none" }} align="left">{row.description}</TableCell>
+                                    <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
+                                        <Button variant="contained" as={Link} to={"/apply/" + (row.id)} style={{ textDecoration: 'none' }}>
+                                            Apply
+                                        </Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                }
             </Table>
         </TableContainer>
     );
