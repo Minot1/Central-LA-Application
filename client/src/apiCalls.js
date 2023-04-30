@@ -24,7 +24,7 @@ async function getAllAnnouncements() {
   } catch (error) {}
 }
 
-async function getAllInstructor() {
+async function getAllInstructors() {
   try {
     const results = await axios.get(apiEndpoint + "/instructors");
     return results.data;
@@ -117,6 +117,7 @@ async function validateLogin(serviceUrl, ticket) {
 
 export {
   getAllAnnouncements,
+  getAllInstructors,
   addAnnouncement,
   getAnnouncement,
   updateAnnouncement,

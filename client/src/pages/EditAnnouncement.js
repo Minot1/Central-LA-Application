@@ -14,7 +14,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
-import {getAnnouncement} from "../apiCalls"
+import {getAnnouncement, getAllInstructors} from "../apiCalls"
 
 function EditAnnouncement() {
   const grades = [
@@ -37,15 +37,32 @@ function EditAnnouncement() {
     { display_name: "Cem Kaya", username: "cemkaya" },
   ]
 
+  const [authUsersList, setAuthUserList] = useState([]); //get instructors from database
   const [authPeople, setAuthPeople] = useState([]); //used for send request as selected from list
-  const [authValue, setAuthValue] = useState("");
-  const [inputAuthValue, setAuthInputValue] = React.useState("");
+  const [authValue, setAuthValue] = useState("");// for autocomplete
+  const [inputAuthValue, setAuthInputValue] = useState("");// for autocomplete
 
+  //get all instructors
+  useEffect(() => {
+    getAllInstructors().then((results) => {
+      const transformedResults = results.map((instructor) => {
+        const [lastName, firstName] = instructor.name.split(',');
+        const displayName = firstName.trim() + " " + lastName.trim();
+        
+        return {
+          display_name: displayName,
+          username: instructor.instructor_username,
+        };
+      });
+      setAuthUserList(transformedResults);
+    });
+  }, []);
+  
   //used in autocomplete for keeping value and input value
   function handleAuthAdd(newValue) {
     if (newValue !== null) {
 
-      const selectedUser = authUsers.find(user => user.display_name === newValue);
+      const selectedUser = authUsersList.find(user => user.display_name === newValue);
       setAuthPeople([...authPeople, selectedUser]);
     }
     setAuthValue("");
@@ -91,7 +108,20 @@ function EditAnnouncement() {
   const { id } = useParams(); //for taking post id 
   useEffect(() => {
     getAnnouncement(id).then((results) => {
-        const deadline = results.deadline.split(' ')
+        const deadline = results.deadline.split(' ');
+        const authInstructors = JSON.parse(results.auth_instructors);
+
+        const FindAuthPeople = authInstructors.reduce((people, instructor) => {
+          const user = authUsersList.find((authUser) => authUser.username === instructor);
+    
+          if (user) {
+            people.push(user);
+          }
+    
+          return people;
+        }, []);
+
+        console.log(FindAuthPeople)
         const PostResult = {
             courseCode: results.courseCode,
             lastApplicationDate: deadline[0],
@@ -99,7 +129,7 @@ function EditAnnouncement() {
             letterGrade: results.mingrade,
             workHours: results.workingHour,
             jobDetails: results.description,
-            authInstructor: authPeople, //change there JSON.parse(results.auth_instructors)
+            authInstructor: FindAuthPeople, //change there JSON.parse(results.auth_instructors) //completely follow different approach
         }
 
         const UserResult = {
@@ -118,14 +148,14 @@ function EditAnnouncement() {
             }
         });
 
+        setAuthPeople(FindAuthPeople);
         setAnnouncementDetails(PostResult)
         setGetQuestions([...transformedResultQuestions])
         setUserDetails(UserResult)
     });
-  }, [id]);
+  }, [id, authUsersList]);
 
-  //getInstructor fnc lazım
-
+  // set changes for autocomplete
   useEffect(() => {
     setAnnouncementDetails((prevDetails) => ({
       ...prevDetails,
@@ -142,7 +172,7 @@ function EditAnnouncement() {
   };
   
   
-  //console.log(announcementDetails) //for debugging announcement details
+  console.log(announcementDetails) //for debugging announcement details
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -219,7 +249,7 @@ function EditAnnouncement() {
               <Grid item xs={6} direction="column" justifyContent="center" alignItems="flex-start">
                 <Autocomplete
                   id="controllable-states-demo"
-                  options={authUsers.map((authUser) => {
+                  options={authUsersList.map((authUser) => {
                     return authUser.display_name
                   })}
                   filterOptions={filterOptions}

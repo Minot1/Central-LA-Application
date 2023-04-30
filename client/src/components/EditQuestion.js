@@ -227,7 +227,7 @@ function EditQuestion(props) {
         });
     }
 
-    console.log(questions); //for debugging questions 
+    //console.log(questions); //for debugging questions 
 
     return (
         <div>
