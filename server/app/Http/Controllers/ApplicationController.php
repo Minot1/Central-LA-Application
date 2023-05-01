@@ -159,12 +159,24 @@ class ApplicationController extends Controller
         $application = Application::find($id);
         $transcript = $application->transcript;
         $lines = explode("\n", $transcript);
+        $in_progress = explode("\t",$req->courceCode);
+        if(count($in_progress)!= 2) {
+            return "invalid course code";
+        }
+        $in_progress_string = strval($in_progress[0]) . " \t" . strval($in_progress[1]);
         $grade = null;
 
-        foreach ($lines as $line) {
+        foreach ($lines as $line) {    
             if (strpos($line, $req->courceCode) !== false) {
                 $columns = explode("\t", substr($line,strpos($line, $req->courceCode)));
                 $grade = $columns[4];
+
+                break;
+            }
+            if (strpos($line, $in_progress_string) !== false) {
+                $columns = explode("\t", substr($line,strpos($line, $in_progress_string)));
+                $grade = $columns[6];
+
                 break;
             }
         }
