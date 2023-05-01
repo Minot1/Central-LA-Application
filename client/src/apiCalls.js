@@ -39,7 +39,17 @@ async function getAllInstructors() {
   } catch (error) {}
 }
 
-function addAnnouncement(courseCode, username, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
+function addAnnouncement(
+  courseCode,
+  username,
+  lastApplicationDate,
+  lastApplicationTime,
+  letterGrade,
+  workHours,
+  details,
+  auth_instructors,
+  questions
+) {
   const mockUserName = "instructor1";
   const faculty = "FENS";
   const term = "Fall 2022";
@@ -70,7 +80,18 @@ function addAnnouncement(courseCode, username, lastApplicationDate, lastApplicat
   });
 }
 
-function updateAnnouncement(id, username, courseCode, lastApplicationDate, lastApplicationTime, letterGrade, workHours, details, auth_instructors, questions) {
+function updateAnnouncement(
+  id,
+  username,
+  courseCode,
+  lastApplicationDate,
+  lastApplicationTime,
+  letterGrade,
+  workHours,
+  details,
+  auth_instructors,
+  questions
+) {
   const faculty = "FENS";
   const term = "Fall 2022";
   const title = "title update test";
@@ -107,6 +128,21 @@ async function getApplicationsByPost(postID) {
   } catch (error) {}
 }
 
+async function updateApplicationById(applicationId, username, grade, faculty, working_hours, status, post_id, answers) {
+  try {
+    const results = await axios.put(apiEndpoint + "/updateApplication/" + applicationId, {
+      student_username: username,
+      grade: grade,
+      faculty: faculty,
+      working_hours: working_hours,
+      status: status,
+      post_id: post_id,
+      answers: answers,
+    });
+    return results.data;
+  } catch (error) {}
+}
+
 async function validateLogin(serviceUrl, ticket) {
   try {
     const result = await axios.post(apiEndpoint + "/serviceValidate", {
@@ -119,4 +155,14 @@ async function validateLogin(serviceUrl, ticket) {
   } catch (error) {}
 }
 
-export { getAllAnnouncements, getAllInstructors, applyToPost, addAnnouncement, getAnnouncement, updateAnnouncement, getApplicationsByPost, validateLogin };
+export {
+  getAllAnnouncements,
+  getAllInstructors,
+  applyToPost,
+  addAnnouncement,
+  updateApplicationById,
+  getAnnouncement,
+  updateAnnouncement,
+  getApplicationsByPost,
+  validateLogin,
+};

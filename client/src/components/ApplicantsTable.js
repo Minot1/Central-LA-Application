@@ -6,7 +6,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Typography, IconButton, Collapse } from "@mui/material";
+import { Typography, IconButton, Collapse, Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import Select from "@mui/material/Select";
@@ -14,16 +15,43 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
-import { getApplicationsByPost } from "../apiCalls";
+import { getApplicationsByPost, updateApplicationById } from "../apiCalls";
 import { useParams } from "react-router";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 function CustomRow(props) {
   const { row, index } = props;
   const [open, setOpen] = React.useState(false);
+  const [snackOpen, setSnackOpen] = React.useState(false);
   const [status, setStatus] = React.useState("");
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
 
   const handleChange = (event) => {
     setStatus(event.target.value);
+    updateApplicationById(
+      row.id,
+      row.student_username,
+      row.grade,
+      row.faculty,
+      row.working_hours,
+      event.target.value,
+      row.post_id,
+      row.answers
+    ).then((res) => {
+      row.status = event.target.value;
+      setSnackOpen(true);
+      console.log(res);
+    });
   };
 
   return (
@@ -58,12 +86,13 @@ function CustomRow(props) {
           <Collapse in={open} component="tr" style={{ display: "block" }}>
             <td>
               <Typography m={2}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget augue tincidunt, tincidunt nunc eu, pulvinar sem. Nunc non lobortis metus.
-                Nulla a ligula ac nisl vulputate auctor eu sed orci. Praesent a augue ut urna laoreet euismod. Duis non nulla fermentum eros scelerisque
-                pharetra. Maecenas id suscipit purus. Mauris vel metus et arcu imperdiet suscipit in vitae arcu. Aenean tellus risus, ultricies ut risus nec,
-                faucibus laoreet libero. Vestibulum nec tempus orci, sagittis pretium tortor. Etiam quis mattis ante, sed efficitur eros. In imperdiet turpis
-                magna, in viverra velit varius sed. Nulla mollis lobortis aliquet. Nullam viverra et enim quis ullamcorper. Sed tincidunt tellus vitae ligula
-                tincidunt, eu molestie metus interdum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget augue tincidunt, tincidunt nunc eu, pulvinar sem. Nunc non
+                lobortis metus. Nulla a ligula ac nisl vulputate auctor eu sed orci. Praesent a augue ut urna laoreet euismod. Duis non
+                nulla fermentum eros scelerisque pharetra. Maecenas id suscipit purus. Mauris vel metus et arcu imperdiet suscipit in vitae
+                arcu. Aenean tellus risus, ultricies ut risus nec, faucibus laoreet libero. Vestibulum nec tempus orci, sagittis pretium
+                tortor. Etiam quis mattis ante, sed efficitur eros. In imperdiet turpis magna, in viverra velit varius sed. Nulla mollis
+                lobortis aliquet. Nullam viverra et enim quis ullamcorper. Sed tincidunt tellus vitae ligula tincidunt, eu molestie metus
+                interdum.
               </Typography>
             </td>
           </Collapse>
@@ -71,10 +100,20 @@ function CustomRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
           <Collapse in={open} component="tr" style={{ display: "block" }}>
             <Box sx={{ minWidth: 120 }}>
+              <Snackbar
+                open={snackOpen}
+                autoHideDuration={3000}
+                onClose={handleSnackClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert onClose={handleSnackClose} severity="success">
+                  Status is successfully changed
+                </Alert>
+              </Snackbar>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Status</InputLabel>
                 <Select labelId="demo-simple-select-label" id="demo-simple-select" value={status} label="Status" onChange={handleChange}>
-                  <MenuItem value={""}>
+                  <MenuItem value={"Applied"}>
                     <em>None</em>
                   </MenuItem>
                   <MenuItem value={"Accepted"}>Accepted</MenuItem>
