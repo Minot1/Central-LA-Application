@@ -1,11 +1,9 @@
 import axios from "axios";
 
 const url = window.location.href;
-
-if (url.indexOf("pro2") !== -1) {
-  const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
-} else {
-  const apiEndpoint = "http://localhost:8000/api";
+var apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
+if (url.indexOf("pro2") === -1) {
+  apiEndpoint = "http://localhost:8000/api";
 }
 // const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
 // const apiEndpoint = "http://localhost:8000/api";
