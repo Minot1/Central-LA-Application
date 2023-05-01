@@ -29,8 +29,8 @@ function AnnouncementTable(props) {
   const isInstructor = useSelector((state) => state.user.isInstructor);
   //const userDisplayName = useSelector((state) => state.user.name);
   //const userDisplayName = "Instructor One" //mock data
-  //const userName = useSelector((state) => state.user.username);
-  const userName = "instructor1"; //mock data
+  const userName = useSelector((state) => state.user.username);
+  // const userName = "instructor1"; //mock data
 
   useEffect(() => {
     const modifiedRows = props.rows.map((row) => {
@@ -112,7 +112,11 @@ function AnnouncementTable(props) {
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
                     {row.instructor_username === userName && (
-                      <Button variant="contained" onClick={() => navigate("/edit-announcement/" + row.id, { replace: true })} startIcon={<EditIcon />}>
+                      <Button
+                        variant="contained"
+                        onClick={() => navigate("/edit-announcement/" + row.id, { replace: true })}
+                        startIcon={<EditIcon />}
+                      >
                         Edit
                       </Button>
                     )}

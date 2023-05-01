@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    name: "",
-    surname: "",
-    username: "",
-    JwtToken: "",
-    isInstructor: true,
-    isLoading: false,
-    isFailed: false,
-    isLoggedIn: false,
+  name: "",
+  surname: "",
+  username: "",
+  JwtToken: "",
+  isInstructor: true,
+  isLoading: false,
+  isFailed: false,
+  isLoggedIn: false,
 };
 
 const userSlice = createSlice({
@@ -37,20 +37,16 @@ const userSlice = createSlice({
       state.name = "";
       state.surname = "";
       state.username = "";
+      state.JwtToken = "";
       state.isLoading = false;
       state.isFailed = false;
       state.isLoggedIn = false;
-    }
+    },
   },
 });
 
 console.log(userSlice);
 
-export const {
-  startLoginProcess,
-  successLogin,
-  failLogin,
-  logout,
-} = userSlice.actions;
+export const { startLoginProcess, successLogin, failLogin, logout } = userSlice.actions;
 
 export default userSlice.reducer;

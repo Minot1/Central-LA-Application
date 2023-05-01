@@ -5,7 +5,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, Collapse, IconButton, styled, Toolbar, useTheme } from "@mui/material";
+import { Avatar, Button, Collapse, IconButton, styled, Toolbar, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import MuiAppBar from "@mui/material/AppBar";
@@ -21,8 +21,10 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../redux/userSlice";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 210;
 
@@ -89,6 +91,8 @@ function Sidebar() {
   const isInstructor = useSelector((state) => state.user.isInstructor);
   const name = useSelector((state) => state.user.name);
   const surname = useSelector((state) => state.user.surname);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleListClick = () => {
     setListOpen(!listOpen);
@@ -122,6 +126,17 @@ function Sidebar() {
           <Typography variant="h6" noWrap component="div">
             FALL 2022-2023
           </Typography>
+          <Button
+            sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
+            endIcon={<LogoutIcon />}
+            variant="outlined"
+            onClick={() => {
+              dispatch(logout());
+              navigate("/", { replace: true });
+            }}
+          >
+            Log Out
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer sidebarOpen={sidebarOpen} variant="permanent" PaperProps={{ sx: { backgroundColor: "#394263", color: "white" } }}>
