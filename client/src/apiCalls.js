@@ -133,6 +133,13 @@ async function getApplicationsByPost(postID) {
   } catch (error) {}
 }
 
+async function getApplicationByUsername(username) {
+  try {
+    const results = await axios.get(apiEndpoint + "/listStudentApplication/" + username);
+    return results.data;
+  } catch (error) {}
+}
+
 async function updateApplicationById(applicationId, username, grade, faculty, working_hours, status, post_id, answers) {
   try {
     const results = await axios.put(apiEndpoint + "/updateApplication/" + applicationId, {
@@ -169,5 +176,6 @@ export {
   getAnnouncement,
   updateAnnouncement,
   getApplicationsByPost,
+  getApplicationByUsername,
   validateLogin,
 };
