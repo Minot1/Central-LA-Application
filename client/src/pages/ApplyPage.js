@@ -15,12 +15,14 @@ import { useSelector } from "react-redux";
 const ApplyPage = (props) => {
   const navigate = useNavigate();
   const username = useSelector((state) => state.user.username);
+  const name = useSelector((state) => state.user.name);
+  const surname = useSelector((state) => state.user.surname);
   const rows = [
-    { name: "Student ID:", val: "00026899" },
-    { name: "Name - Surname:", val: "Taner Dinçer" },
-    { name: "Admit term:", val: "2018-19 Fall" },
-    { name: "Faculty:", val: "FENS" },
-    { name: "Program:", val: "BSCS - Computer Science" },
+    { name: "Student ID:", val: "00000000" },
+    { name: "Name - Surname:", val: name + " " + surname },
+    { name: "Admit term:", val: "-" },
+    { name: "Faculty:", val: "-" },
+    { name: "Program:", val: "-" },
   ];
   const [questionsAndAnswers, setQuestionsAndAnswers] = useState({});
   const [questions, setQuestions] = useState([]);
