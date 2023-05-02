@@ -54,11 +54,17 @@ function CustomRow(props) {
     });
   };
 
+  function changeName(student_name) {
+    const [lastName, firstName] = student_name.split(",");
+    const modifiedStudentName = firstName.trim() + " " + lastName.trim();
+    return modifiedStudentName;
+  }
+
   return (
     <>
       <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
         <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
-          {row.student_name}
+          {changeName(row.student_name)}
         </TableCell>
         <TableCell sx={{ borderBottom: "none" }} component="th" scope="row">
           {row.faculty}
@@ -69,13 +75,13 @@ function CustomRow(props) {
         <TableCell sx={{ borderBottom: "none" }} align="left">
           {row.working_hours}
         </TableCell>
-        <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
+        <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none", minWidth: 120 }} align="left">
           {row.status}
         </TableCell>
-        <TableCell sx={{ borderBottom: "none" }} align="left">
+        {/* <TableCell sx={{ borderBottom: "none" }} align="left">
           {row.post_id}
-        </TableCell>
-        <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
+        </TableCell> */}
+        <TableCell sx={{ borderBottom: "none" }} align="right">
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
