@@ -49,7 +49,7 @@ const ApplyPage = (props) => {
     applyToPost(id, username, temp, transcript).then((res) => {
       console.log(res);
     });
-    navigate("/home", { replace: true });
+    navigate("/home", { replace: true, state: { updatedAnnouncement: true } });
   };
 
   const onAnswerChange = (e, question) => {
