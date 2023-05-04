@@ -16,7 +16,6 @@ function ApplicantsPage() {
     getAnnouncement(postId).then((res) => {
       setTitle(res.courseCode);
     });
-    console.log(rows);
   }, []);
 
   return (

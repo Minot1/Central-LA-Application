@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Typography, IconButton, Collapse, Snackbar } from "@mui/material";
+import { Typography, IconButton, Collapse, Snackbar, Grid } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -27,6 +27,23 @@ function CustomRow(props) {
   const [open, setOpen] = React.useState(false);
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [status, setStatus] = React.useState("");
+  const [qAndA, setQAndA] = React.useState([]);
+
+  useEffect(() => {
+    var temp = [];
+    if (questions.length !== 0 && row) {
+      for (let index = 0; index < row.answers.length; index++) {
+        const a = row.answers[index].answer;
+        const q = questions[index].question;
+        var temp2 = [];
+        temp2.push(q);
+        temp2.push(a);
+        temp.push(temp2);
+      }
+      console.log(temp);
+      setQAndA(temp);
+    }
+  }, [questions]);
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -98,12 +115,14 @@ function CustomRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
           <Collapse in={open} component="tr" style={{ display: "block" }}>
             <td>
-              {questions.map((q) => (
-                <Typography>{q.question}</Typography>
-              ))}
-              {row.answers.map((answer) => (
-                <Typography>{answer.answer}</Typography>
-              ))}
+              <Grid container direction="column" alignItems="center" justifyContent="center">
+                {qAndA.map((element) => (
+                  <Grid item container m={2}>
+                    <Grid item>{element[0]}:</Grid>
+                    <Grid item>{element[1]}</Grid>
+                  </Grid>
+                ))}
+              </Grid>
             </td>
           </Collapse>
         </TableCell>
