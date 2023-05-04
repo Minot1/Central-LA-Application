@@ -65,9 +65,10 @@ function addAnnouncement(
   workHours,
   details,
   auth_instructors,
+  desired_courses,
   questions
 ) {
-  const mockUserName = "instructor1";
+  //const mockUserName = "instructor1";
   const faculty = "FENS";
   const term = "Fall 2022";
   const title = "title add test";
@@ -86,9 +87,10 @@ function addAnnouncement(
   );
 
   axios.post(apiEndpoint + "/addPost", {
-    instructor_username: mockUserName,
+    instructor_username: username,
     faculty: faculty,
     course_code: course_code,
+    desired_courses: desired_courses,
     deadline: deadline,
     term: term,
     title: title,
@@ -110,6 +112,7 @@ function updateAnnouncement(
   workHours,
   details,
   auth_instructors,
+  desired_courses,
   questions
 ) {
   const faculty = "FENS";
@@ -124,7 +127,7 @@ function updateAnnouncement(
     multiple_choices:
       question.mValue === "Multiple Choice" ? question.mMultiple : [],
   }));
-  console.log(deadline);
+  console.log(desired_courses);
   const authInstructor_userNames = auth_instructors.map(
     (user) => user.username
   );
@@ -133,6 +136,7 @@ function updateAnnouncement(
     instructor_username: username,
     faculty: faculty,
     course_code: course_code,
+    desired_courses: desired_courses,
     deadline: deadline,
     term: term,
     title: title,
