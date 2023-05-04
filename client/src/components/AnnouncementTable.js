@@ -32,7 +32,7 @@ function AnnouncementTable(props) {
   //const userDisplayName = useSelector((state) => state.user.name);
   //const userDisplayName = "Instructor One" //mock data
   const userName = useSelector((state) => state.user.username);
-  //const userName = "instructor1"; //mock data for instructor
+  // const userName = "instructor2"; //mock data for instructor
   // const userName = "muratk"; //mock data for student
 
   useEffect(() => {

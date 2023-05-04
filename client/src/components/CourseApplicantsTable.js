@@ -30,7 +30,7 @@ function CourseApplicantsTable(props) {
               props.rows.map((row, index) => (
                 <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
-                    {row.courseCode}
+                    {row.course_code}
                   </TableCell>
                   <TableCell sx={{ borderBottom: "none" }} align="center">
                     {row.term}
