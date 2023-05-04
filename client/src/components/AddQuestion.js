@@ -58,7 +58,8 @@ const suggestedQuestions = [
 function AddQuestion(props) {
 
     const [questions, setQuestions] = useState([{ questionNumber: 1, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 2, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }, { questionNumber: 3, mQuestion: "", mValue: 'Text Answer', mMultiple: ["", ""] }])
-    const userName = useSelector((state) => state.user.username);
+    //const userName = useSelector((state) => state.user.username);
+    const userName = "instructor1"; //mock data for testing
     const navigate = useNavigate();
 
     function addNewQuestion() {
@@ -335,7 +336,7 @@ function AddQuestion(props) {
             </Grid>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
                 <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ m: 2, textDecoration: 'none' }} onClick={() => {
-                            addAnnouncement(props.AnnouncementDetails.course_code, userName, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
+                            addAnnouncement(props.AnnouncementDetails.course_code, userName, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, props.AnnouncementDetails.desiredCourses, questions)
                             navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
                         }}>
                     Submit

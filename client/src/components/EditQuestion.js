@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import { Typography, Box, Button, Grid } from '@mui/material'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import TextField from '@mui/material/TextField';
@@ -11,7 +12,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ControlPointDuplicateIcon from '@mui/icons-material/ControlPointDuplicate';
 import UpdateIcon from '@mui/icons-material/Update';
 import CloseIcon from '@mui/icons-material/Close';
-import {updateAnnouncement} from "../apiCalls"
+import { updateAnnouncement } from "../apiCalls"
 
 
 const questionType = [
@@ -56,13 +57,15 @@ const suggestedQuestions = [
 
 function EditQuestion(props) {
 
-    const [questions, setQuestions] = useState([])   
+    const [questions, setQuestions] = useState([])
+    //const userName = useSelector((state) => state.user.username);
+    //const userName = "instructor1"; //mock data for testing
     const navigate = useNavigate();
 
     useEffect(() => {
         setQuestions([...props.getQuestions]);
-      }, [props.getQuestions]);
-    
+    }, [props.getQuestions]);
+
 
     function addNewQuestion() {
         const nextNum = (questions.length) + 1
@@ -333,9 +336,9 @@ function EditQuestion(props) {
             </Grid>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
                 <Button variant="contained" startIcon={<UpdateIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
-                            updateAnnouncement(props.postID, props.userDetails.instructor_username, props.AnnouncementDetails.courseCode, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
-                            navigate('/home', {replace: true, state: { updatedAnnouncement: true } })
-                        }}>
+                    updateAnnouncement(props.postID, props.userDetails.instructor_username, props.AnnouncementDetails.course_code, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, props.AnnouncementDetails.desiredCourses, questions)
+                    navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
+                }}>
                     Update
                 </Button>
                 <Button variant="contained" startIcon={<CloseIcon />} color="error" sx={{ mx: 2 }} onClick={() => navigate('/home', { replace: true })}>
