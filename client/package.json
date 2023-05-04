@@ -14,6 +14,8 @@
     "@testing-library/user-event": "^13.5.0",
     "assert": "^2.0.0",
     "buffer": "^6.0.3",
+    "pdfjs": "^2.4.7",
+    "pdfjs-dist": "2.5.207",
     "react": "^18.2.0",
     "react-axios": "^2.0.6",
     "react-beautiful-dnd": "^13.1.1",

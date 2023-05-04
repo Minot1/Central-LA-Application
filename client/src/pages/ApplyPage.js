@@ -28,13 +28,25 @@ const ApplyPage = (props) => {
   const [questions, setQuestions] = useState([]);
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const { id } = useParams();
+  const [transcript, setTranscript] = useState(null);
   const [filename, setFile] = useState(() => {
     const initialFileName = "No File Uploaded";
     return initialFileName;
   });
 
   const onSubmit = () => {
-    applyToPost(id, username, Object.values(questionsAndAnswers)).then((res) => {
+    console.log(questionsAndAnswers);
+    var temp = [];
+    for (var q in questionsAndAnswers) {
+      if (!questionsAndAnswers.hasOwnProperty(q)) continue;
+
+      var temp2 = {};
+      temp2.question_id = parseInt(q);
+      temp2.answer = questionsAndAnswers[q];
+      temp.push(temp2);
+    }
+    console.log(temp);
+    applyToPost(id, username, temp, transcript).then((res) => {
       console.log(res);
     });
     navigate("/home", { replace: true });
@@ -44,7 +56,7 @@ const ApplyPage = (props) => {
     e.preventDefault();
     let temp = questionsAndAnswers;
     for (const [q, a] of Object.entries(temp)) {
-      if (q === question.question) {
+      if (q == question.id) {
         temp[q] = e.target.value;
       }
     }
@@ -55,8 +67,8 @@ const ApplyPage = (props) => {
     var temp = {};
     if (questions !== undefined) {
       for (let index = 0; index < questions.length; index++) {
-        const element = questions[index];
-        temp[element.question] = "";
+        const element = questions[index].id;
+        temp[element] = "";
       }
       setQuestionsAndAnswers(temp);
     }
@@ -66,7 +78,9 @@ const ApplyPage = (props) => {
     if (!e.target.files) {
       return;
     }
+
     const file = e.target.files[0];
+    setTranscript(file);
     const { name } = file;
     setFile(name);
   };
@@ -80,7 +94,7 @@ const ApplyPage = (props) => {
     if (announcementInfo.questions !== undefined) {
       let temp = questionsAndAnswers;
       announcementInfo.questions.map((q) => {
-        temp[q.question] = "";
+        temp[q.id] = "";
       });
       setQuestionsAndAnswers(temp);
     }
@@ -147,7 +161,7 @@ const ApplyPage = (props) => {
               <Grid item container direction="rows">
                 <Button variant="contained" component="label">
                   Upload File
-                  <input type="file" accept=".pdf" hidden onChange={onFileChange} />
+                  <input type="file" hidden onChange={onFileChange} />
                 </Button>
                 <Typography alignItems="center" justifyContent="center" textAlign="center" m={2}>
                   {filename}

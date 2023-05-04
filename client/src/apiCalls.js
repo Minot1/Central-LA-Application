@@ -8,17 +8,18 @@ if (url.indexOf("pro2") === -1) {
 // const apiEndpoint = "http://pro2-dev.sabanciuniv.edu/api";
 // const apiEndpoint = "http://localhost:8000/api";
 
-async function applyToPost(postId, username, answers) {
+async function applyToPost(postId, username, answers, transcript) {
   try {
-    const results = await axios.post(apiEndpoint + "/addApplication", {
-      student_username: username,
-      working_hours: 10,
-      post_id: postId,
-      answers: answers,
-      status: "applied",
-      grade: 3,
-      faculty: "FENS",
-    });
+    var bodyFormData = new FormData();
+    bodyFormData.append("student_username", username);
+    bodyFormData.append("working_hours", 10);
+    bodyFormData.append("post_id", postId);
+    bodyFormData.append("answers", JSON.stringify(answers));
+    bodyFormData.append("status", "applied");
+    bodyFormData.append("grade", 0);
+    bodyFormData.append("faculty", "-");
+    bodyFormData.append("transcript", transcript);
+    const results = await axios.post(apiEndpoint + "/addApplication", bodyFormData, { headers: { "Content-Type": "multipart/form-data" } });
     return results.data;
   } catch (error) {}
 }
