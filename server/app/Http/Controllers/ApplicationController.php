@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\Answer;
 use App\Models\Student;
+use App\Models\Course;
 
 
 class ApplicationController extends Controller
@@ -182,5 +183,10 @@ class ApplicationController extends Controller
         }
 
         return $grade;
+    }
+    function listCourse()
+    {
+        $results = Course::all()->sort()->pluck('course')->toArray();
+        return $results;
     }
 }
