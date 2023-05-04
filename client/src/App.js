@@ -38,7 +38,7 @@ function App() {
               username: result.authenticationSuccess.attributes.cn,
               name: result.authenticationSuccess.attributes.givenName,
               surname: result.authenticationSuccess.attributes.sn,
-              isInstructor: result.authenticationSuccess.attributes.ou[1] !== "academic", //result.authenticationSuccess.attributes.ou[1] == "academic"
+              isInstructor: result.authenticationSuccess.attributes.ou[1] === "academic", //result.authenticationSuccess.attributes.ou[1] == "academic"
             })
           );
         });

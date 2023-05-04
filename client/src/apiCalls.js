@@ -46,7 +46,7 @@ async function getAllInstructors() {
 }
 
 function addAnnouncement(
-  courseCode,
+  course_code,
   username,
   lastApplicationDate,
   lastApplicationTime,
@@ -74,11 +74,11 @@ function addAnnouncement(
   axios.post(apiEndpoint + "/addPost", {
     instructor_username: mockUserName,
     faculty: faculty,
-    courseCode: courseCode,
+    course_code: course_code,
     deadline: deadline,
     term: term,
     title: title,
-    workingHour: workHours,
+    working_hour: workHours,
     description: details,
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,
@@ -89,7 +89,7 @@ function addAnnouncement(
 function updateAnnouncement(
   id,
   username,
-  courseCode,
+  course_code,
   lastApplicationDate,
   lastApplicationTime,
   letterGrade,
@@ -115,11 +115,11 @@ function updateAnnouncement(
   axios.put(apiEndpoint + "/updatePost/" + id, {
     instructor_username: username,
     faculty: faculty,
-    courseCode: courseCode,
+    course_code: course_code,
     deadline: deadline,
     term: term,
     title: title,
-    workingHour: workHours,
+    working_hour: workHours,
     description: details,
     auth_instructors: authInstructor_userNames,
     mingrade: letterGrade,

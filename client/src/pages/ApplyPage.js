@@ -107,7 +107,7 @@ const ApplyPage = (props) => {
         <AppBarHeader />
         <Grid container direction="column" alignItems="center" justifyContent="center" spacing={3}>
           <Grid item>
-            <Typography variant="h4">{announcementInfo.courseCode} LA Application</Typography>
+            <Typography variant="h4">{announcementInfo.course_code} LA Application</Typography>
             <Divider></Divider>
           </Grid>
           <Grid item>

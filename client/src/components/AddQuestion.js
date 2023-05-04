@@ -335,7 +335,7 @@ function AddQuestion(props) {
             </Grid>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
                 <Button variant="contained" startIcon={<SendIcon />} color="success" sx={{ m: 2, textDecoration: 'none' }} onClick={() => {
-                            addAnnouncement(props.AnnouncementDetails.courseCode, userName, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
+                            addAnnouncement(props.AnnouncementDetails.course_code, userName, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, questions)
                             navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
                         }}>
                     Submit

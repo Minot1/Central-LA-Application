@@ -14,15 +14,15 @@ import { getApplicationByUsername } from "../apiCalls";
 
 function AnnouncementTable(props) {
   // const rows = [
-  //     { id: 1, courseCode: 'CS201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
-  //     { id: 2, courseCode: 'CS210', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "5", details: "lorem ipsum"},
-  //     { id: 3, courseCode: 'MATH201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A-', wHour: "5", details: "lorem ipsum"},
-  //     { id: 4, courseCode: 'CS300', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "5", details: "lorem ipsum"},
-  //     { id: 5, courseCode: 'MATH204', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "10", details: "lorem ipsum" },
-  //     { id: 6, courseCode: 'ENS206', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "10", details: "lorem ipsum"},
-  //     { id: 7, courseCode: 'ECON201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B', wHour: "5", details: "lorem ipsum"},
-  //     { id: 8, courseCode: 'CS301', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "10", details: "lorem ipsum"},
-  //     { id: 9, courseCode: 'HUM201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
+  //     { id: 1, course_code: 'CS201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
+  //     { id: 2, course_code: 'CS210', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "5", details: "lorem ipsum"},
+  //     { id: 3, course_code: 'MATH201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A-', wHour: "5", details: "lorem ipsum"},
+  //     { id: 4, course_code: 'CS300', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "5", details: "lorem ipsum"},
+  //     { id: 5, course_code: 'MATH204', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "10", details: "lorem ipsum" },
+  //     { id: 6, course_code: 'ENS206', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "10", details: "lorem ipsum"},
+  //     { id: 7, course_code: 'ECON201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B', wHour: "5", details: "lorem ipsum"},
+  //     { id: 8, course_code: 'CS301', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'A', wHour: "10", details: "lorem ipsum"},
+  //     { id: 9, course_code: 'HUM201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
   //   ];
   const [rows, setRows] = useState([]);
   const [studentApplications, setStudentApplications] = useState([]);
@@ -99,7 +99,7 @@ function AnnouncementTable(props) {
                     {row.title}
                   </TableCell> */}
                   <TableCell sx={{ borderBottom: "none" }} component="th" scope="row">
-                    {row.courseCode}
+                    {row.course_code}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
                     {row.instructor_name}
@@ -126,7 +126,7 @@ function AnnouncementTable(props) {
                     {row.mingrade}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
-                    {row.workingHour}
+                    {row.working_hour}
                   </TableCell>
                   <TableCell sx={{ borderBottom: "none" }} align="left">
                     {row.description}
@@ -157,7 +157,7 @@ function AnnouncementTable(props) {
                     {row.title}
                   </TableCell> */}
                   <TableCell sx={{ borderBottom: "none" }} component="th" scope="row">
-                    {row.courseCode}
+                    {row.course_code}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
                     {row.instructor_name}
@@ -184,7 +184,7 @@ function AnnouncementTable(props) {
                     {row.mingrade}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
-                    {row.workingHour}
+                    {row.working_hour}
                   </TableCell>
                   <TableCell sx={{ borderBottom: "none" }} align="left">
                     {row.description}

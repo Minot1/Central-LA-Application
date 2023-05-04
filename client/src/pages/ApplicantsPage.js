@@ -14,7 +14,7 @@ function ApplicantsPage() {
   useEffect(() => {
     getApplicationsByPost(postId).then((results) => setRows(results));
     getAnnouncement(postId).then((res) => {
-      setTitle(res.courseCode);
+      setTitle(res.course_code);
     });
   }, []);
 

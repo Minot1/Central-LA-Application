@@ -120,11 +120,11 @@ function EditAnnouncement() {
 
       console.log(FindAuthPeople);
       const PostResult = {
-        courseCode: results.courseCode,
+        course_code: results.course_code,
         lastApplicationDate: deadline[0],
         lastApplicationTime: deadline[1],
         letterGrade: results.mingrade,
-        workHours: results.workingHour,
+        workHours: results.working_hour,
         jobDetails: results.description,
         authInstructor: FindAuthPeople, //change there JSON.parse(results.auth_instructors) //completely follow different approach
       };
@@ -189,7 +189,7 @@ function EditAnnouncement() {
               <Typography>Course Code:</Typography>
               <TextField
                 id="outlined-required"
-                name="courseCode"
+                name="course_code"
                 label="Enter course code"
                 variant="outlined"
                 size="small"
@@ -197,7 +197,7 @@ function EditAnnouncement() {
                 maxRows={20}
                 InputLabelProps={{ shrink: true }}
                 sx={{ m: 2, width: 350 }}
-                value={announcementDetails.courseCode}
+                value={announcementDetails.course_code}
                 onChange={handleInput}
               />
             </Grid>

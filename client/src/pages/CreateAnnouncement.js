@@ -100,7 +100,7 @@ function CreateAnnouncement() {
   //console.log(authPeople) //for debugging authPeople
 
   const [announcementDetails, setAnnouncementDetails] = useState({
-    courseCode: "",
+    course_code: "",
     lastApplicationDate: new Date().toLocaleDateString("en-CA"),
     lastApplicationTime: new Date().toLocaleTimeString().replace(/(.*)\D\d+/, "$1"),
     letterGrade: "A",
@@ -146,14 +146,14 @@ function CreateAnnouncement() {
               <Typography>Course Code:</Typography>
               <TextField
                 id="outlined-required"
-                name="courseCode"
+                name="course_code"
                 label="Enter course code"
                 variant="outlined"
                 size="small"
                 multiline
                 maxRows={20}
                 sx={{ m: 2, width: 350 }}
-                value={announcementDetails.courseCode}
+                value={announcementDetails.course_code}
                 onChange={handleInput}
               />
             </Grid>
