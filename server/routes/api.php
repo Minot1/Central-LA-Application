@@ -35,6 +35,7 @@ Route::get('search/{key}',[PostController::class, 'search']);
 Route::get('listApplication', [ApplicationController::class, 'listApplication']);
 Route::get('application/{id}', [ApplicationController::class, 'getApplication']);
 Route::post('getGrade/{id}', [ApplicationController::class, 'getGrade']);
+Route::get('listCourse', [ApplicationController::class, 'listCourse']);
 Route::get('listStudentApplication/{username}', [ApplicationController::class, 'listStudentApplication']);
 Route::post('addApplication', [ApplicationController::class, 'addApplication']);
 Route::put('updateApplication/{id}',[ApplicationController::class, 'updateApplication']);

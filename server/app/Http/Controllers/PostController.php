@@ -19,7 +19,6 @@ class PostController extends Controller
         $post->deadline=$req->input('deadline');
         $post->workingHour=$req->input('workingHour');
         $post->term=$req->input('term');
-        $post->title=$req->input('title');
         $post->description=$req->input('description');
         $post->mingrade=$req->input('mingrade');
         $post->auth_instructors=json_encode($req->input('auth_instructors'),TRUE);
@@ -64,6 +63,8 @@ class PostController extends Controller
     function deletePost($id)
     {
         $result= Post::where('id', $id) ->delete();
+        $questions = Question::where('post_id',$result["$id"])->delete();
+
         if($result)
         {
           return ["result"=>"Post has been deleted"];
@@ -89,7 +90,7 @@ class PostController extends Controller
 
     function search($key)
     {
-        $results = Post::where('title', 'Like', "%$key%")->get();
+        $results = Post::where('description', 'Like', "%$key%")->get();
         foreach($results as $row)
         {
             $row['auth_instructors']= json_decode($row['auth_instructors'],TRUE);
@@ -116,7 +117,6 @@ class PostController extends Controller
         $post->deadline=$req->input('deadline');
         $post->workingHour=$req->input('workingHour');
         $post->term=$req->input('term');
-        $post->title=$req->input('title');
         $post->description=$req->input('description');
         $post->auth_instructors=$req->input('auth_instructors');
         $post->mingrade=$req->input('mingrade');
