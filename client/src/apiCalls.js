@@ -19,7 +19,11 @@ async function applyToPost(postId, username, answers, transcript) {
     bodyFormData.append("grade", 0);
     bodyFormData.append("faculty", "-");
     bodyFormData.append("transcript", transcript);
-    const results = await axios.post(apiEndpoint + "/addApplication", bodyFormData, { headers: { "Content-Type": "multipart/form-data" } });
+    const results = await axios.post(
+      apiEndpoint + "/addApplication",
+      bodyFormData,
+      { headers: { "Content-Type": "multipart/form-data" } }
+    );
     return results.data;
   } catch (error) {}
 }
@@ -45,6 +49,13 @@ async function getAllInstructors() {
   } catch (error) {}
 }
 
+async function getAllCourses() {
+  try {
+    const results = await axios.get(apiEndpoint + "/listCourse");
+    return results.data;
+  } catch (error) {}
+}
+
 function addAnnouncement(
   course_code,
   username,
@@ -66,10 +77,13 @@ function addAnnouncement(
     type: question.mValue,
     ranking: question.questionNumber,
     question: question.mQuestion,
-    multiple_choices: question.mValue === "Multiple Choice" ? question.mMultiple : [],
+    multiple_choices:
+      question.mValue === "Multiple Choice" ? question.mMultiple : [],
   }));
   console.log(letterGrade);
-  const authInstructor_userNames = auth_instructors.map((user) => user.username);
+  const authInstructor_userNames = auth_instructors.map(
+    (user) => user.username
+  );
 
   axios.post(apiEndpoint + "/addPost", {
     instructor_username: mockUserName,
@@ -107,10 +121,13 @@ function updateAnnouncement(
     type: question.mValue,
     ranking: question.questionNumber,
     question: question.mQuestion,
-    multiple_choices: question.mValue === "Multiple Choice" ? question.mMultiple : [],
+    multiple_choices:
+      question.mValue === "Multiple Choice" ? question.mMultiple : [],
   }));
   console.log(deadline);
-  const authInstructor_userNames = auth_instructors.map((user) => user.username);
+  const authInstructor_userNames = auth_instructors.map(
+    (user) => user.username
+  );
 
   axios.put(apiEndpoint + "/updatePost/" + id, {
     instructor_username: username,
@@ -129,29 +146,45 @@ function updateAnnouncement(
 
 async function getApplicationsByPost(postID) {
   try {
-    const results = await axios.get(apiEndpoint + "/listPostApplication/" + postID);
+    const results = await axios.get(
+      apiEndpoint + "/listPostApplication/" + postID
+    );
     return results.data;
   } catch (error) {}
 }
 
 async function getApplicationByUsername(username) {
   try {
-    const results = await axios.get(apiEndpoint + "/listStudentApplication/" + username);
+    const results = await axios.get(
+      apiEndpoint + "/listStudentApplication/" + username
+    );
     return results.data;
   } catch (error) {}
 }
 
-async function updateApplicationById(applicationId, username, grade, faculty, working_hours, status, post_id, answers) {
+async function updateApplicationById(
+  applicationId,
+  username,
+  grade,
+  faculty,
+  working_hours,
+  status,
+  post_id,
+  answers
+) {
   try {
-    const results = await axios.put(apiEndpoint + "/updateApplication/" + applicationId, {
-      student_username: username,
-      grade: grade,
-      faculty: faculty,
-      working_hours: working_hours,
-      status: status,
-      post_id: post_id,
-      answers: answers,
-    });
+    const results = await axios.put(
+      apiEndpoint + "/updateApplication/" + applicationId,
+      {
+        student_username: username,
+        grade: grade,
+        faculty: faculty,
+        working_hours: working_hours,
+        status: status,
+        post_id: post_id,
+        answers: answers,
+      }
+    );
     return results.data;
   } catch (error) {}
 }
@@ -171,6 +204,7 @@ async function validateLogin(serviceUrl, ticket) {
 export {
   getAllAnnouncements,
   getAllInstructors,
+  getAllCourses,
   applyToPost,
   addAnnouncement,
   updateApplicationById,

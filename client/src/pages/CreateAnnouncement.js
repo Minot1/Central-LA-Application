@@ -13,7 +13,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
-import { getAllInstructors } from "../apiCalls";
+import { getAllInstructors, getAllCourses } from "../apiCalls";
 
 function CreateAnnouncement() {
   const grades = [
@@ -40,7 +40,10 @@ function CreateAnnouncement() {
   const [authPeople, setAuthPeople] = useState([]); //used for send request as selected from list
   const [authValue, setAuthValue] = useState(""); // for autocomplete
   const [inputAuthValue, setAuthInputValue] = useState(""); // for autocomplete
-
+  const [courseList, setcourseList] = useState([]); //get courses from database
+  const [selectedCourses, setSelectedCourses] = useState([]); //used for send request as selected from list
+  const [courseValue, setCourseValue] = useState(""); // for autocomplete
+  const [inputCourseValue, setCourseInputValue] = useState(""); // for autocomplete
   //get all instructors
   useEffect(() => {
     getAllInstructors().then((results) => {
@@ -57,12 +60,21 @@ function CreateAnnouncement() {
     });
   }, []);
 
+  useEffect(() => {
+    getAllCourses().then((results) => {
+      setcourseList(results);
+    });
+  }, []);
+
   console.log(authUsersList);
+  console.log(courseList);
 
   //used in autocomplete for keeping value and input value
   function handleAuthAdd(newValue) {
     if (newValue !== null) {
-      const selectedUser = authUsersList.find((user) => user.display_name === newValue);
+      const selectedUser = authUsersList.find(
+        (user) => user.display_name === newValue
+      );
       setAuthPeople([...authPeople, selectedUser]);
     }
     setAuthValue("");
@@ -70,9 +82,51 @@ function CreateAnnouncement() {
   }
 
   function handleAuthDelete(userToDelete) {
-    const updatedAuthPeople = authPeople.filter((user) => user.username !== userToDelete.username);
+    const updatedAuthPeople = authPeople.filter(
+      (user) => user.username !== userToDelete.username
+    );
     // console.log(updatedAuthPeople)
     setAuthPeople(updatedAuthPeople);
+  }
+
+  //used in autocomplete for keeping value and input value
+  function handleCourseAdd(newValue) {
+    if (newValue !== null) {
+      const selectedCourse = courseList.find((course) => course === newValue);
+      setSelectedCourses([...selectedCourses, selectedCourse]);
+    }
+    setCourseValue("");
+    setCourseInputValue("");
+  }
+
+  function handleCourseDelete(courseToDelete) {
+    const updatedSelectedCourses = selectedCourses.filter(
+      (course) => course !== courseToDelete
+    );
+    // console.log(updatedSelectedCourses)
+    setSelectedCourses(updatedSelectedCourses);
+  }
+
+  function filterCourses(optionCourses, { inputValue }) {
+    const filtered = optionCourses.filter((option) => {
+      if (selectedCourses.some((course) => course === option)) {
+        return false; // filter out if already in selectedCourses
+      }
+      return option.toLowerCase().includes(inputValue.toLowerCase());
+    });
+
+    // sort the filtered options based on their match with the input value
+    const inputValueLowerCase = inputValue.toLowerCase();
+    filtered.sort((a, b) => {
+      const aIndex = a.toLowerCase().indexOf(inputValueLowerCase);
+      const bIndex = b.toLowerCase().indexOf(inputValueLowerCase);
+      if (aIndex !== bIndex) {
+        return aIndex - bIndex;
+      }
+      return a.localeCompare(b);
+    });
+
+    return filtered;
   }
 
   function filterOptions(options, { inputValue }) {
@@ -102,11 +156,14 @@ function CreateAnnouncement() {
   const [announcementDetails, setAnnouncementDetails] = useState({
     course_code: "",
     lastApplicationDate: new Date().toLocaleDateString("en-CA"),
-    lastApplicationTime: new Date().toLocaleTimeString().replace(/(.*)\D\d+/, "$1"),
+    lastApplicationTime: new Date()
+      .toLocaleTimeString()
+      .replace(/(.*)\D\d+/, "$1"),
     letterGrade: "A",
     workHours: "5 Hours",
     jobDetails: "",
     authInstructor: authPeople,
+    desiredCourses: selectedCourses,
   });
 
   // set changes for autocomplete
@@ -114,8 +171,9 @@ function CreateAnnouncement() {
     setAnnouncementDetails((prevDetails) => ({
       ...prevDetails,
       authInstructor: authPeople,
+      desiredCourses: selectedCourses,
     }));
-  }, [authPeople]);
+  }, [authPeople, selectedCourses]);
 
   function handleInput(event) {
     const { name, value } = event.target;
@@ -132,17 +190,35 @@ function CreateAnnouncement() {
       <Sidebar></Sidebar>
       <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
         <AppBarHeader />
-        <Grid container direction="row" justifyContent="center" alignItems="center" sx={{ mb: 4, mt: 2 }}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          sx={{ mb: 4, mt: 2 }}
+        >
           <Typography variant="h4" sx={{ fontWeight: "bold" }}>
             Create Announcement
           </Typography>
         </Grid>
         <Grid container spacing={2}>
           <Grid item xs={6}>
-            <Typography variant="h5" sx={{ textDecoration: "underline", marginY: 2, fontWeight: "bold" }}>
+            <Typography
+              variant="h5"
+              sx={{
+                textDecoration: "underline",
+                marginY: 2,
+                fontWeight: "bold",
+              }}
+            >
               Announcement Details:
             </Typography>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+            >
               <Typography>Course Code:</Typography>
               <TextField
                 id="outlined-required"
@@ -157,7 +233,12 @@ function CreateAnnouncement() {
                 onChange={handleInput}
               />
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+            >
               <Typography>Last Application Date:</Typography>
               <TextField
                 id="outlined-required"
@@ -184,7 +265,12 @@ function CreateAnnouncement() {
                 onChange={handleInput}
               />
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+            >
               <Typography> Minimum Desired Letter Grade:</Typography>
               <TextField
                 id="outlined-select-currency"
@@ -202,7 +288,12 @@ function CreateAnnouncement() {
                 ))}
               </TextField>
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="center"
+            >
               <Typography>Work Hours:</Typography>
               <TextField
                 id="outlined-select-currency"
@@ -220,7 +311,12 @@ function CreateAnnouncement() {
                 ))}
               </TextField>
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="flex-start">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="flex-start"
+            >
               <Typography paddingTop={3}>Job Details:</Typography>
               <TextField
                 placeholder="Enter Job Details..."
@@ -234,9 +330,20 @@ function CreateAnnouncement() {
                 onChange={handleInput}
               />
             </Grid>
-            <Grid container direction="row" justifyContent="start" alignItems="flex-start">
+            <Grid
+              container
+              direction="row"
+              justifyContent="start"
+              alignItems="flex-start"
+            >
               <Typography sx={{ my: 2 }}>Authorized Instructor(s):</Typography>
-              <Grid item xs={6} direction="column" justifyContent="center" alignItems="flex-start">
+              <Grid
+                item
+                xs={6}
+                direction="column"
+                justifyContent="center"
+                alignItems="flex-start"
+              >
                 <Autocomplete
                   id="controllable-states-demo"
                   options={authUsersList.map((authUser) => {
@@ -253,7 +360,14 @@ function CreateAnnouncement() {
                   onChange={(event, newValue) => {
                     if (newValue !== null) handleAuthAdd(newValue);
                   }}
-                  renderInput={(params) => <TextField {...params} multiline size="small" sx={{ mx: 2, mt: 1, mb: 2, width: 300 }} />}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      multiline
+                      size="small"
+                      sx={{ mx: 2, mt: 1, mb: 2, width: 300 }}
+                    />
+                  )}
                 />
                 {authPeople.length > 0 &&
                   authPeople.map((authPerson, index) => {
@@ -263,8 +377,16 @@ function CreateAnnouncement() {
                         label={authPerson.display_name}
                         variant="outlined"
                         avatar={
-                          <Avatar sx={{ backgroundColor: index % 2 === 0 ? "#6A759C" : "#4D5571" }}>
-                            <Typography fontSize="small" sx={{ color: "white" }}>
+                          <Avatar
+                            sx={{
+                              backgroundColor:
+                                index % 2 === 0 ? "#6A759C" : "#4D5571",
+                            }}
+                          >
+                            <Typography
+                              fontSize="small"
+                              sx={{ color: "white" }}
+                            >
                               {authPerson.display_name.split(" ")[0][0]}
                             </Typography>
                           </Avatar>
@@ -275,6 +397,71 @@ function CreateAnnouncement() {
                     );
                   })}
               </Grid>
+            </Grid>
+          </Grid>
+          <Grid
+            container
+            direction="row"
+            justifyContent="start"
+            alignItems="flex-start"
+          >
+            <Typography sx={{ my: 2 }}>Desired Course Grade(s):</Typography>
+            <Grid
+              item
+              xs={6}
+              direction="column"
+              justifyContent="center"
+              alignItems="flex-start"
+            >
+              <Autocomplete
+                id="controllable-states-demo"
+                options={courseList.map((course) => {
+                  return course;
+                })}
+                filterOptions={filterOptions}
+                value={courseValue}
+                inputValue={inputCourseValue}
+                onInputChange={(event, newInputCourseValue) => {
+                  if (newInputCourseValue !== null) {
+                    setCourseInputValue(newInputCourseValue);
+                  }
+                }}
+                onChange={(event, newCourseValue) => {
+                  if (newCourseValue !== null) handleCourseAdd(newCourseValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    multiline
+                    size="small"
+                    sx={{ mx: 2, mt: 1, mb: 2, width: 300 }}
+                  />
+                )}
+              />
+              {selectedCourses.length > 0 &&
+                selectedCourses.map((courseSelected, i) => {
+                  return (
+                    <Chip
+                      key={courseSelected}
+                      label={courseSelected}
+                      variant="outlined"
+                      avatar={
+                        <Avatar
+                          sx={{
+                            backgroundColor:
+                              i % 2 === 0 ? "#6A759C" : "#4D5571",
+                          }}
+                        >
+                          <Typography fontSize="small" sx={{ color: "white" }}>
+                            {courseSelected}
+                          </Typography>
+                        </Avatar>
+                      }
+                      sx={{ m: 1 }}
+                      onDelete={() => handleCourseDelete(courseSelected)}
+                    />
+                  );
+                })}
             </Grid>
           </Grid>
           <Grid item xs={6}>
@@ -301,22 +488,64 @@ function CreateAnnouncement() {
                   <ListItemText primary="These information come automatically to you:" />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="1) Name" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="1) Name"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="2) ID" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="2) ID"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="3) Term" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="3) Term"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="4) Previous Grade" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="4) Previous Grade"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="5) Class" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="5) Class"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="6) GPA" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText
+                    secondary="6) GPA"
+                    secondaryTypographyProps={{
+                      component: "span",
+                      variant: "body2",
+                      sx: { pl: "24px" },
+                    }}
+                  />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
