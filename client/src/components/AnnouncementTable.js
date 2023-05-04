@@ -54,7 +54,6 @@ function AnnouncementTable(props) {
     //console.log(rows);
   }, [props.rows]);
 
-
   useEffect(() => {
     if (!isInstructor) {
       getApplicationByUsername(userName)
@@ -64,12 +63,10 @@ function AnnouncementTable(props) {
         })
         .catch((error) => {
           // Handle any errors that occur during the API call
-          console.error('Failed to fetch user applications:', error);
+          console.error("Failed to fetch user applications:", error);
         });
     }
   }, [isInstructor, userName]);
-
-
 
   useEffect(() => {
     setTabValue(props.tabValue);
@@ -151,7 +148,9 @@ function AnnouncementTable(props) {
         ) : (
           <TableBody>
             {rows
-              .filter((row) => (tabValue === 1 ? studentApplications.some((studentApplication) => row.id === studentApplication.post_id) : true)) //to be continued, student'in hangi posta kayıt oldugu lazim (belki vardır)
+              .filter((row) =>
+                tabValue === 1 ? studentApplications.some((studentApplication) => row.id === studentApplication.post_id) : true
+              ) //to be continued, student'in hangi posta kayıt oldugu lazim (belki vardır)
               .map((row, index) => (
                 <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   {/* <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
@@ -191,20 +190,34 @@ function AnnouncementTable(props) {
                     {row.description}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
-                    {tabValue === 0 ? <Button variant="contained" as={Link} to={"/apply/" + row.id} style={{ textDecoration: "none" }}>
-                      Apply
-                    </Button> : (
+                    {tabValue === 0 ? (
+                      <Button variant="contained" as={Link} to={"/apply/" + row.id} style={{ textDecoration: "none" }}>
+                        Apply
+                      </Button>
+                    ) : (
                       studentApplications
                         .filter((studentApplication) => row.id === studentApplication.post_id)
                         .map((studentApplication) => (
-                          <Button variant="contained" key={studentApplication.id} style={{ 
-                            textDecoration: "none",
-                            backgroundColor: studentApplication.status === "Accepted" ? "green" : studentApplication.status === "Rejected" ? "red" : "orange",
-                            color: "white",
-                            pointerEvents: "none",
-                            cursor: "default",
-                            }}>
-                            {studentApplication.status.toLowerCase() === "applied" ? "In Progress" : studentApplication.status}
+                          <Button
+                            variant="contained"
+                            key={studentApplication.id}
+                            style={{
+                              textDecoration: "none",
+                              backgroundColor:
+                                studentApplication.status === "Accepted"
+                                  ? "green"
+                                  : studentApplication.status === "Rejected"
+                                  ? "red"
+                                  : "orange",
+                              color: "white",
+                              pointerEvents: "none",
+                              cursor: "default",
+                            }}
+                          >
+                            {studentApplication.status.toLowerCase() === "applied" ||
+                            studentApplication.status.toLowerCase() === "interested"
+                              ? "In Progress"
+                              : studentApplication.status}
                           </Button>
                         ))
                     )}
