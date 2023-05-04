@@ -15,9 +15,10 @@ class PostController extends Controller
         $post= new Post;
         $post->instructor_username=$req->input('instructor_username');
         $post->faculty=$req->input('faculty');
-        $post->courseCode=$req->input('courseCode');
+        $post->course_code=$req->input('course_code');
+        $post->desired_courses=json_encode($req->input('desired_courses'),TRUE);
         $post->deadline=$req->input('deadline');
-        $post->workingHour=$req->input('workingHour');
+        $post->working_hour=$req->input('working_hour');
         $post->term=$req->input('term');
         $post->description=$req->input('description');
         $post->mingrade=$req->input('mingrade');
@@ -46,6 +47,7 @@ class PostController extends Controller
         foreach($results as $row)
         {
             $row['auth_instructors']= json_decode($row['auth_instructors'],TRUE);
+            $row['desired_courses']= json_decode($row['desired_courses'],TRUE);
         }
         $results = json_decode($results,TRUE);
         foreach ($results as &$result){
@@ -94,6 +96,7 @@ class PostController extends Controller
         foreach($results as $row)
         {
             $row['auth_instructors']= json_decode($row['auth_instructors'],TRUE);
+            $row['desired_courses']= json_decode($row['desired_courses'],TRUE);
         }
         $results = json_decode($results,TRUE);
         foreach ($results as &$result){
@@ -113,12 +116,13 @@ class PostController extends Controller
     {
         $post= Post::find($id);
         $post->faculty=$req->input('faculty');
-        $post->courseCode=$req->input('courseCode');
+        $post->course_code=$req->input('course_code');
+        $post->desired_courses=json_encode($req->input('desired_courses'),TRUE);
         $post->deadline=$req->input('deadline');
-        $post->workingHour=$req->input('workingHour');
+        $post->working_hour=$req->input('working_hour');
         $post->term=$req->input('term');
         $post->description=$req->input('description');
-        $post->auth_instructors=$req->input('auth_instructors');
+        $post->auth_instructors=json_encode($req->input('auth_instructors'),TRUE);
         $post->mingrade=$req->input('mingrade');
         $post->updated_at=date_create()->format('Y-m-d H:i:s');
         $post->save();
