@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Typography, IconButton, Collapse, Snackbar } from "@mui/material";
+import { Typography, IconButton, Collapse, Snackbar, Grid } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,7 +15,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
-import { getApplicationsByPost, updateApplicationById } from "../apiCalls";
+import { getApplicationsByPost, updateApplicationById, getAnnouncement } from "../apiCalls";
 import { useParams } from "react-router";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -23,10 +23,27 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 });
 
 function CustomRow(props) {
-  const { row, index } = props;
+  const { row, index, questions } = props;
   const [open, setOpen] = React.useState(false);
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [status, setStatus] = React.useState("");
+  const [qAndA, setQAndA] = React.useState([]);
+
+  useEffect(() => {
+    var temp = [];
+    if (questions.length !== 0 && row) {
+      for (let index = 0; index < row.answers.length; index++) {
+        const a = row.answers[index].answer;
+        const q = questions[index].question;
+        var temp2 = [];
+        temp2.push(q);
+        temp2.push(a);
+        temp.push(temp2);
+      }
+      console.log(temp);
+      setQAndA(temp);
+    }
+  }, [questions]);
 
   const handleSnackClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -82,7 +99,14 @@ function CustomRow(props) {
           {row.post_id}
         </TableCell> */}
         <TableCell sx={{ borderBottom: "none" }} align="right">
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={() => {
+              setOpen(!open);
+              console.log(row);
+            }}
+          >
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -91,15 +115,14 @@ function CustomRow(props) {
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={4}>
           <Collapse in={open} component="tr" style={{ display: "block" }}>
             <td>
-              <Typography m={2}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget augue tincidunt, tincidunt nunc eu, pulvinar sem. Nunc non
-                lobortis metus. Nulla a ligula ac nisl vulputate auctor eu sed orci. Praesent a augue ut urna laoreet euismod. Duis non
-                nulla fermentum eros scelerisque pharetra. Maecenas id suscipit purus. Mauris vel metus et arcu imperdiet suscipit in vitae
-                arcu. Aenean tellus risus, ultricies ut risus nec, faucibus laoreet libero. Vestibulum nec tempus orci, sagittis pretium
-                tortor. Etiam quis mattis ante, sed efficitur eros. In imperdiet turpis magna, in viverra velit varius sed. Nulla mollis
-                lobortis aliquet. Nullam viverra et enim quis ullamcorper. Sed tincidunt tellus vitae ligula tincidunt, eu molestie metus
-                interdum.
-              </Typography>
+              <Grid container direction="column" alignItems="center" justifyContent="center">
+                {qAndA.map((element) => (
+                  <Grid item container m={2}>
+                    <Grid item>{element[0]}:</Grid>
+                    <Grid item>{element[1]}</Grid>
+                  </Grid>
+                ))}
+              </Grid>
             </td>
           </Collapse>
         </TableCell>
@@ -148,10 +171,14 @@ function ApplicantsTable(props) {
   //     { id: 9, courseCode: 'HUM201', instructors: 'John Doe', lDate: 'dd/mm/yyyy', grade: 'B+', wHour: "5", details: "lorem ipsum"},
   //   ];
   const [rows, setRows] = React.useState([]);
+  const [questions, setQuestions] = React.useState([]);
   const { postId } = useParams();
 
   useEffect(() => {
     getApplicationsByPost(postId).then((results) => setRows(results));
+    getAnnouncement(postId).then((res) => {
+      setQuestions(res.questions);
+    });
     console.log(rows);
   }, [props]);
 
@@ -171,7 +198,7 @@ function ApplicantsTable(props) {
         </TableHead>
         <TableBody>
           {rows.map((row, index) => (
-            <CustomRow row={row} index={index}></CustomRow>
+            <CustomRow row={row} index={index} questions={questions}></CustomRow>
           ))}
         </TableBody>
       </Table>
