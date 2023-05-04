@@ -6,11 +6,48 @@ use Illuminate\Http\Request;
 use App\Models\Application;
 use App\Models\Answer;
 use App\Models\Student;
+use App\Models\Post;
 use App\Models\Course;
 
+function getGrade($desired_courses, $id)
+{
+    $application = Application::find($id);
+    $transcript = $application->transcript;
+    $lines = explode("\n", $transcript);
+    $courses= json_decode($desired_courses,TRUE);
+    $result = array();
+    foreach ($courses as $course){
+        $in_progress = explode(" ", $course);
+        $course_string = strval($in_progress[0]) . "\t" . strval($in_progress[1]);
+        $in_progress_string = strval($in_progress[0]) . " \t" . strval($in_progress[1]);
+        $grade = null;
+
+        foreach ($lines as $line) {    
+            if (strpos($line, $course_string) !== false) {
+                $columns = explode("\t", substr($line,strpos($line, $course_string)));
+                $grade = $columns[4];
+                break;
+            }
+            if (strpos($line, $in_progress_string) !== false) {
+                $columns = explode("\t", substr($line,strpos($line, $in_progress_string)));
+                $grade = trim(preg_replace('/\s/u', ' ', $columns[6]));
+                break;
+            }
+        }
+        array_push($result, $grade);
+    }
+    return $result;
+}
 
 class ApplicationController extends Controller
 {
+
+    function listCourse()
+    {
+        $results = Course::all()->sort()->pluck('course')->toArray();
+        return $results;
+    }
+
     function addApplication(Request $req)
     {
         $application = new Application;
@@ -74,7 +111,8 @@ class ApplicationController extends Controller
 
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
-        $result = json_encode($result, TRUE);
+        $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
+        $result = json_encode($result,TRUE);
 
         return $result;
     }
@@ -91,6 +129,7 @@ class ApplicationController extends Controller
 
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
+            $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -108,6 +147,7 @@ class ApplicationController extends Controller
 
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
+            $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -125,6 +165,7 @@ class ApplicationController extends Controller
 
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
+            $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -150,42 +191,10 @@ class ApplicationController extends Controller
         $result["answers"] = $answers;
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
-        $result = json_encode($result, TRUE);
+        $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
+        $result = json_encode($result,TRUE);
         return $result;
     }
 
-    function getGrade(Request $req, $id)
-    {
-        $application = Application::find($id);
-        $transcript = $application->transcript;
-        $lines = explode("\n", $transcript);
-        $in_progress = explode("\t", $req->courceCode);
-        if (count($in_progress) != 2) {
-            return "invalid course code";
-        }
-        $in_progress_string = strval($in_progress[0]) . " \t" . strval($in_progress[1]);
-        $grade = null;
-
-        foreach ($lines as $line) {
-            if (strpos($line, $req->courceCode) !== false) {
-                $columns = explode("\t", substr($line, strpos($line, $req->courceCode)));
-                $grade = $columns[4];
-
-                break;
-            }
-            if (strpos($line, $in_progress_string) !== false) {
-                $columns = explode("\t", substr($line, strpos($line, $in_progress_string)));
-                $grade = $columns[6];
-
-                break;
-            }
-        }
-
-        return $grade;
-    }
-    function listCourse()
-    {
-        $results = Course::all()->sort()->pluck('course')->toArray();
-        return $results;
-    }
+    
 }
