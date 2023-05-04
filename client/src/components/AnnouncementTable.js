@@ -31,9 +31,9 @@ function AnnouncementTable(props) {
   const isInstructor = useSelector((state) => state.user.isInstructor);
   //const userDisplayName = useSelector((state) => state.user.name);
   //const userDisplayName = "Instructor One" //mock data
-  //const userName = useSelector((state) => state.user.username);
+  const userName = useSelector((state) => state.user.username);
   //const userName = "instructor1"; //mock data for instructor
-  const userName = "muratk"; //mock data for student
+  // const userName = "muratk"; //mock data for student
 
   useEffect(() => {
     const modifiedRows = props.rows.map((row) => {
@@ -190,37 +190,37 @@ function AnnouncementTable(props) {
                     {row.description}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
-                    {tabValue === 0 ? (
-                      <Button variant="contained" as={Link} to={"/apply/" + row.id} style={{ textDecoration: "none" }}>
-                        Apply
-                      </Button>
-                    ) : (
-                      studentApplications
-                        .filter((studentApplication) => row.id === studentApplication.post_id)
-                        .map((studentApplication) => (
-                          <Button
-                            variant="contained"
-                            key={studentApplication.id}
-                            style={{
-                              textDecoration: "none",
-                              backgroundColor:
-                                studentApplication.status === "Accepted"
-                                  ? "green"
-                                  : studentApplication.status === "Rejected"
-                                  ? "red"
-                                  : "orange",
-                              color: "white",
-                              pointerEvents: "none",
-                              cursor: "default",
-                            }}
-                          >
-                            {studentApplication.status.toLowerCase() === "applied" ||
-                            studentApplication.status.toLowerCase() === "interested"
-                              ? "In Progress"
-                              : studentApplication.status}
+                    {tabValue === 0
+                      ? !studentApplications.find((o) => o.post_id === row.id) && (
+                          <Button variant="contained" as={Link} to={"/apply/" + row.id} style={{ textDecoration: "none" }}>
+                            Apply
                           </Button>
-                        ))
-                    )}
+                        )
+                      : studentApplications
+                          .filter((studentApplication) => row.id === studentApplication.post_id)
+                          .map((studentApplication) => (
+                            <Button
+                              variant="contained"
+                              key={studentApplication.id}
+                              style={{
+                                textDecoration: "none",
+                                backgroundColor:
+                                  studentApplication.status === "Accepted"
+                                    ? "green"
+                                    : studentApplication.status === "Rejected"
+                                    ? "red"
+                                    : "orange",
+                                color: "white",
+                                pointerEvents: "none",
+                                cursor: "default",
+                              }}
+                            >
+                              {studentApplication.status.toLowerCase() === "applied" ||
+                              studentApplication.status.toLowerCase() === "interested"
+                                ? "In Progress"
+                                : studentApplication.status}
+                            </Button>
+                          ))}
                   </TableCell>
                 </TableRow>
               ))}
