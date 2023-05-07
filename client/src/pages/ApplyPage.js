@@ -54,7 +54,17 @@ const ApplyPage = (props) => {
 
       var temp2 = {};
       temp2.question_id = parseInt(q);
-      temp2.answer = questionsAndAnswers[q];
+      if (!questionsAndAnswers[q]) {
+        for (let index = 0; index < questions.length; index++) {
+          const element = questions[index];
+          const tempList = JSON.parse(element.multiple_choices);
+          if (element.id == q && element.type === "Multiple Choice") {
+            temp2.answer = tempList[0];
+          }
+        }
+      } else {
+        temp2.answer = questionsAndAnswers[q];
+      }
       temp.push(temp2);
     }
     console.log(temp);
