@@ -1,7 +1,19 @@
 import React, { useEffect, useState } from "react";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
-import { Typography, Box, Button, Grid, Divider, TextField } from "@mui/material";
+import {
+  Typography,
+  Box,
+  Button,
+  Grid,
+  Divider,
+  TextField,
+  FormControl,
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormLabel,
+} from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { applyToPost, getAnnouncement } from "../apiCalls";
 import Table from "@mui/material/Table";
@@ -61,6 +73,18 @@ const ApplyPage = (props) => {
       }
     }
     setQuestionsAndAnswers(temp);
+  };
+
+  const onMultipleChoiceAnswerChange = (e, question) => {
+    e.preventDefault();
+    let temp = questionsAndAnswers;
+    for (const [q, a] of Object.entries(temp)) {
+      if (q == question.id) {
+        temp[q] = e.target.value;
+      }
+    }
+    setQuestionsAndAnswers(temp);
+    console.log(questionsAndAnswers);
   };
 
   useEffect(() => {
@@ -139,15 +163,33 @@ const ApplyPage = (props) => {
                   <Typography textAlign="center">{question.question}:</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    name={question}
-                    value={questionsAndAnswers.question}
-                    onChange={(e) => {
-                      onAnswerChange(e, question);
-                    }}
-                    multiline
-                    fullWidth
-                  ></TextField>
+                  {question.type === "Multiple Choice" && (
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue={JSON.parse(question.multiple_choices)[0]}
+                        name="radio-buttons-group"
+                        onChange={(e) => {
+                          onMultipleChoiceAnswerChange(e, question);
+                        }}
+                      >
+                        {JSON.parse(question.multiple_choices).map((ans, index) => (
+                          <FormControlLabel value={ans} control={<Radio />} label={ans}></FormControlLabel>
+                        ))}
+                      </RadioGroup>
+                    </FormControl>
+                  )}
+                  {question.type !== "Multiple Choice" && (
+                    <TextField
+                      name={question}
+                      value={questionsAndAnswers.question}
+                      onChange={(e) => {
+                        onAnswerChange(e, question);
+                      }}
+                      multiline
+                      fullWidth
+                    ></TextField>
+                  )}
                 </Grid>
                 <Grid item xs={2}></Grid>
               </Grid>
