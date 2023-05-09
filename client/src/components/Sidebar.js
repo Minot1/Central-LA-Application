@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout } from "../redux/userSlice";
 import LogoutIcon from "@mui/icons-material/Logout";
+import axios from "axios";
 
 const drawerWidth = 210;
 
@@ -131,8 +132,13 @@ function Sidebar() {
             endIcon={<LogoutIcon />}
             variant="outlined"
             onClick={() => {
-              dispatch(logout());
-              navigate("/", { replace: true });
+              try {
+                axios.get("https://login.sabanciuniv.edu/cas/logout").then((res) => {
+                  console.log(res);
+                  dispatch(logout());
+                  navigate("/", { replace: true });
+                });
+              } catch (error) {}
             }}
           >
             Log Out
