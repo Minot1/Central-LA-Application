@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 import AppBarHeader from "../components/AppBarHeader";
 import Sidebar from "../components/Sidebar";
 import AddQuestion from "../components/AddQuestion";
@@ -38,6 +39,9 @@ function CreateAnnouncement() {
   //   { display_name: "Cem Kaya", username: "cemkaya" },
   // ]
 
+  const userName = useSelector((state) => state.user.username);
+  //const userName = "instructor1"; //mock data for testing
+
   const [authUsersList, setAuthUserList] = useState([]); //get instructors from database
   const [authPeople, setAuthPeople] = useState([]); //used for send request as selected from list
   const [authValue, setAuthValue] = useState(""); // for autocomplete
@@ -57,13 +61,19 @@ function CreateAnnouncement() {
   //get all instructors
   useEffect(() => {
     getAllInstructors().then((results) => {
-      const transformedResults = results.map((instructor) => {
+      const filteredResults = results.filter((instructor) => { //for removing current user from options
+        return instructor.instructor_username !== userName;
+      });
+
+      const transformedResults = filteredResults.map((instructor) => {
         const [lastName, firstName] = instructor.name.split(",");
         const displayName = firstName.trim() + " " + lastName.trim();
+        const OptionValue = displayName + " (" + instructor.instructor_username + ")";
 
         return {
           display_name: displayName,
           username: instructor.instructor_username,
+          authOptionValue: OptionValue,
         };
       });
       setAuthUserList(transformedResults);
@@ -81,15 +91,15 @@ function CreateAnnouncement() {
   //console.log(authUsersList);
   //console.log(courseList);
 
-  console.log(courseCode)
-  console.log(courseCodeValue)
-  console.log(inputCourseCodeValue)
+  // console.log(courseCode)
+  // console.log(courseCodeValue)
+  // console.log(inputCourseCodeValue)
 
   //used in autocomplete for keeping value and input value
   function handleAuthAdd(newValue) {
     if (newValue !== null) {
       const selectedUser = authUsersList.find(
-        (user) => user.display_name === newValue
+        (user) => user.authOptionValue === newValue
       );
       setAuthPeople([...authPeople, selectedUser]);
     }
@@ -104,6 +114,31 @@ function CreateAnnouncement() {
     // console.log(updatedAuthPeople)
     setAuthPeople(updatedAuthPeople);
   }
+
+  //for auth filter options
+  function filterOptions(options, { inputValue }) {
+    const filtered = options.filter((option) => {
+      if (authPeople.some((person) => person.authOptionValue === option)) {
+        return false; // filter out if already in authPeople
+      }
+      return option.toLowerCase().includes(inputValue.toLowerCase());
+    });
+
+    // sort the filtered options based on their match with the input value
+    const inputValueLowerCase = inputValue.toLowerCase();
+    filtered.sort((a, b) => {
+      const aIndex = a.toLowerCase().indexOf(inputValueLowerCase);
+      const bIndex = b.toLowerCase().indexOf(inputValueLowerCase);
+      if (aIndex !== bIndex) {
+        return aIndex - bIndex;
+      }
+      return a.localeCompare(b);
+    });
+
+    return filtered;
+  }
+
+  console.log(authPeople) //for debugging authPeople
 
   //used in autocomplete for keeping value and input value
   function handleCourseCodeAdd(newValue) { //change here
@@ -190,31 +225,6 @@ function CreateAnnouncement() {
     return filtered;
   }
 
-  //for auth filter options
-  function filterOptions(options, { inputValue }) {
-    const filtered = options.filter((option) => {
-      if (authPeople.some((person) => person.display_name === option)) {
-        return false; // filter out if already in authPeople
-      }
-      return option.toLowerCase().includes(inputValue.toLowerCase());
-    });
-
-    // sort the filtered options based on their match with the input value
-    const inputValueLowerCase = inputValue.toLowerCase();
-    filtered.sort((a, b) => {
-      const aIndex = a.toLowerCase().indexOf(inputValueLowerCase);
-      const bIndex = b.toLowerCase().indexOf(inputValueLowerCase);
-      if (aIndex !== bIndex) {
-        return aIndex - bIndex;
-      }
-      return a.localeCompare(b);
-    });
-
-    return filtered;
-  }
-
-  //console.log(authPeople) //for debugging authPeople
-
   const [announcementDetails, setAnnouncementDetails] = useState({
     course_code: courseCode,
     lastApplicationDate: new Date().toLocaleDateString("en-CA"),
@@ -282,7 +292,7 @@ function CreateAnnouncement() {
               justifyContent="start"
               alignItems="center"
             >
-              <Typography>Course Code:</Typography>
+              <Typography>Course Code<span style={{ color: 'red' }}>*</span>:</Typography>
               {/* <TextField
                 id="outlined-required"
                 name="course_code"
@@ -320,7 +330,7 @@ function CreateAnnouncement() {
                     multiline
                     size="small"
                     sx={{
-                      mx: 2, mt: 1, mb: 2, width: 300, 
+                      mx: 2, mt: 1, mb: 2, width: 300,
                       ...(params.disabled && {
                         backgroundColor: 'transparent',
                         color: 'inherit',
@@ -356,7 +366,7 @@ function CreateAnnouncement() {
               justifyContent="start"
               alignItems="center"
             >
-              <Typography>Last Application Date:</Typography>
+              <Typography>Last Application Date<span style={{ color: 'red' }}>*</span>:</Typography>
               <TextField
                 id="outlined-required"
                 name="lastApplicationDate"
@@ -388,7 +398,7 @@ function CreateAnnouncement() {
               justifyContent="start"
               alignItems="center"
             >
-              <Typography> Minimum Desired Letter Grade:</Typography>
+              <Typography> Minimum Desired Letter Grade<span style={{ color: 'red' }}>*</span>:</Typography>
               <TextField
                 id="outlined-select-currency"
                 name="letterGrade"
@@ -411,7 +421,7 @@ function CreateAnnouncement() {
               justifyContent="start"
               alignItems="center"
             >
-              <Typography>Work Hours:</Typography>
+              <Typography>Work Hours<span style={{ color: 'red' }}>*</span>:</Typography>
               <TextField
                 id="outlined-select-currency"
                 name="workHours"
@@ -434,7 +444,7 @@ function CreateAnnouncement() {
               justifyContent="start"
               alignItems="flex-start"
             >
-              <Typography paddingTop={3}>Job Details:</Typography>
+              <Typography paddingTop={3}>Job Details<span style={{ color: 'red' }}>*</span>:</Typography>
               <TextField
                 placeholder="Enter Job Details..."
                 name="jobDetails"
@@ -445,6 +455,7 @@ function CreateAnnouncement() {
                 maxRows={20}
                 sx={{ m: 2, width: 400 }}
                 onChange={handleInput}
+                required //to be contiuned maybe?
               />
             </Grid>
             <Grid
@@ -464,7 +475,7 @@ function CreateAnnouncement() {
                 <Autocomplete
                   id="controllable-states-demo"
                   options={authUsersList.map((authUser) => {
-                    return authUser.display_name;
+                    return authUser.authOptionValue;
                   })}
                   filterOptions={filterOptions}
                   value={authValue}
@@ -520,15 +531,16 @@ function CreateAnnouncement() {
               direction="row"
               justifyContent="start"
               alignItems="flex-start"
-              sx={{ my: 2 }}
+              sx={{ my: 2}}
             >
-              <Typography sx={{ my: 2 }}>Desired Course Grade(s):</Typography>
+              <Typography sx={{ my: 2 }}>Desired Course Grade(s)<span style={{ color: 'red' }}>*</span>:</Typography>
               <Grid
                 item
                 xs={6}
                 direction="column"
                 justifyContent="center"
                 alignItems="flex-start"
+                sx={{backgroundColor: selectedCourses.length === 0 ? "#FFF" : "#F5F5F5" }}
               >
                 <Autocomplete
                   id="controllable-states-demo"
@@ -574,6 +586,7 @@ function CreateAnnouncement() {
                             </Typography>
                           </Avatar>
                         }
+                        color= {courseSelected === courseCode ? "error" : "default"}
                         sx={{ m: 1 }}
                         onDelete={() => handleCourseDelete(courseSelected)}
                       />
@@ -675,7 +688,7 @@ function CreateAnnouncement() {
             </Box>
           </Grid>
         </Grid>
-        <AddQuestion AnnouncementDetails={announcementDetails} />
+        <AddQuestion AnnouncementDetails={announcementDetails} username={userName} />
       </Box>
     </Box>
   );
