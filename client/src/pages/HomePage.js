@@ -41,6 +41,7 @@ function HomePage() {
         } else {
           // Set the rows state with the fetched data
           setRows(announcements);
+          setUpdated(false); // Set the update status to false
         }
       } catch (error) {
         // Handle the error here

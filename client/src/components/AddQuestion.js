@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
 import { Typography, Box, Button, Grid } from "@mui/material";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -59,8 +58,7 @@ function AddQuestion(props) {
     { questionNumber: 2, mQuestion: "", mValue: "Text Answer", mMultiple: ["", ""] },
     { questionNumber: 3, mQuestion: "", mValue: "Text Answer", mMultiple: ["", ""] },
   ]);
-  const userName = useSelector((state) => state.user.username);
-  // const userName = "instructor1"; //mock data for testing
+
   const navigate = useNavigate();
 
   function addNewQuestion() {
@@ -412,6 +410,7 @@ function AddQuestion(props) {
                     },
                   }}
                   onClick={() => handleButtonClick(idx)}
+                  disabled = {questions.length >= 20}
                 >
                   {e.sQuestion}
                 </Button>
@@ -427,19 +426,36 @@ function AddQuestion(props) {
           color="success"
           sx={{ m: 2, textDecoration: "none" }}
           onClick={() => {
-            addAnnouncement(
-              props.AnnouncementDetails.course_code,
-              userName,
-              props.AnnouncementDetails.lastApplicationDate,
-              props.AnnouncementDetails.lastApplicationTime,
-              props.AnnouncementDetails.letterGrade,
-              props.AnnouncementDetails.workHours,
-              props.AnnouncementDetails.jobDetails,
-              props.AnnouncementDetails.authInstructor,
-              props.AnnouncementDetails.desiredCourses,
-              questions
-            );
-            navigate("/home", { replace: true, state: { updatedAnnouncement: true } });
+            if (
+              props.AnnouncementDetails.course_code &&
+              props.AnnouncementDetails.lastApplicationDate &&
+              props.AnnouncementDetails.lastApplicationTime &&
+              props.AnnouncementDetails.letterGrade &&
+              props.AnnouncementDetails.workHours &&
+              props.AnnouncementDetails.jobDetails &&
+              //props.AnnouncementDetails.authInstructor.length > 0 &&
+              props.AnnouncementDetails.desiredCourses.length > 0 &&
+              questions.length > 0
+            ) {
+              addAnnouncement(
+                props.AnnouncementDetails.course_code,
+                props.username,
+                props.AnnouncementDetails.lastApplicationDate,
+                props.AnnouncementDetails.lastApplicationTime,
+                props.AnnouncementDetails.letterGrade,
+                props.AnnouncementDetails.workHours,
+                props.AnnouncementDetails.jobDetails,
+                props.AnnouncementDetails.authInstructor,
+                props.AnnouncementDetails.desiredCourses,
+                questions
+              );
+              navigate("/home", {
+                replace: true,
+                state: { updatedAnnouncement: true },
+              });
+            } else {
+              alert("Please fill out all necessary fields before creating the annoucement.");
+            }
           }}
         >
           Submit

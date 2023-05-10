@@ -58,8 +58,6 @@ const suggestedQuestions = [
 function EditQuestion(props) {
 
     const [questions, setQuestions] = useState([])
-    //const userName = useSelector((state) => state.user.username);
-    //const userName = "instructor1"; //mock data for testing
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -319,13 +317,21 @@ function EditQuestion(props) {
                         <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
                         {suggestedQuestions.map((e, idx) => {
                             return (
-                                <Button variant="contained" size="large" endIcon={<AddIcon />} sx={{
-                                    bgcolor: e.sBgColor, my: 2, textTransform: "none", textAlign: "left", '&:hover': {
-                                        backgroundColor: '#84BFF7'
-                                    }
-
-                                }} onClick={() => handleButtonClick(idx)
-                                }
+                                <Button
+                                    variant="contained"
+                                    size="large"
+                                    endIcon={<AddIcon />}
+                                    sx={{
+                                        bgcolor: e.sBgColor,
+                                        my: 2,
+                                        textTransform: "none",
+                                        textAlign: "left",
+                                        '&:hover': {
+                                            backgroundColor: '#84BFF7'
+                                        }
+                                    }}
+                                    onClick={() => handleButtonClick(idx)}
+                                    disabled = {questions.length >= 20}
                                 >
                                     {e.sQuestion}
                                 </Button>
@@ -336,8 +342,34 @@ function EditQuestion(props) {
             </Grid>
             <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2} sx={{ p: 4 }}>
                 <Button variant="contained" startIcon={<UpdateIcon />} color="success" sx={{ mx: 2 }} onClick={() => {
-                    updateAnnouncement(props.postID, props.userDetails.instructor_username, props.AnnouncementDetails.course_code, props.AnnouncementDetails.lastApplicationDate, props.AnnouncementDetails.lastApplicationTime, props.AnnouncementDetails.letterGrade, props.AnnouncementDetails.workHours, props.AnnouncementDetails.jobDetails, props.AnnouncementDetails.authInstructor, props.AnnouncementDetails.desiredCourses, questions)
-                    navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
+                    if (
+                        props.AnnouncementDetails.course_code &&
+                        props.AnnouncementDetails.lastApplicationDate &&
+                        props.AnnouncementDetails.lastApplicationTime &&
+                        props.AnnouncementDetails.letterGrade &&
+                        props.AnnouncementDetails.workHours &&
+                        props.AnnouncementDetails.jobDetails &&
+                        //props.AnnouncementDetails.authInstructor.length > 0 &&
+                        props.AnnouncementDetails.desiredCourses.length > 0 &&
+                        questions.length > 0
+                    ) {
+                        updateAnnouncement(
+                            props.postID,
+                            props.userDetails.instructor_username,
+                            props.AnnouncementDetails.course_code,
+                            props.AnnouncementDetails.lastApplicationDate,
+                            props.AnnouncementDetails.lastApplicationTime,
+                            props.AnnouncementDetails.letterGrade,
+                            props.AnnouncementDetails.workHours,
+                            props.AnnouncementDetails.jobDetails,
+                            props.AnnouncementDetails.authInstructor,
+                            props.AnnouncementDetails.desiredCourses,
+                            questions)
+                        navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
+                    } else {
+                        alert("Please fill out all necessary fields before creating the annoucement.");
+                    }
+
                 }}>
                     Update
                 </Button>
