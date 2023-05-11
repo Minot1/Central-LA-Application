@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  Grid,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { Box, Button, Grid, Tab, Tabs } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AnnouncementTable from "../components/AnnouncementTable";
 import AppBarHeader from "../components/AppBarHeader";
@@ -12,7 +6,7 @@ import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
 import { getAllAnnouncements } from "../apiCalls";
 import { useSelector } from "react-redux";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 
 function HomePage() {
   const location = useLocation();
@@ -41,11 +35,10 @@ function HomePage() {
         } else {
           // Set the rows state with the fetched data
           setRows(announcements);
-          setUpdated(false); // Set the update status to false
         }
       } catch (error) {
         // Handle the error here
-        console.error('Failed to fetch announcements:', error);
+        console.error("Failed to fetch announcements:", error);
       }
     };
 
@@ -53,7 +46,7 @@ function HomePage() {
   }, [location, updated]); // Include the updated status in the dependencies
 
   const handleAnnouncementTableChange = (event, newValue) => {
-      setValue(newValue);
+    setValue(newValue);
   };
 
   return (
@@ -66,23 +59,21 @@ function HomePage() {
             <Grid item></Grid>
             <Grid item>
               <Tabs onChange={handleAnnouncementTableChange} value={value}>
-                <Tab label="All Announcements"/>
-                {!isInstructor && <Tab label="My Applications"/>}
-                {isInstructor && <Tab label="My Announcements"/>}
+                <Tab label="All Announcements" />
+                {!isInstructor && <Tab label="My Applications" />}
+                {isInstructor && <Tab label="My Announcements" />}
               </Tabs>
             </Grid>
             <Grid item>
-              {isInstructor && <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                href="/create-announcement"
-              >
-                Add
-              </Button>}
+              {isInstructor && (
+                <Button variant="contained" startIcon={<AddIcon />} href="/create-announcement">
+                  Add
+                </Button>
+              )}
             </Grid>
           </Grid>
           <Grid item>
-            <AnnouncementTable rows={rows} tabValue = {value}></AnnouncementTable>
+            <AnnouncementTable rows={rows} tabValue={value}></AnnouncementTable>
           </Grid>
         </Grid>
       </Box>

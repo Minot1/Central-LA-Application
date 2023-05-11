@@ -11,6 +11,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getApplicationByUsername } from "../apiCalls";
+import { Tooltip } from "@mui/material";
 
 function AnnouncementTable(props) {
   // const rows = [
@@ -190,37 +191,51 @@ function AnnouncementTable(props) {
                     {row.description}
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
-                    {tabValue === 0
-                      ? !studentApplications.find((o) => o.post_id === row.id) && (
-                          <Button variant="contained" as={Link} to={"/apply/" + row.id} style={{ textDecoration: "none" }}>
-                            Apply
-                          </Button>
-                        )
-                      : studentApplications
-                          .filter((studentApplication) => row.id === studentApplication.post_id)
-                          .map((studentApplication) => (
+                    {tabValue === 0 ? (
+                      !studentApplications.find((o) => o.post_id === row.id) ? (
+                        <Button variant="contained" onClick={() => navigate("/apply/" + row.id, { replace: true })}>
+                          Apply
+                        </Button>
+                      ) : (
+                        new Date(row.deadline) > new Date() && (
+                          <Tooltip title="Edit your existing application" enterDelay={500} leaveDelay={200}>
                             <Button
                               variant="contained"
-                              key={studentApplication.id}
-                              style={{
-                                textDecoration: "none",
-                                backgroundColor:
-                                  studentApplication.status === "Accepted"
-                                    ? "green"
-                                    : studentApplication.status === "Rejected"
-                                    ? "red"
-                                    : "orange",
-                                color: "white",
-                                pointerEvents: "none",
-                                cursor: "default",
-                              }}
+                              onClick={() => navigate("/edit-apply/" + row.id, { replace: true })}
+                              endIcon={<EditIcon />}
                             >
-                              {studentApplication.status.toLowerCase() === "applied" ||
-                              studentApplication.status.toLowerCase() === "interested"
-                                ? "In Progress"
-                                : studentApplication.status}
+                              Edit
                             </Button>
-                          ))}
+                          </Tooltip>
+                        )
+                      )
+                    ) : (
+                      studentApplications
+                        .filter((studentApplication) => row.id === studentApplication.post_id)
+                        .map((studentApplication) => (
+                          <Button
+                            variant="contained"
+                            key={studentApplication.id}
+                            style={{
+                              textDecoration: "none",
+                              backgroundColor:
+                                studentApplication.status === "Accepted"
+                                  ? "green"
+                                  : studentApplication.status === "Rejected"
+                                  ? "red"
+                                  : "orange",
+                              color: "white",
+                              pointerEvents: "none",
+                              cursor: "default",
+                            }}
+                          >
+                            {studentApplication.status.toLowerCase() === "applied" ||
+                            studentApplication.status.toLowerCase() === "interested"
+                              ? "In Progress"
+                              : studentApplication.status}
+                          </Button>
+                        ))
+                    )}
                   </TableCell>
                 </TableRow>
               ))}

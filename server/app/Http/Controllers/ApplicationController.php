@@ -14,22 +14,22 @@ function getGrade($desired_courses, $id)
     $application = Application::find($id);
     $transcript = $application->transcript;
     $lines = explode("\n", $transcript);
-    $courses= json_decode($desired_courses,TRUE);
+    $courses = json_decode($desired_courses, TRUE);
     $result = array();
-    foreach ($courses as $course){
+    foreach ($courses as $course) {
         $in_progress = explode(" ", $course);
         $course_string = strval($in_progress[0]) . "\t" . strval($in_progress[1]);
         $in_progress_string = strval($in_progress[0]) . " \t" . strval($in_progress[1]);
         $grade = null;
 
-        foreach ($lines as $line) {    
+        foreach ($lines as $line) {
             if (strpos($line, $course_string) !== false) {
-                $columns = explode("\t", substr($line,strpos($line, $course_string)));
+                $columns = explode("\t", substr($line, strpos($line, $course_string)));
                 $grade = $columns[4];
                 break;
             }
             if (strpos($line, $in_progress_string) !== false) {
-                $columns = explode("\t", substr($line,strpos($line, $in_progress_string)));
+                $columns = explode("\t", substr($line, strpos($line, $in_progress_string)));
                 $grade = trim(preg_replace('/\s/u', ' ', $columns[6]));
                 break;
             }
@@ -99,7 +99,7 @@ class ApplicationController extends Controller
         $answers = $req->input('answers');
 
         foreach ($answers as $ans) {
-            $answer = Answer::find($ans["id"]);
+            $answer = Answer::find($ans["question_id"]);
             $answer->answer = $ans["answer"];
             $answer->save();
         }
@@ -112,7 +112,7 @@ class ApplicationController extends Controller
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
         $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
-        $result = json_encode($result,TRUE);
+        $result = json_encode($result, TRUE);
 
         return $result;
     }
@@ -192,9 +192,7 @@ class ApplicationController extends Controller
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
         $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
-        $result = json_encode($result,TRUE);
+        $result = json_encode($result, TRUE);
         return $result;
     }
-
-    
 }
