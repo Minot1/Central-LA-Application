@@ -23,7 +23,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../redux/userSlice";
+import { logout, switchIsInstructor } from "../redux/userSlice";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 210;
@@ -126,6 +126,16 @@ function Sidebar() {
           <Typography variant="h6" noWrap component="div">
             FALL 2022-2023
           </Typography>
+          <Button
+            sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
+            variant="outlined"
+            onClick={(e) => {
+              dispatch(switchIsInstructor());
+              navigate("/home", { replace: true });
+            }}
+          >
+            Switch between Ins-Stu
+          </Button>
           <Button
             sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
             endIcon={<LogoutIcon />}

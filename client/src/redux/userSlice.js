@@ -42,11 +42,14 @@ const userSlice = createSlice({
       state.isFailed = false;
       state.isLoggedIn = false;
     },
+    switchIsInstructor: (state) => {
+      state.isInstructor = !state.isInstructor;
+    },
   },
 });
 
 console.log(userSlice);
 
-export const { startLoginProcess, successLogin, failLogin, logout } = userSlice.actions;
+export const { startLoginProcess, successLogin, failLogin, logout, switchIsInstructor } = userSlice.actions;
 
 export default userSlice.reducer;
