@@ -99,7 +99,7 @@ class ApplicationController extends Controller
         $answers = $req->input('answers');
 
         foreach ($answers as $ans) {
-            $answer = Answer::find($ans["question_id"]);
+            $answer = Answer::find($ans["id"]);
             $answer->answer = $ans["answer"];
             $answer->save();
         }

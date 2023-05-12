@@ -41,6 +41,7 @@ function EditApplyPage() {
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const [applicationInfo, setApplicationInfo] = useState({});
   const [defaultAnswers, setDefaultAnswers] = useState([]);
+  const [answerIds, setAnswerIds] = useState([]);
   const { id } = useParams();
   const [transcript, setTranscript] = useState(null);
   const [filename, setFile] = useState(() => {
@@ -51,11 +52,13 @@ function EditApplyPage() {
   const onSubmit = () => {
     console.log(questionsAndAnswers);
     var temp = [];
+    var idx = 0;
     for (var q in questionsAndAnswers) {
       if (!questionsAndAnswers.hasOwnProperty(q)) continue;
 
       var temp2 = {};
       temp2.question_id = parseInt(q);
+      temp2.id = answerIds[idx];
       if (!questionsAndAnswers[q]) {
         for (let index = 0; index < questions.length; index++) {
           const element = questions[index];
@@ -71,6 +74,7 @@ function EditApplyPage() {
         temp2.answer = questionsAndAnswers[q];
       }
       temp.push(temp2);
+      idx += 1;
     }
     console.log(temp);
     if (transcript) {
@@ -170,10 +174,13 @@ function EditApplyPage() {
         if (element.post_id === announcementInfo.id) {
           setApplicationInfo(element);
           var tmpAnswers = [];
+          var tmpIds = [];
           for (let i = 0; i < element.answers.length; i++) {
             const ans = element.answers[i];
             tmpAnswers.push(ans.answer);
+            tmpIds.push(ans.id);
           }
+          setAnswerIds(tmpIds);
           setDefaultAnswers(tmpAnswers);
         }
       }
