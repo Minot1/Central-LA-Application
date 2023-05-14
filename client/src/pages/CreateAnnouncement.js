@@ -40,6 +40,7 @@ function CreateAnnouncement() {
   // ]
 
   const userName = useSelector((state) => state.user.username);
+  const term = useSelector((state) => state.user.term);
   //const userName = "instructor1"; //mock data for testing
 
   const [authUsersList, setAuthUserList] = useState([]); //get instructors from database
@@ -610,7 +611,7 @@ function CreateAnnouncement() {
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
-                  <ListItemText primary="At most (20) questions can add on the application." />
+                  <ListItemText primary="At most (20) questions can be added to the application." />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
@@ -640,7 +641,7 @@ function CreateAnnouncement() {
                 </ListItem>
                 <ListItem>
                   <ListItemText
-                    secondary="3) Term"
+                    secondary="3) Faculty"
                     secondaryTypographyProps={{
                       component: "span",
                       variant: "body2",
@@ -683,6 +684,12 @@ function CreateAnnouncement() {
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
                   <ListItemText primary="Please do not add these as questions." />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
+                    <FiberManualRecordIcon fontSize="inherit" />
+                  </ListItemIcon>
+                  <ListItemText primary={"Currently selected term: " + term + ". If you want to change it, please use the selection on the top of the page."} />
                 </ListItem>
               </List>
             </Box>
