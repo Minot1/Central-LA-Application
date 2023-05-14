@@ -5,6 +5,7 @@ const initialState = {
   surname: "",
   username: "",
   JwtToken: "",
+  term: "",
   isInstructor: true,
   isLoading: false,
   isFailed: false,
@@ -45,11 +46,14 @@ const userSlice = createSlice({
     switchIsInstructor: (state) => {
       state.isInstructor = !state.isInstructor;
     },
+    setTerm: (state, action) => {
+      state.term = action.payload.term;
+    },
   },
 });
 
 console.log(userSlice);
 
-export const { startLoginProcess, successLogin, failLogin, logout, switchIsInstructor } = userSlice.actions;
+export const { startLoginProcess, successLogin, failLogin, logout, switchIsInstructor, setTerm } = userSlice.actions;
 
 export default userSlice.reducer;
