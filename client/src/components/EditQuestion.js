@@ -58,6 +58,7 @@ const suggestedQuestions = [
 function EditQuestion(props) {
 
     const [questions, setQuestions] = useState([])
+    const term = useSelector((state) => state.user.term);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -364,7 +365,9 @@ function EditQuestion(props) {
                             props.AnnouncementDetails.jobDetails,
                             props.AnnouncementDetails.authInstructor,
                             props.AnnouncementDetails.desiredCourses,
-                            questions)
+                            questions,
+                            term
+                            )
                         navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
                     } else {
                         alert("Please fill out all necessary fields before creating the annoucement.");

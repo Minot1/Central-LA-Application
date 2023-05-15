@@ -114,10 +114,11 @@ function updateAnnouncement(
   details,
   auth_instructors,
   desired_courses,
-  questions
+  questions,
+  term,
 ) {
   const faculty = "FENS";
-  const term = "Fall 2022";
+  // const term = "Fall 2022";
   const title = "title update test";
 
   const deadline = lastApplicationDate + " " + lastApplicationTime;

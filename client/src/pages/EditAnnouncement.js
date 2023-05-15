@@ -58,6 +58,7 @@ function EditAnnouncement() {
 
   const userName = useSelector((state) => state.user.username);
   //const userName = "instructor1"; //mock data for testing
+  const term = useSelector((state) => state.user.term);
 
   //get all instructors
   useEffect(() => {
@@ -607,7 +608,7 @@ function EditAnnouncement() {
                   <ListItemText secondary="2) ID" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
-                  <ListItemText secondary="3) Term" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
+                  <ListItemText secondary="3) Faculty" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
                 </ListItem>
                 <ListItem>
                   <ListItemText secondary="4) Previous Grade" secondaryTypographyProps={{ component: "span", variant: "body2", sx: { pl: "24px" } }} />
@@ -623,6 +624,12 @@ function EditAnnouncement() {
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
                   <ListItemText primary="Please do not add these as questions." />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
+                    <FiberManualRecordIcon fontSize="inherit" />
+                  </ListItemIcon>
+                  <ListItemText primary={"Currently selected term: " + term + ". If you want to change it, please use the selection on the top of the page."} />
                 </ListItem>
               </List>
             </Box>
