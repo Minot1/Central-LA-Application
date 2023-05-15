@@ -88,7 +88,7 @@ function AnnouncementTable(props) {
           <TableRow sx={{ bgcolor: "#eeeeee" }}>
             {/* <TableCell align="left">Title</TableCell> */}
             <TableCell>Course Code</TableCell>
-            <TableCell align="left">Instructors</TableCell>
+            <TableCell align="left">Primary Instructor</TableCell>
             <TableCell align="left">Last Application Date/Time </TableCell>
             <TableCell align="left">Desired Letter Grade</TableCell>
             <TableCell align="left">Work Hours</TableCell>
