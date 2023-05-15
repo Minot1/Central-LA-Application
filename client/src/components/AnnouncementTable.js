@@ -200,7 +200,7 @@ function AnnouncementTable(props) {
                   </TableCell>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
                     {tabValue === 0 ? (
-                      !studentApplications.find((o) => o.post_id === row.id) ? (
+                      !studentApplications.find((o) => o.post_id === row.id) ? new Date(row.deadline) > new Date() && (
                         <Button variant="contained" onClick={() => navigate("/apply/" + row.id, { replace: true })}>
                           Apply
                         </Button>
