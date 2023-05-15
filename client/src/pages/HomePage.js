@@ -6,10 +6,11 @@ import Sidebar from "../components/Sidebar";
 import AddIcon from "@mui/icons-material/Add";
 import { getAllAnnouncements } from "../apiCalls";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function HomePage() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [updated, setUpdated] = useState(false);
 
   const [value, setValue] = useState(0);
@@ -66,7 +67,9 @@ function HomePage() {
             </Grid>
             <Grid item>
               {isInstructor && (
-                <Button variant="contained" startIcon={<AddIcon />} href="/create-announcement">
+                <Button variant="contained" startIcon={<AddIcon />} onClick={() => {
+                  navigate("/create-announcement", { replace: true });
+                }}>
                   Add
                 </Button>
               )}
