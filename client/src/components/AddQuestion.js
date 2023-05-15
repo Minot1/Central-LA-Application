@@ -12,6 +12,7 @@ import ControlPointDuplicateIcon from "@mui/icons-material/ControlPointDuplicate
 import SendIcon from "@mui/icons-material/Send";
 import CloseIcon from "@mui/icons-material/Close";
 import { addAnnouncement } from "../apiCalls";
+import { useSelector } from "react-redux";
 
 const questionType = [
   { value: "Text Answer", label: "Text Answer" },
@@ -59,6 +60,7 @@ function AddQuestion(props) {
     { questionNumber: 3, mQuestion: "", mValue: "Text Answer", mMultiple: ["", ""] },
   ]);
 
+  const term = useSelector((state) => state.user.term);
   const navigate = useNavigate();
 
   function addNewQuestion() {
@@ -447,7 +449,8 @@ function AddQuestion(props) {
                 props.AnnouncementDetails.jobDetails,
                 props.AnnouncementDetails.authInstructor,
                 props.AnnouncementDetails.desiredCourses,
-                questions
+                questions,
+                term
               );
               navigate("/home", {
                 replace: true,

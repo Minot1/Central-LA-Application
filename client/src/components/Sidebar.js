@@ -5,7 +5,7 @@ import HistoryIcon from "@mui/icons-material/History";
 import HomeIcon from "@mui/icons-material/Home";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import SearchIcon from "@mui/icons-material/Search";
-import { Avatar, Button, Collapse, IconButton, styled, Toolbar, useTheme } from "@mui/material";
+import { Avatar, Button, Collapse, FormControl, IconButton, InputLabel, MenuItem, Select, styled, Toolbar, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import MuiAppBar from "@mui/material/AppBar";
@@ -23,7 +23,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import AppBarHeader from "./AppBarHeader";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { logout, switchIsInstructor } from "../redux/userSlice";
+import { logout, setTerm, switchIsInstructor } from "../redux/userSlice";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 const drawerWidth = 210;
@@ -91,11 +91,18 @@ function Sidebar() {
   const isInstructor = useSelector((state) => state.user.isInstructor);
   const name = useSelector((state) => state.user.name);
   const surname = useSelector((state) => state.user.surname);
+  const term = useSelector((state) => state.user.term);
+  const [termSelect, setTermSelect] = React.useState(term);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleListClick = () => {
     setListOpen(!listOpen);
+  };
+
+  const handleTermSelect = (event) => {
+    dispatch(setTerm({term:event.target.value}));
+    setTermSelect(event.target.value);
   };
 
   const handleSidebarOpen = () => {
@@ -123,9 +130,56 @@ function Sidebar() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            FALL 2022-2023
-          </Typography>
+          <Box width={200}>
+            <FormControl
+              sx={{
+                m: 1,
+                minWidth: 150,
+                color: "white !important",
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "white",
+                },
+                "& .MuiSvgIcon-root": {
+                  color: "white",
+                },
+              }}
+              size="small"
+            >
+              <InputLabel id="simple-select-label" sx={{ color: "white" }}>
+                Select Term
+              </InputLabel>
+              <Select
+                id="simple-select"
+                labelId="simple-select-label"
+                label="Term"
+                onChange={handleTermSelect}
+                defaultValue={termSelect}
+                value={termSelect}
+                sx={{
+                  height: "2.5rem",
+                  color: "white",
+                  "& .MuiOutlinedInput-notchedOutline": {
+                    borderColor: "white",
+                  },
+                  "& .MuiSvgIcon-root": {
+                    color: "white",
+                  },
+                }}
+              >
+                <MenuItem value="Spring 2018/19">Spring 2018/19</MenuItem>
+                <MenuItem value="Fall 2019/20">Fall 2019/20</MenuItem>
+                <MenuItem value="Spring 2019/20">Spring 2019/20</MenuItem>
+                <MenuItem value="Fall 2020/21">Fall 2020/21</MenuItem>
+                <MenuItem value="Spring 2020/21">Spring 2020/21</MenuItem>
+                <MenuItem value="Fall 2021/22">Fall 2021/22</MenuItem>
+                <MenuItem value="Spring 2021/22">Spring 2021/22</MenuItem>
+                <MenuItem value="Fall 2022/23">Fall 2022/23</MenuItem>
+                <MenuItem value="Spring 2022/23">Spring 2022/23</MenuItem>
+                <MenuItem value="Fall 2023/24">Fall 2023/24</MenuItem>
+                <MenuItem value="Spring 2023/24">Spring 2023/24</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <Button
             sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
             variant="outlined"

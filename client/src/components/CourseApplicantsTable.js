@@ -9,9 +9,11 @@ import React from "react";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { useSelector } from "react-redux";
 
 function CourseApplicantsTable(props) {
   const navigate = useNavigate();
+  const term = useSelector((state) => state.user.term);
 
   return (
     <>
@@ -27,7 +29,7 @@ function CourseApplicantsTable(props) {
           </TableHead>
           <TableBody>
             {props.rows &&
-              props.rows.map((row, index) => (
+              props.rows.filter((row) => (row.term == term)).map((row, index) => (
                 <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
                     {row.course_code}

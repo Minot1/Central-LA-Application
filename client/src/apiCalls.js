@@ -66,11 +66,12 @@ function addAnnouncement(
   details,
   auth_instructors,
   desired_courses,
-  questions
+  questions,
+  term
 ) {
   //const mockUserName = "instructor1";
   const faculty = "FENS";
-  const term = "Fall 2022";
+  // const term = "Fall 2022";
   const title = "title add test";
 
   const deadline = lastApplicationDate + " " + lastApplicationTime + ":00";

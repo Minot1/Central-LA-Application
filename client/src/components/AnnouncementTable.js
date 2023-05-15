@@ -30,6 +30,7 @@ function AnnouncementTable(props) {
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(props.tabValue);
   const isInstructor = useSelector((state) => state.user.isInstructor);
+  const term = useSelector((state) => state.user.term);
   //const userDisplayName = useSelector((state) => state.user.name);
   //const userDisplayName = "Instructor One" //mock data
   const userName = useSelector((state) => state.user.username);
@@ -43,17 +44,22 @@ function AnnouncementTable(props) {
 
       // Rearrange the name format
       const modifiedInstructorName = firstName.trim() + " " + lastName.trim();
+      var newTerm = row.term;
+      if (row.term == "Fall 2022") {
+        newTerm = "Fall 2022/23";
+      }
 
       // Return the modified row object
       return {
         ...row,
         instructor_name: modifiedInstructorName,
+        term: newTerm,
       };
     });
-
+    console.log(modifiedRows);
     setRows(modifiedRows);
     //console.log(rows);
-  }, [props.rows]);
+  }, [props.rows, term]);
 
   useEffect(() => {
     if (!isInstructor) {
@@ -67,7 +73,7 @@ function AnnouncementTable(props) {
           console.error("Failed to fetch user applications:", error);
         });
     }
-  }, [isInstructor, userName]);
+  }, [isInstructor, userName, term]);
 
   useEffect(() => {
     setTabValue(props.tabValue);
@@ -93,7 +99,7 @@ function AnnouncementTable(props) {
         {isInstructor ? (
           <TableBody>
             {rows
-              .filter((row) => (tabValue === 1 ? row.instructor_username === userName : true))
+              .filter((row) => (tabValue === 1 ? (row.instructor_username === userName && term == row.term) : term == row.term))
               .map((row, index) => (
                 <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   {/* <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
@@ -150,7 +156,9 @@ function AnnouncementTable(props) {
           <TableBody>
             {rows
               .filter((row) =>
-                tabValue === 1 ? studentApplications.some((studentApplication) => row.id === studentApplication.post_id) : true
+                (tabValue === 1)
+                  ? (studentApplications.some((studentApplication) => row.id === studentApplication.post_id) && term == row.term)
+                  : term == row.term
               ) //to be continued, student'in hangi posta kayıt oldugu lazim (belki vardır)
               .map((row, index) => (
                 <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
