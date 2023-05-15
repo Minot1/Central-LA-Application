@@ -33,8 +33,8 @@ class UserController extends Controller
         if (array_key_exists("authenticationFailure", $array)) {
             return $array;
         } else {
-            $role = $array["authenticationSuccess"]["attributes"]["ou"][count($array["authenticationSuccess"]["attributes"]["ou"]) - 2];
-            if ($role == 'UG') {
+            $role = $array["authenticationSuccess"]["attributes"]["ou"];
+            if (in_array('UG', $role)) {
                 $result = Student::where('student_username', $array["authenticationSuccess"]["user"])->value('student_username');
                 $date = date_create()->format('Y-m-d H:i:s');
                 if (!$result) {
