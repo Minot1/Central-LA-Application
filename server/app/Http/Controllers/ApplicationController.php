@@ -98,7 +98,7 @@ class ApplicationController extends Controller
         $application->post_id = $req->input('post_id');
         $application->updated_at = date_create()->format('Y-m-d H:i:s');
 
-        if ($request->hasFile('trancript')) {
+        if ($req->hasFile('trancript')) {
 
             $filename = "$application->student_username-"."$application->post_id.pdf";
             Storage::delete($filename);
