@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Models\Application;
 use App\Models\Answer;
 use App\Models\Student;
@@ -54,6 +55,10 @@ class ApplicationController extends Controller
         $application->student_username = $req->input('student_username');
         $application->grade = $req->input('grade');
         $application->faculty = $req->input('faculty');
+        $application->post_id = $req->input('post_id');
+
+        $filename = "$application->student_username-"."$application->post_id.pdf";
+        $req->file('transcript')->storeAs('transcripts', $filename);
 
         $parser = new \Smalot\PdfParser\Parser();
         $pdf = $req->file('transcript');
@@ -64,7 +69,6 @@ class ApplicationController extends Controller
         // $application->transcript = $req->input('transcript');
         $application->working_hours = $req->input('working_hours');
         $application->status = $req->input('status');
-        $application->post_id = $req->input('post_id');
         $application->created_at = date_create()->format('Y-m-d H:i:s');
         $application->updated_at = date_create()->format('Y-m-d H:i:s');
         $application->save();
@@ -93,6 +97,22 @@ class ApplicationController extends Controller
         $application->status = $req->input('status');
         $application->post_id = $req->input('post_id');
         $application->updated_at = date_create()->format('Y-m-d H:i:s');
+
+        if ($request->hasFile('trancript')) {
+
+            $filename = "$application->student_username-"."$application->post_id.pdf";
+            Storage::delete($filename);
+            $req->file('transcript')->storeAs('transcripts', $filename);
+    
+            $parser = new \Smalot\PdfParser\Parser();
+            $pdf = $req->file('transcript');
+            $pdff = $parser->parseFile($pdf->path());
+            $pdfFile = $pdff->getText();
+    
+            $application->transcript = $pdfFile;
+        }
+
+
         $application->save();
 
         $application_id = $application->id;
