@@ -176,20 +176,23 @@ async function updateApplicationById(
   working_hours,
   status,
   post_id,
-  answers
+  answers,
+  transcript
 ) {
   try {
-    const results = await axios.put(
+    var bodyFormData = new FormData();
+    bodyFormData.append("student_username", username);
+    bodyFormData.append("working_hours", working_hours);
+    bodyFormData.append("post_id", post_id);
+    bodyFormData.append("answers", JSON.stringify(answers));
+    bodyFormData.append("status", "Applied");
+    bodyFormData.append("grade", 0);
+    bodyFormData.append("faculty", "-");
+    bodyFormData.append("transcript", transcript);
+    console.log(transcript);
+    const results = await axios.post(
       apiEndpoint + "/updateApplication/" + applicationId,
-      {
-        student_username: username,
-        grade: grade,
-        faculty: faculty,
-        working_hours: working_hours,
-        status: status,
-        post_id: post_id,
-        answers: answers,
-      }
+      bodyFormData, { headers: { "Content-Type": "multipart/form-data" } }
     );
     return results.data;
   } catch (error) {}

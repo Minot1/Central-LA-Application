@@ -71,7 +71,7 @@ const ApplyPage = (props) => {
     applyToPost(id, username, temp, transcript).then((res) => {
       console.log(res);
     });
-    navigate("/home", { replace: true, state: { updatedAnnouncement: true } });
+    navigate("/success", { replace: true, state: { successText: "You have applied successfully." } });
   };
 
   const onAnswerChange = (e, question) => {

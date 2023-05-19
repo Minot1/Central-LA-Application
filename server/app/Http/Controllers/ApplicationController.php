@@ -24,12 +24,12 @@ function getGrade($desired_courses, $id)
         $grade = null;
 
         foreach ($lines as $line) {
-            if (strpos($line, $course_string) !== false) {
+            if (strpos($line, $course_string)) {
                 $columns = explode("\t", substr($line, strpos($line, $course_string)));
                 $grade = $columns[4];
                 break;
             }
-            if (strpos($line, $in_progress_string) !== false) {
+            if (strpos($line, $in_progress_string)) {
                 $columns = explode("\t", substr($line, strpos($line, $in_progress_string)));
                 $grade = trim(preg_replace('/\s/u', ' ', $columns[6]));
                 break;
@@ -64,6 +64,9 @@ class ApplicationController extends Controller
         $pdf = $req->file('transcript');
         $pdff = $parser->parseFile($pdf->path());
         $pdfFile = $pdff->getText();
+        if (!strpos($pdfFile, "End of Transcript")) {
+            return "invalid transcript";
+        }
 
         $application->transcript = $pdfFile;
         // $application->transcript = $req->input('transcript');
@@ -98,8 +101,7 @@ class ApplicationController extends Controller
         $application->post_id = $req->input('post_id');
         $application->updated_at = date_create()->format('Y-m-d H:i:s');
 
-        if ($req->hasFile('trancript')) {
-
+        if ($req->hasFile('transcript')) {
             $filename = "$application->student_username-"."$application->post_id.pdf";
             Storage::delete($filename);
             $req->file('transcript')->storeAs('transcripts', $filename);
@@ -108,6 +110,9 @@ class ApplicationController extends Controller
             $pdf = $req->file('transcript');
             $pdff = $parser->parseFile($pdf->path());
             $pdfFile = $pdff->getText();
+            if (!strpos($pdfFile, "End of Transcript")) {
+                return "invalid transcript";
+            }
     
             $application->transcript = $pdfFile;
         }
@@ -117,8 +122,9 @@ class ApplicationController extends Controller
 
         $application_id = $application->id;
         $answers = $req->input('answers');
+        $decoded_answers = json_decode($answers, TRUE);
 
-        foreach ($answers as $ans) {
+        foreach ($decoded_answers as $ans) {
             $answer = Answer::find($ans["id"]);
             $answer->answer = $ans["answer"];
             $answer->save();
