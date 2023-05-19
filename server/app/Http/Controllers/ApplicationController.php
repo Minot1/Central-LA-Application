@@ -24,12 +24,12 @@ function getGrade($desired_courses, $id)
         $grade = null;
 
         foreach ($lines as $line) {
-            if (strpos($line, $course_string)) {
+            if (strpos($line, $course_string) !== false) {
                 $columns = explode("\t", substr($line, strpos($line, $course_string)));
                 $grade = $columns[4];
                 break;
             }
-            if (strpos($line, $in_progress_string)) {
+            if (strpos($line, $in_progress_string) !== false) {
                 $columns = explode("\t", substr($line, strpos($line, $in_progress_string)));
                 $grade = trim(preg_replace('/\s/u', ' ', $columns[6]));
                 break;
