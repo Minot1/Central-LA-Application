@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -8,6 +9,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -41,6 +43,7 @@ function EditApplyPage() {
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const [applicationInfo, setApplicationInfo] = useState({});
   const [defaultAnswers, setDefaultAnswers] = useState([]);
+  const [snackOpen, setSnackOpen] = React.useState(false);
   const [answerIds, setAnswerIds] = useState([]);
   const { id } = useParams();
   const [transcript, setTranscript] = useState(null);
@@ -48,6 +51,14 @@ function EditApplyPage() {
     const initialFileName = username + "_transcript.pdf";
     return initialFileName;
   });
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
 
   const onSubmit = () => {
     console.log(questionsAndAnswers);
@@ -89,6 +100,11 @@ function EditApplyPage() {
       temp,
       transcript
     );
+    if (transcript.size > 1000000) {
+      setSnackOpen(true);
+      console.log("file too big")
+      return;
+    }
     updateApplicationById(
       applicationInfo.id,
       applicationInfo.student_username,
@@ -103,6 +119,7 @@ function EditApplyPage() {
       console.log(res);
       if (res == "invalid transcript") {
         console.log("invalid tr");
+        setSnackOpen(true);
       }
       else {
         navigate("/success", { replace: true, state: { successText: "Your application has been successfully updated." } });
@@ -263,7 +280,17 @@ function EditApplyPage() {
               </Grid>
             ))}
           <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={2}>
+              <Snackbar
+                open={snackOpen}
+                autoHideDuration={10000}
+                onClose={handleSnackClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert onClose={handleSnackClose} severity="error">
+                  File upload error. File needs to be a PDF of transcript and less than 1MB.
+                </Alert>
+              </Snackbar></Grid>
             <Grid item xs={2}>
               <Typography textAlign="center">Upload your transcript:</Typography>
             </Grid>

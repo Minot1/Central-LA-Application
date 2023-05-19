@@ -110,7 +110,7 @@ class ApplicationController extends Controller
             $pdf = $req->file('transcript');
             $pdff = $parser->parseFile($pdf->path());
             $pdfFile = $pdff->getText();
-            if (!strpos($pdfFile, "End of Transcript")) {
+            if (!strpos($pdfFile, "End of Transcript")) {
                 return "invalid transcript";
             }
     
