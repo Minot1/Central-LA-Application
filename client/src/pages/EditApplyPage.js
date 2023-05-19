@@ -1,4 +1,5 @@
 import {
+  Alert,
   Box,
   Button,
   Divider,
@@ -8,6 +9,7 @@ import {
   Paper,
   Radio,
   RadioGroup,
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -20,7 +22,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import AppBarHeader from "../components/AppBarHeader";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { applyToPost, getAnnouncement, getApplicationByUsername, updateApplicationById } from "../apiCalls";
 
@@ -41,6 +43,7 @@ function EditApplyPage() {
   const [announcementInfo, setAnnouncementInfo] = useState({});
   const [applicationInfo, setApplicationInfo] = useState({});
   const [defaultAnswers, setDefaultAnswers] = useState([]);
+  const [snackOpen, setSnackOpen] = React.useState(false);
   const [answerIds, setAnswerIds] = useState([]);
   const { id } = useParams();
   const [transcript, setTranscript] = useState(null);
@@ -48,6 +51,14 @@ function EditApplyPage() {
     const initialFileName = username + "_transcript.pdf";
     return initialFileName;
   });
+
+  const handleSnackClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setSnackOpen(false);
+  };
 
   const onSubmit = () => {
     console.log(questionsAndAnswers);
@@ -66,8 +77,7 @@ function EditApplyPage() {
             temp2.answer = defaultAnswers[index];
           }
           if (element.id == q && element.type === "Multiple Choice") {
-            const tempList = JSON.parse(element.multiple_choices);
-            temp2.answer = tempList[0];
+            temp2.answer = defaultAnswers[index];
           }
         }
       } else {
@@ -89,6 +99,11 @@ function EditApplyPage() {
       temp,
       transcript
     );
+    if (transcript && transcript.size > 1000000) {
+      setSnackOpen(true);
+      console.log("file too big")
+      return;
+    }
     updateApplicationById(
       applicationInfo.id,
       applicationInfo.student_username,
@@ -102,7 +117,7 @@ function EditApplyPage() {
     ).then((res) => {
       console.log(res);
       if (res == "invalid transcript") {
-        console.log("invalid tr");
+        setSnackOpen(true);
       }
       else {
         navigate("/success", { replace: true, state: { successText: "Your application has been successfully updated." } });
@@ -124,10 +139,15 @@ function EditApplyPage() {
   const onMultipleChoiceAnswerChange = (e, question) => {
     e.preventDefault();
     let temp = questionsAndAnswers;
+    var ct = 0;
     for (const [q, a] of Object.entries(temp)) {
       if (q == question.id) {
         temp[q] = e.target.value;
+        var defaultTemp = [...defaultAnswers];
+        defaultTemp[ct] = e.target.value;
+        setDefaultAnswers(defaultTemp);
       }
+      ct += 1;
     }
     setQuestionsAndAnswers(temp);
     console.log(questionsAndAnswers);
@@ -154,7 +174,7 @@ function EditApplyPage() {
     const { name } = file;
     setFile(name);
   };
-
+  
   useEffect(() => {
     getAnnouncement(id).then((results) => {
       setAnnouncementInfo(results);
@@ -186,6 +206,7 @@ function EditApplyPage() {
           }
           setAnswerIds(tmpIds);
           setDefaultAnswers(tmpAnswers);
+          console.log(tmpAnswers);
         }
       }
     });
@@ -225,7 +246,6 @@ function EditApplyPage() {
           {questions &&
             questions.map((question, index) => (
               <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
-                <Grid item xs={2}></Grid>
                 <Grid item xs={2}>
                   <Typography textAlign="center">{question.question}:</Typography>
                 </Grid>
@@ -234,14 +254,14 @@ function EditApplyPage() {
                     <FormControl>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={JSON.parse(question.multiple_choices)[0]}
+                        value={defaultAnswers[index] ? defaultAnswers[index] : "a"}
                         name="radio-buttons-group"
                         onChange={(e) => {
                           onMultipleChoiceAnswerChange(e, question);
                         }}
                       >
-                        {JSON.parse(question.multiple_choices).map((ans, index) => (
-                          <FormControlLabel value={ans} control={<Radio />} label={ans}></FormControlLabel>
+                        {JSON.parse(question.multiple_choices).map((ans) => (
+                            <FormControlLabel value={ans} control={<Radio />} label={ans}></FormControlLabel>
                         ))}
                       </RadioGroup>
                     </FormControl>
@@ -263,7 +283,17 @@ function EditApplyPage() {
               </Grid>
             ))}
           <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
-            <Grid item xs={2}></Grid>
+            <Grid item xs={2}>
+              <Snackbar
+                open={snackOpen}
+                autoHideDuration={10000}
+                onClose={handleSnackClose}
+                anchorOrigin={{ vertical: "top", horizontal: "center" }}
+              >
+                <Alert onClose={handleSnackClose} severity="error">
+                  File upload error. File needs to be a PDF of transcript and less than 1MB.
+                </Alert>
+              </Snackbar></Grid>
             <Grid item xs={2}>
               <Typography textAlign="center">Upload your transcript:</Typography>
             </Grid>
