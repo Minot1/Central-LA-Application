@@ -118,7 +118,6 @@ function EditApplyPage() {
     ).then((res) => {
       console.log(res);
       if (res == "invalid transcript") {
-        console.log("invalid tr");
         setSnackOpen(true);
       }
       else {
