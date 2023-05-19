@@ -38,7 +38,7 @@ Route::post('getGrade/{id}', [ApplicationController::class, 'getGrade']);
 Route::get('listCourse', [ApplicationController::class, 'listCourse']);
 Route::get('listStudentApplication/{username}', [ApplicationController::class, 'listStudentApplication']);
 Route::post('addApplication', [ApplicationController::class, 'addApplication']);
-Route::put('updateApplication/{id}',[ApplicationController::class, 'updateApplication']);
+Route::post('updateApplication/{id}',[ApplicationController::class, 'updateApplication']);
 Route::delete('deleteApplication/{id}', [ApplicationController::class, 'deleteApplication']);
 
 Route::middleware(['jwt'])->group(function(){

@@ -77,9 +77,6 @@ function EditApplyPage() {
       idx += 1;
     }
     console.log(temp);
-    if (transcript) {
-      setTranscript(applicationInfo.transcript);
-    }
     let intID = parseInt(id);
     console.log(
       applicationInfo.id,
@@ -89,7 +86,8 @@ function EditApplyPage() {
       applicationInfo.working_hours,
       applicationInfo.status,
       intID,
-      temp
+      temp,
+      transcript
     );
     updateApplicationById(
       applicationInfo.id,
@@ -99,11 +97,17 @@ function EditApplyPage() {
       applicationInfo.working_hours,
       applicationInfo.status,
       intID,
-      temp
+      temp,
+      transcript
     ).then((res) => {
       console.log(res);
+      if (res == "invalid transcript") {
+        console.log("invalid tr");
+      }
+      else {
+        navigate("/success", { replace: true, state: { successText: "Your application has been successfully updated." } });
+      }
     });
-    navigate("/home", { replace: true, state: { updatedAnnouncement: true } });
   };
 
   const onAnswerChange = (e, question) => {
@@ -265,7 +269,7 @@ function EditApplyPage() {
             </Grid>
             <Grid item xs={6}>
               <Grid item container direction="rows">
-                <Button variant="contained" component="label" disabled>
+                <Button variant="contained" component="label">
                   Upload File
                   <input type="file" hidden onChange={onFileChange} />
                 </Button>

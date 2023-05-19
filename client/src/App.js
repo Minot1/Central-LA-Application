@@ -13,6 +13,7 @@ import { startLoginProcess, successLogin } from "./redux/userSlice";
 import { validateLogin } from "./apiCalls";
 import CourseApplicantsPage from "./pages/CourseApplicantsPage";
 import EditApplyPage from "./pages/EditApplyPage";
+import SuccessPage from "./pages/SuccessPage";
 
 function App() {
   const [urlParams, setUrlParams] = useSearchParams();
@@ -65,6 +66,7 @@ function App() {
           <Route path="/edit-apply/:id" element={<EditApplyPage></EditApplyPage>}></Route>
           <Route path="/applicants" element={<CourseApplicantsPage></CourseApplicantsPage>}></Route>
           <Route path="/application-of/:postId" element={<ApplicantsPage></ApplicantsPage>}></Route>
+          <Route path="/success" element={<SuccessPage></SuccessPage>}></Route>
         </>
       ) : (
         <>

@@ -331,7 +331,7 @@ function Sidebar() {
           </Collapse>
           <Divider sx={{ bgcolor: "#e0e0e0", margin: "3px" }} />
           <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton>
+            <ListItemButton disabled>
               <ListItemIcon sx={{ minWidth: "30px" }}>
                 <HistoryIcon sx={{ color: "white" }} />
               </ListItemIcon>

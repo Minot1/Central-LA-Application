@@ -452,9 +452,9 @@ function AddQuestion(props) {
                 questions,
                 term
               );
-              navigate("/home", {
+              navigate("/success", {
                 replace: true,
-                state: { updatedAnnouncement: true },
+                state: { successText: "Your announcement has been successfully added." },
               });
             } else {
               alert("Please fill out all necessary fields before creating the annoucement.");

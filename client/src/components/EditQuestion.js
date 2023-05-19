@@ -368,7 +368,7 @@ function EditQuestion(props) {
                             questions,
                             term
                             )
-                        navigate('/home', { replace: true, state: { updatedAnnouncement: true } })
+                        navigate('/success', { replace: true, state: { successText: "Your announcement has been successfully edited and updated." } })
                     } else {
                         alert("Please fill out all necessary fields before creating the annoucement.");
                     }
