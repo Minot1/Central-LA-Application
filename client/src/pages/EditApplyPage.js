@@ -22,7 +22,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import AppBarHeader from "../components/AppBarHeader";
-import { useNavigate, useParams } from "react-router";
+import { useLocation, useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
 import { applyToPost, getAnnouncement, getApplicationByUsername, updateApplicationById } from "../apiCalls";
 
@@ -77,8 +77,7 @@ function EditApplyPage() {
             temp2.answer = defaultAnswers[index];
           }
           if (element.id == q && element.type === "Multiple Choice") {
-            const tempList = JSON.parse(element.multiple_choices);
-            temp2.answer = tempList[0];
+            temp2.answer = defaultAnswers[index];
           }
         }
       } else {
@@ -100,7 +99,7 @@ function EditApplyPage() {
       temp,
       transcript
     );
-    if (transcript.size > 1000000) {
+    if (transcript && transcript.size > 1000000) {
       setSnackOpen(true);
       console.log("file too big")
       return;
@@ -140,10 +139,15 @@ function EditApplyPage() {
   const onMultipleChoiceAnswerChange = (e, question) => {
     e.preventDefault();
     let temp = questionsAndAnswers;
+    var ct = 0;
     for (const [q, a] of Object.entries(temp)) {
       if (q == question.id) {
         temp[q] = e.target.value;
+        var defaultTemp = [...defaultAnswers];
+        defaultTemp[ct] = e.target.value;
+        setDefaultAnswers(defaultTemp);
       }
+      ct += 1;
     }
     setQuestionsAndAnswers(temp);
     console.log(questionsAndAnswers);
@@ -170,7 +174,7 @@ function EditApplyPage() {
     const { name } = file;
     setFile(name);
   };
-
+  
   useEffect(() => {
     getAnnouncement(id).then((results) => {
       setAnnouncementInfo(results);
@@ -202,6 +206,7 @@ function EditApplyPage() {
           }
           setAnswerIds(tmpIds);
           setDefaultAnswers(tmpAnswers);
+          console.log(tmpAnswers);
         }
       }
     });
@@ -241,7 +246,6 @@ function EditApplyPage() {
           {questions &&
             questions.map((question, index) => (
               <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
-                <Grid item xs={2}></Grid>
                 <Grid item xs={2}>
                   <Typography textAlign="center">{question.question}:</Typography>
                 </Grid>
@@ -250,14 +254,14 @@ function EditApplyPage() {
                     <FormControl>
                       <RadioGroup
                         aria-labelledby="demo-radio-buttons-group-label"
-                        defaultValue={JSON.parse(question.multiple_choices)[0]}
+                        value={defaultAnswers[index] ? defaultAnswers[index] : "a"}
                         name="radio-buttons-group"
                         onChange={(e) => {
                           onMultipleChoiceAnswerChange(e, question);
                         }}
                       >
-                        {JSON.parse(question.multiple_choices).map((ans, index) => (
-                          <FormControlLabel value={ans} control={<Radio />} label={ans}></FormControlLabel>
+                        {JSON.parse(question.multiple_choices).map((ans) => (
+                            <FormControlLabel value={ans} control={<Radio />} label={ans}></FormControlLabel>
                         ))}
                       </RadioGroup>
                     </FormControl>
