@@ -211,6 +211,7 @@ class ApplicationController extends Controller
     function getApplication($id)
     {
         $result = Application::find($id);
+        $filepath = storage_path("app/transcripts/")."$result->student_username-"."$result->post_id.pdf";
         $result = json_decode($result, TRUE);
         $answers = Answer::where('application_id', $result["id"])->get();
         $answers = json_decode($answers, TRUE);
@@ -219,6 +220,6 @@ class ApplicationController extends Controller
         $result["student_name"] = $student;
         $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
         $result = json_encode($result, TRUE);
-        return $result;
+        return response()->download($filepath);
     }
 }
