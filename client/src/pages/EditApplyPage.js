@@ -16,15 +16,14 @@ import {
   TableContainer,
   TableRow,
   TextField,
-  Tooltip,
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/Sidebar";
 import AppBarHeader from "../components/AppBarHeader";
-import { useLocation, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useSelector } from "react-redux";
-import { applyToPost, getAnnouncement, getApplicationByUsername, updateApplicationById } from "../apiCalls";
+import { getAnnouncement, getApplicationByUsername, updateApplicationById } from "../apiCalls";
 
 function EditApplyPage() {
   const navigate = useNavigate();
