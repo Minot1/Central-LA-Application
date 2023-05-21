@@ -152,7 +152,7 @@ function CustomRow(props) {
                 </Select>
               </FormControl>
               <Button variant="outlined" endIcon={<DownloadIcon />} sx={{ m: "15px" }} onClick={() => {
-                getTranscript("55").then((res) => {
+                getTranscript(row.id).then((res) => {
                   const file = new Blob(
                     [res], 
                     {type: 'application/pdf'});
