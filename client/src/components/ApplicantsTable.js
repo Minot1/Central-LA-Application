@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Typography, IconButton, Collapse, Snackbar, Grid } from "@mui/material";
+import { Typography, IconButton, Collapse, Snackbar, Grid, Button } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,8 +15,9 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
-import { getApplicationsByPost, updateApplicationById, getAnnouncement } from "../apiCalls";
+import { getApplicationsByPost, updateApplicationById, getAnnouncement, getTranscript } from "../apiCalls";
 import { useParams } from "react-router";
+import DownloadIcon from '@mui/icons-material/Download';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -128,7 +129,7 @@ function CustomRow(props) {
         </TableCell>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
           <Collapse in={open} component="tr" style={{ display: "block" }}>
-            <Box sx={{ minWidth: 120 }}>
+            <Box sx={{ minWidth: 120, m: "10px" }} textAlign="center">
               <Snackbar
                 open={snackOpen}
                 autoHideDuration={3000}
@@ -150,6 +151,21 @@ function CustomRow(props) {
                   <MenuItem value={"Interested"}>Interested</MenuItem>
                 </Select>
               </FormControl>
+              <Button variant="outlined" endIcon={<DownloadIcon />} sx={{ m: "15px" }} onClick={() => {
+                getTranscript("55").then((res) => {
+                  const file = new Blob(
+                    [res], 
+                    {type: 'application/pdf'});
+                  //Build a URL from the file
+                  const fileURL = URL.createObjectURL(file);
+                  // Open the URL on new Window
+                  window.open(fileURL);
+                  // const link = document.createElement("a");
+                  // link.download = 'pdf.pdf';
+                  // link.href = fileURL;
+                  // link.click();
+                });
+              }}>Transcript</Button>
             </Box>
           </Collapse>
         </TableCell>

@@ -210,6 +210,15 @@ async function validateLogin(serviceUrl, ticket) {
   } catch (error) {}
 }
 
+async function getTranscript(applicationId) {
+  try {
+    const result = await axios.get(apiEndpoint + "/applicationTranscript/" + applicationId, {
+      responseType: 'blob'
+    });
+    return result.data;
+  } catch (error) {}
+}
+
 export {
   getAllAnnouncements,
   getAllInstructors,
@@ -222,4 +231,5 @@ export {
   getApplicationsByPost,
   getApplicationByUsername,
   validateLogin,
+  getTranscript,
 };
