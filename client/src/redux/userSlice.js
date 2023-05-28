@@ -5,7 +5,7 @@ const initialState = {
   surname: "",
   username: "",
   JwtToken: "",
-  term: "Spring 2022/23",
+  term: "Fall 2022/23",
   isInstructor: true,
   isLoading: false,
   isFailed: false,

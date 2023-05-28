@@ -219,6 +219,15 @@ async function getTranscript(applicationId) {
   } catch (error) {}
 }
 
+async function getTerms() {
+  try {
+    const result = await axios.get("https://mysu.sabanciuniv.edu/apps/ods_api/getTerms.php", {
+      headers: { "Authorization":"Basic dGVybXNfYXBpOmF5WV8zNjZUYTE=" }
+    });
+    return result.data;
+  } catch (error) {}
+}
+
 export {
   getAllAnnouncements,
   getAllInstructors,
@@ -232,4 +241,5 @@ export {
   getApplicationByUsername,
   validateLogin,
   getTranscript,
+  getTerms,
 };
