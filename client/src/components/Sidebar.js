@@ -16,7 +16,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Typography from "@mui/material/Typography";
-import React from "react";
+import React, { useEffect } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { logout, setTerm, switchIsInstructor } from "../redux/userSlice";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { getTerms } from "../apiCalls";
 
 const drawerWidth = 210;
 
@@ -114,6 +115,13 @@ function Sidebar() {
     setListOpen(false);
   };
 
+  useEffect(() => {
+    getTerms().then((res) => {
+      console.log(res);
+    });
+  }, [])
+  
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar position="fixed" sidebarOpen={sidebarOpen}>
@@ -166,15 +174,9 @@ function Sidebar() {
                   },
                 }}
               >
-                <MenuItem value="Spring 2018/19">Spring 2018/19</MenuItem>
-                <MenuItem value="Fall 2019/20">Fall 2019/20</MenuItem>
-                <MenuItem value="Spring 2019/20">Spring 2019/20</MenuItem>
-                <MenuItem value="Fall 2020/21">Fall 2020/21</MenuItem>
-                <MenuItem value="Spring 2020/21">Spring 2020/21</MenuItem>
-                <MenuItem value="Fall 2021/22">Fall 2021/22</MenuItem>
-                <MenuItem value="Spring 2021/22">Spring 2021/22</MenuItem>
                 <MenuItem value="Fall 2022/23">Fall 2022/23</MenuItem>
                 <MenuItem value="Spring 2022/23">Spring 2022/23</MenuItem>
+                <MenuItem value="Summer 2023">Summer 2023</MenuItem>
                 <MenuItem value="Fall 2023/24">Fall 2023/24</MenuItem>
                 <MenuItem value="Spring 2023/24">Spring 2023/24</MenuItem>
               </Select>
