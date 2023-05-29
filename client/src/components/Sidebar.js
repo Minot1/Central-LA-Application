@@ -115,11 +115,11 @@ function Sidebar() {
     setListOpen(false);
   };
 
-  useEffect(() => {
-    getTerms().then((res) => {
-      console.log(res);
-    });
-  }, [])
+  // useEffect(() => {
+  //   getTerms().then((res) => {
+  //     console.log(res);
+  //   });
+  // }, [])
   
 
   return (
@@ -281,22 +281,6 @@ function Sidebar() {
               <ListItemText primary={"Home"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
             </ListItemButton>
           </ListItem>
-          <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: "30px" }}>
-                <SearchIcon sx={{ color: "white" }} />
-              </ListItemIcon>
-              <ListItemText primary={"Search"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
-          <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: "30px" }}>
-                <NotificationsIcon sx={{ color: "white" }} />
-              </ListItemIcon>
-              <ListItemText primary={"Notifications"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
           <Divider sx={{ bgcolor: "#e0e0e0", margin: "3px" }} />
           <ListItem sx={{ padding: "0px" }}>
             <ListItemButton onClick={handleListClick}>
@@ -314,14 +298,6 @@ function Sidebar() {
                   <ListItemText primary={"- All Announcements"} sx={{ textAlign: "center" }} />
                 </ListItemButton>
               </ListItem>
-              <ListItem sx={{ padding: "0px" }}>
-                <ListItemButton>
-                  <ListItemText
-                    primary={(isInstructor && "- My Announcements") || (!isInstructor && "- My Applications")}
-                    sx={{ textAlign: "center" }}
-                  />
-                </ListItemButton>
-              </ListItem>
               {isInstructor && (
                 <ListItem sx={{ padding: "0px" }}>
                   <ListItemButton as={Link} to="/applicants" style={{ textDecoration: "none", color: "white" }}>
@@ -331,15 +307,6 @@ function Sidebar() {
               )}
             </List>
           </Collapse>
-          <Divider sx={{ bgcolor: "#e0e0e0", margin: "3px" }} />
-          <ListItem sx={{ padding: "0px" }}>
-            <ListItemButton disabled>
-              <ListItemIcon sx={{ minWidth: "30px" }}>
-                <HistoryIcon sx={{ color: "white" }} />
-              </ListItemIcon>
-              <ListItemText primary={"History"} sx={{ opacity: sidebarOpen ? 1 : 0 }} />
-            </ListItemButton>
-          </ListItem>
         </List>
       </Drawer>
     </Box>

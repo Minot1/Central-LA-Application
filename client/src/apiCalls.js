@@ -174,7 +174,7 @@ async function updateApplicationById(
   grade,
   faculty,
   working_hours,
-  status,
+  status = "Applied",
   post_id,
   answers,
   transcript
@@ -185,7 +185,7 @@ async function updateApplicationById(
     bodyFormData.append("working_hours", working_hours);
     bodyFormData.append("post_id", post_id);
     bodyFormData.append("answers", JSON.stringify(answers));
-    bodyFormData.append("status", "Applied");
+    bodyFormData.append("status", status);
     bodyFormData.append("grade", 0);
     bodyFormData.append("faculty", "-");
     bodyFormData.append("transcript", transcript);

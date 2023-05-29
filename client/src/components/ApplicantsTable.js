@@ -6,7 +6,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Typography, IconButton, Collapse, Snackbar, Grid, Button } from "@mui/material";
+import { Typography, IconButton, Collapse, Snackbar, Grid, Button, Divider } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
@@ -15,7 +15,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Box from "@mui/material/Box";
-import { getApplicationsByPost, updateApplicationById, getAnnouncement, getTranscript } from "../apiCalls";
+import { getApplicationsByPost, updateApplicationById, getAnnouncement, getTranscript, getApplicationByUsername, getAllAnnouncements } from "../apiCalls";
 import { useParams } from "react-router";
 import DownloadIcon from '@mui/icons-material/Download';
 
@@ -29,6 +29,9 @@ function CustomRow(props) {
   const [snackOpen, setSnackOpen] = React.useState(false);
   const [status, setStatus] = React.useState("");
   const [qAndA, setQAndA] = React.useState([]);
+  const [LaHistory, setLaHistory] = React.useState([]);
+  const [courseHistory, setCourseHistory] = React.useState([]);
+  const [announcements, setAnnouncements] = React.useState([]);
 
   useEffect(() => {
     var temp = [];
@@ -78,6 +81,31 @@ function CustomRow(props) {
     return modifiedStudentName;
   }
 
+  useEffect(() => {
+    getAllAnnouncements().then((res) => {
+      setAnnouncements(res);
+    });
+  }, [])
+  
+  useEffect(() => {
+    getApplicationByUsername(row.student_username).then((res) => {
+      setLaHistory(res.filter((application) => application.status.toLowerCase() == "applied"));
+
+      var tempList = [];
+      var tmp2 = announcements.filter((annc) => annc.id == row.post_id);
+      if (tmp2.length != 0) {
+        var title = tmp2[0].course_code;
+      }
+      res.map((application) => {
+        var tmp = announcements.filter((annc) => annc.id == application.post_id);
+        if (tmp.length != 0 && tmp[0].course_code == title) {
+          tempList.push(application);
+        }
+      });
+      setCourseHistory(tempList);
+    });
+  }, [announcements])
+
   return (
     <>
       <TableRow key={index + 1} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
@@ -119,17 +147,59 @@ function CustomRow(props) {
               <Grid container direction="column" alignItems="center" justifyContent="center">
                 {qAndA.map((element) => (
                   <Grid item container m={2}>
-                    <Grid item>{element[0]}:</Grid>
-                    <Grid item>{element[1]}</Grid>
+                  <Grid item>
+                    <Typography>{element[0]}:</Typography>
                   </Grid>
+                      <Grid item>
+                        <Typography>{element[1]}</Typography>
+                      </Grid>
+                      </Grid>
                 ))}
+                <Grid item container direction="row" alignItems="center" justifyContent="center" textAlign="center">
+                  <Grid item xs={6}>
+                    <Typography><strong>LA History</strong></Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography><strong>Course History</strong></Typography>
+                  </Grid>
+                </Grid>
+                <Grid item container direction="row" alignItems="center" justifyContent="space-evenly">
+                  <Grid item container direction="column" justifyContent="flex-start" alignItems="center" xs={6}>
+                    {LaHistory.map((application) => (
+                      <Grid item>
+                        {announcements.filter((annc) => annc.id == application.post_id).map((elem) => (
+                          <Typography>{elem.course_code}</Typography>
+                        ))}
+                      </Grid>
+                    ))}
+                    {(LaHistory.length == 0) && 
+                    <Grid>
+                      <Typography>None</Typography>
+                    </Grid>
+                    }
+                  </Grid>
+                  <Grid item container direction="column" justifyContent="flex-start" alignItems="center" xs={6}>
+                    {courseHistory.map((application) => (
+                      <Grid item>
+                        <Typography>{application.status} - {new Date(application.updated_at).toISOString().substring(0, 10)}</Typography>
+                      </Grid>
+                    ))}
+                    {(courseHistory.length == 0) && 
+                    <Grid>
+                      <Typography>None</Typography>
+                    </Grid>
+                    }
+                  </Grid>
+                  <Grid item container m={1}>
+                      </Grid>
+                </Grid>
               </Grid>
             </td>
           </Collapse>
         </TableCell>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={3}>
           <Collapse in={open} component="tr" style={{ display: "block" }}>
-            <Box sx={{ minWidth: 120, m: "10px" }} textAlign="center">
+            <Box sx={{ minWidth: 120, mY: "15px" }} textAlign="center">
               <Snackbar
                 open={snackOpen}
                 autoHideDuration={3000}
@@ -151,7 +221,7 @@ function CustomRow(props) {
                   <MenuItem value={"Interested"}>Interested</MenuItem>
                 </Select>
               </FormControl>
-              <Button variant="outlined" endIcon={<DownloadIcon />} sx={{ m: "15px" }} onClick={() => {
+              <Button variant="outlined" endIcon={<DownloadIcon />} sx={{ m: "20px", marginTop: "35px" }} onClick={() => {
                 getTranscript(row.id).then((res) => {
                   const file = new Blob(
                     [res], 
