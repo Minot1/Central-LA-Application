@@ -182,7 +182,7 @@ function Sidebar() {
               </Select>
             </FormControl>
           </Box>
-          <Button
+          {/* <Button
             sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
             variant="outlined"
             onClick={(e) => {
@@ -191,7 +191,7 @@ function Sidebar() {
             }}
           >
             Switch between Ins-Stu
-          </Button>
+          </Button> */}
           <Button
             sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
             endIcon={<LogoutIcon />}
