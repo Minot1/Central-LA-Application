@@ -138,6 +138,7 @@ class ApplicationController extends Controller
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
         $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
+        $result["term"] = Post::find($result["post_id"])->term;
         $result = json_encode($result, TRUE);
 
         return $result;
@@ -156,6 +157,7 @@ class ApplicationController extends Controller
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
             $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
+            $result["term"] = Post::find($result["post_id"])->term;
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -174,6 +176,7 @@ class ApplicationController extends Controller
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
             $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
+            $result["term"] = Post::find($result["post_id"])->term;
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -192,6 +195,7 @@ class ApplicationController extends Controller
             $student = Student::where('student_username', $result["student_username"])->value("name");
             $result["student_name"] = $student;
             $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $result["id"]);
+            $result["term"] = Post::find($result["post_id"])->term;
         }
         $results = json_encode($results, TRUE);
         return $results;
@@ -218,6 +222,7 @@ class ApplicationController extends Controller
         $student = Student::where('student_username', $result["student_username"])->value("name");
         $result["student_name"] = $student;
         $result["desired_courses"] = getGrade(Post::find($result["post_id"])->desired_courses, $id);
+        $result["term"] = Post::find($result["post_id"])->term;
         $result = json_encode($result, TRUE);
         return $result;
     }

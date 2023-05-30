@@ -32,6 +32,7 @@ function CustomRow(props) {
   const [LaHistory, setLaHistory] = React.useState([]);
   const [courseHistory, setCourseHistory] = React.useState([]);
   const [announcements, setAnnouncements] = React.useState([]);
+  const [courseTitle, setCourseTitle] = React.useState("");
 
   useEffect(() => {
     var temp = [];
@@ -88,23 +89,23 @@ function CustomRow(props) {
   }, [])
   
   useEffect(() => {
+    var tmp2 = announcements.filter((annc) => annc.id == row.post_id);
+    if (tmp2.length != 0) {
+      setCourseTitle(tmp2[0].course_code);
+    }
     getApplicationByUsername(row.student_username).then((res) => {
-      setLaHistory(res.filter((application) => application.status.toLowerCase() == "applied"));
+      setLaHistory(res.filter((application) => application.status.toLowerCase() == "accepted"));
 
       var tempList = [];
-      var tmp2 = announcements.filter((annc) => annc.id == row.post_id);
-      if (tmp2.length != 0) {
-        var title = tmp2[0].course_code;
-      }
       res.map((application) => {
         var tmp = announcements.filter((annc) => annc.id == application.post_id);
-        if (tmp.length != 0 && tmp[0].course_code == title) {
+        if (tmp.length != 0 && tmp[0].course_code == courseTitle && row.term != application.term) {
           tempList.push(application);
         }
       });
       setCourseHistory(tempList);
     });
-  }, [announcements])
+  }, [announcements, courseTitle])
 
   return (
     <>
@@ -155,16 +156,16 @@ function CustomRow(props) {
                       </Grid>
                       </Grid>
                 ))}
-                <Grid item container direction="row" alignItems="center" justifyContent="center" textAlign="center">
+                <Grid item container direction="row" alignItems="center" justifyContent="center">
                   <Grid item xs={6}>
                     <Typography><strong>LA History</strong></Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography><strong>Course History</strong></Typography>
+                    <Typography><strong>{courseTitle} History</strong></Typography>
                   </Grid>
                 </Grid>
                 <Grid item container direction="row" alignItems="center" justifyContent="space-evenly">
-                  <Grid item container direction="column" justifyContent="flex-start" alignItems="center" xs={6}>
+                  <Grid item container direction="column" justifyContent="flex-start" xs={6}>
                     {LaHistory.map((application) => (
                       <Grid item>
                         {announcements.filter((annc) => annc.id == application.post_id).map((elem) => (
@@ -178,10 +179,13 @@ function CustomRow(props) {
                     </Grid>
                     }
                   </Grid>
-                  <Grid item container direction="column" justifyContent="flex-start" alignItems="center" xs={6}>
+                  <Grid item container direction="column" justifyContent="flex-start" xs={6}>
+                    <Grid>
+                      <Typography variant="caption" color="gray">(Including rejected)</Typography>
+                    </Grid>
                     {courseHistory.map((application) => (
                       <Grid item>
-                        <Typography>{application.status} - {new Date(application.updated_at).toISOString().substring(0, 10)}</Typography>
+                        <Typography>{application.status} - {application.term}</Typography>
                       </Grid>
                     ))}
                     {(courseHistory.length == 0) && 
