@@ -22,34 +22,40 @@ const questionType = [
 
 const suggestedQuestions = [
   {
-    sValue: "Numeric Answer",
-    sQuestion: "Explain in detail why you want to be an LA for this course",
+    sValue: "Text Answer",
+    sQuestion: "Explain in detail why you want to be an LA for this course.",
     sMultiple: [],
     sBgColor: "#5FB3F6",
   },
   {
-    sValue: "Numeric Answer",
-    sQuestion: "Explain in detail why you are qualified for the position",
+    sValue: "Text Answer",
+    sQuestion: "Explain in detail why you are qualified for the position.",
     sMultiple: [],
     sBgColor: "#2196F3",
   },
   {
     sValue: "Text Answer",
-    sQuestion: "Previous teaching experiences",
+    sQuestion: "Previous teaching experiences:",
     sMultiple: [],
     sBgColor: "#5FB3F6",
   },
   {
-    sValue: "Numeric Answer",
-    sQuestion: "Bu dersi alırken en sevdiğiniz konu neydi? Sizi en çok zorlayan konu neydi?",
+    sValue: "Text Answer",
+    sQuestion: "What was your favorite topic while taking this course? What was the most challenging topic for you?",
     sMultiple: [],
     sBgColor: "#2196F3",
+  },
+  {
+    sValue: "Numeric Answer",
+    sQuestion: "How many CS courses did you take in previous terms?",
+    sMultiple: [],
+    sBgColor: "#5FB3F6",
   },
   {
     sValue: "Multiple Choice",
     sQuestion: "Soru saatine hazırlık için hangi günü/günleri özellikle kullanmayı düşünüyorsunuz?",
     sMultiple: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-    sBgColor: "#5FB3F6",
+    sBgColor: "#2196F3",
   },
 ];
 
@@ -410,6 +416,8 @@ function AddQuestion(props) {
                     "&:hover": {
                       backgroundColor: "#84BFF7",
                     },
+                    width: "100%",
+                    justifyContent: "space-between", 
                   }}
                   onClick={() => handleButtonClick(idx)}
                   disabled = {questions.length >= 20}

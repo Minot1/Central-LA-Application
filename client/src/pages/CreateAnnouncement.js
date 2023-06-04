@@ -258,6 +258,7 @@ function CreateAnnouncement() {
   }
 
   console.log(announcementDetails) //for debugging announcement details
+  console.log(courseCode.length) //for debugging announcement details
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -323,7 +324,7 @@ function CreateAnnouncement() {
                   if (newCourseCodeValue !== null) {
                     setCourseCodeValue(newCourseCodeValue);
                     handleCourseCodeAdd(newCourseCodeValue);
-                  }//change here
+                  }
                 }}
                 renderInput={(params) => (
                   <TextField
@@ -456,7 +457,7 @@ function CreateAnnouncement() {
                 maxRows={20}
                 sx={{ m: 2, width: 400 }}
                 onChange={handleInput}
-                required //to be contiuned maybe?
+                required 
               />
             </Grid>
             <Grid
@@ -567,6 +568,7 @@ function CreateAnnouncement() {
                       sx={{ mx: 2, mt: 1, mb: 2, width: 300 }}
                     />
                   )}
+                  disabled = {courseCode.length == 0} //if it creates some problems, delete it.
                 />
                 {selectedCourses.length > 0 &&
                   selectedCourses.map((courseSelected, i) => {
@@ -689,7 +691,7 @@ function CreateAnnouncement() {
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
-                  <ListItemText primary={"Currently selected term: " + term + ". If you want to change it, please use the selection on the top of the page."} />
+                  <ListItemText primary={`Currently selected term: "${term}". If you want to change it, please use the selection on the top of the page.`} />
                 </ListItem>
               </List>
             </Box>
