@@ -5,9 +5,14 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { getApplicationByUsername } from "../apiCalls";
@@ -80,6 +85,9 @@ function AnnouncementTable(props) {
   }, [props.tabValue]);
 
   //console.log(studentApplications[0].post_id);
+
+  const [open, setOpen] = useState(false);
+  const [selectedDescription, setSelectedDescription] = useState("");
 
   return (
     <TableContainer component={Paper}>
@@ -192,13 +200,56 @@ function AnnouncementTable(props) {
                   <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
                     {row.mingrade}
                   </TableCell>
-                  <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="left">
+                  <TableCell sx={{ borderBottom: "none" }} align="left">
                     {row.working_hour}
                   </TableCell>
-                  <TableCell sx={{ borderBottom: "none" }} align="left">
+                  {/* <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none", maxLines: 1}} align="left">
                     {row.description}
+                  </TableCell> */}
+                  <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none", maxWidth: "300px" }} align="left">
+                    {row.description.length > 100 ? (
+                      <>
+                        {selectedDescription === row.id ? (
+                          <Dialog
+                            open={open}
+                            onClose={() => {
+                              setOpen(false);
+                              setSelectedDescription("");
+                            }}
+                            BackdropProps={{
+                              onClick: (event) => event.stopPropagation() // Prevent closing when clicking on backdrop
+                            }}
+                          >
+                            <DialogTitle>Details</DialogTitle>
+                            <DialogContent>
+                              {row.description}
+                              <IconButton
+                                aria-label="close"
+                                onClick={() => {
+                                  setOpen(false);
+                                  setSelectedDescription("");
+                                }}
+                                sx={{ position: "absolute", top: 8, right: 8 }}
+                              >
+                                <CloseIcon />
+                              </IconButton>
+                            </DialogContent>
+                          </Dialog>
+                        ) : (
+                          <>
+                            {row.description.substr(0, 100)}...
+                            <Button onClick={() => {
+                              setOpen(true);
+                              setSelectedDescription(row.id);
+                            }}>Show More</Button>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      row.description
+                    )}
                   </TableCell>
-                  <TableCell sx={{ bgcolor: "#FAFAFA", borderBottom: "none" }} align="center">
+                  <TableCell sx={{ borderBottom: "none" }} align="center">
                     {tabValue === 0 ? (
                       !studentApplications.find((o) => o.post_id === row.id) ? new Date(row.deadline) > new Date() && (
                         <Button variant="contained" onClick={() => navigate("/apply/" + row.id, { replace: true })}>
@@ -206,7 +257,7 @@ function AnnouncementTable(props) {
                         </Button>
                       ) : (
                         new Date(row.deadline) > new Date() && (
-                          <Tooltip title="Edit your existing application" enterDelay={500} leaveDelay={200}>
+                          <Tooltip title="Edit your existing application." enterDelay={500} leaveDelay={200}>
                             <Button
                               variant="contained"
                               onClick={() => navigate("/edit-apply/" + row.id, { replace: true })}
@@ -230,15 +281,15 @@ function AnnouncementTable(props) {
                                 studentApplication.status === "Accepted"
                                   ? "green"
                                   : studentApplication.status === "Rejected"
-                                  ? "red"
-                                  : "orange",
+                                    ? "red"
+                                    : "orange",
                               color: "white",
                               pointerEvents: "none",
                               cursor: "default",
                             }}
                           >
                             {studentApplication.status.toLowerCase() === "applied" ||
-                            studentApplication.status.toLowerCase() === "interested"
+                              studentApplication.status.toLowerCase() === "interested"
                               ? "In Progress"
                               : studentApplication.status}
                           </Button>
