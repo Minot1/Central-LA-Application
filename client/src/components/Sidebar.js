@@ -102,7 +102,7 @@ function Sidebar() {
   };
 
   const handleTermSelect = (event) => {
-    dispatch(setTerm({term:event.target.value}));
+    dispatch(setTerm({ term: event.target.value }));
     setTermSelect(event.target.value);
   };
 
@@ -120,7 +120,7 @@ function Sidebar() {
   //     console.log(res);
   //   });
   // }, [])
-  
+
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -144,8 +144,19 @@ function Sidebar() {
                 m: 1,
                 minWidth: 150,
                 color: "white !important",
-                "& .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "white",
+                "& .MuiInputLabel-root": {
+                  color: "white",
+                },
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "white",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "white",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "white",
+                  },
                 },
                 "& .MuiSvgIcon-root": {
                   color: "white",
@@ -153,32 +164,44 @@ function Sidebar() {
               }}
               size="small"
             >
-              <InputLabel id="simple-select-label" sx={{ color: "white" }}>
+              <InputLabel id="simple-select-label" sx={{
+                color: termSelect !== "" ? "white" : "rgba(255, 255, 255, 0.6)",
+                "&.Mui-focused": {
+                  color: "white",
+                },
+              }}>
                 Select Term
               </InputLabel>
               <Select
                 id="simple-select"
                 labelId="simple-select-label"
-                label="Term"
+                label="Select Term"
                 onChange={handleTermSelect}
                 defaultValue={termSelect}
                 value={termSelect}
                 sx={{
                   height: "2.5rem",
                   color: "white",
-                  "& .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "white",
+                  "& .MuiInput-underline:before": {
+                    borderBottomColor: "white",
                   },
-                  "& .MuiSvgIcon-root": {
-                    color: "white",
+                  "& .MuiInput-underline:after": {
+                    borderBottomColor: "white",
+                  },
+                  "& .MuiInput-underline:hover:not(.Mui-disabled):before": {
+                    borderBottomColor: "white",
                   },
                 }}
               >
                 <MenuItem value="Fall 2022/23">Fall 2022/23</MenuItem>
                 <MenuItem value="Spring 2022/23">Spring 2022/23</MenuItem>
-                <MenuItem value="Summer 2023">Summer 2023</MenuItem>
+                <MenuItem value="Summer 2022/23">Summer 2022/23</MenuItem>
                 <MenuItem value="Fall 2023/24">Fall 2023/24</MenuItem>
                 <MenuItem value="Spring 2023/24">Spring 2023/24</MenuItem>
+                <MenuItem value="Summer 2023/24">Summer 2023/24</MenuItem>
+                <MenuItem value="Fall 2024/25">Fall 2024/25</MenuItem>
+                <MenuItem value="Spring 2024/25">Spring 2024/25</MenuItem>
+                <MenuItem value="Summer 2024/25">Summer 2024/25</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -193,9 +216,10 @@ function Sidebar() {
             Switch between Ins-Stu
           </Button> */}
           <Button
-            sx={{ backgroundColor: "#394263", color: "white", borderColor: "white", marginLeft: "auto" }}
+            sx={{color: "white", borderColor: "white", marginLeft: "auto" }}
             endIcon={<LogoutIcon />}
-            variant="outlined"
+            color= "error"
+            variant="contained"
             href="https://login.sabanciuniv.edu/cas/logout"
           >
             Log Out
