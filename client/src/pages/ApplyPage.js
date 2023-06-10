@@ -137,14 +137,14 @@ const ApplyPage = (props) => {
   return (
     <Box sx={{ display: "flex" }}>
       <Sidebar></Sidebar>
-      <Box component="main" sx={{ flexGrow: 1, p: 5 }}>
+      <Box component="main" sx={{ flexGrow: 1, m: 3 }}>
         <AppBarHeader />
-        <Grid container direction="column" alignItems="center" justifyContent="center" spacing={3}>
+        <Grid container direction="column" alignItems="center" justifyContent="center" paddingY={2}>
           <Grid item>
             <Typography variant="h4">{announcementInfo.course_code} LA Application</Typography>
             <Divider></Divider>
           </Grid>
-          <Grid item>
+          <Grid item sx={{ m: 2 }}>
             <TableContainer component={Paper}>
               <Table sx={{ minWidth: 500, border: 1.5, borderColor: "#cccccc" }} aria-label="simple table">
                 <TableBody>
@@ -167,12 +167,11 @@ const ApplyPage = (props) => {
           </Grid>
           {questions &&
             questions.map((question) => (
-              <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
-                <Grid item xs={2}></Grid>
-                <Grid item xs={2}>
-                  <Typography textAlign="center">{question.question}:</Typography>
+              <Grid item container direction="column" sx={{ border: 1, borderRadius: 3, borderColor: "#cccccc", backgroundColor: "#f5f5f5", marginY: 2, p: 2 }}>
+                <Grid item sx={{ m: 1 }}>
+                  <Typography>{question.question}:</Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item>
                   {question.type === "Multiple Choice" && (
                     <FormControl>
                       <RadioGroup
@@ -198,13 +197,13 @@ const ApplyPage = (props) => {
                       }}
                       multiline
                       fullWidth
+                      sx={{ backgroundColor: "white", display: "flex" }}
                     ></TextField>
                   )}
                 </Grid>
-                <Grid item xs={2}></Grid>
               </Grid>
             ))}
-          <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={4}>
+            <Grid item container direction="rows" alignItems="center" justifyContent="center" sx={{ m: 1, marginBottom: 3 }}>
             <Grid item xs={2}></Grid>
             <Grid item xs={2}>
               <Typography textAlign="center">Upload your transcript:</Typography>
