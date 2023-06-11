@@ -457,7 +457,7 @@ function CreateAnnouncement() {
                 maxRows={20}
                 sx={{ m: 2, width: 400 }}
                 onChange={handleInput}
-                required 
+                required
               />
             </Grid>
             <Grid
@@ -533,7 +533,7 @@ function CreateAnnouncement() {
               direction="row"
               justifyContent="start"
               alignItems="flex-start"
-              sx={{ my: 2}}
+              sx={{ my: 2 }}
             >
               <Typography sx={{ my: 2 }}>Desired Course Grade(s)<span style={{ color: 'red' }}>*</span>:</Typography>
               <Grid
@@ -542,7 +542,7 @@ function CreateAnnouncement() {
                 direction="column"
                 justifyContent="center"
                 alignItems="flex-start"
-                sx={{backgroundColor: selectedCourses.length === 0 ? "#FFF" : "#F5F5F5" }}
+                sx={{ backgroundColor: selectedCourses.length === 0 ? "#FFF" : "#F5F5F5" }}
               >
                 <Autocomplete
                   id="controllable-states-demo"
@@ -568,7 +568,7 @@ function CreateAnnouncement() {
                       sx={{ mx: 2, mt: 1, mb: 2, width: 300 }}
                     />
                   )}
-                  disabled = {courseCode.length == 0} //if it creates some problems, delete it.
+                  disabled={courseCode.length == 0} //if it creates some problems, delete it.
                 />
                 {selectedCourses.length > 0 &&
                   selectedCourses.map((courseSelected, i) => {
@@ -589,7 +589,7 @@ function CreateAnnouncement() {
                             </Typography>
                           </Avatar>
                         }
-                        color= {courseSelected === courseCode ? "error" : "default"}
+                        color={courseSelected === courseCode ? "error" : "default"}
                         sx={{ m: 1 }}
                         onDelete={() => handleCourseDelete(courseSelected)}
                       />
@@ -603,6 +603,9 @@ function CreateAnnouncement() {
               sx={{
                 backgroundColor: "#F2F2F2",
                 p: 2,
+                border: 1,
+                borderRadius: 3,
+                borderColor: "#cccccc",
               }}
             >
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -691,7 +694,11 @@ function CreateAnnouncement() {
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
-                  <ListItemText primary={`Currently selected term: "${term}". If you want to change it, please use the selection on the top of the page.`} />
+                  <ListItemText primary={
+                    <Typography variant="body1">
+                      Currently selected term: <strong>"{term}"</strong>. If you want to change it, please use "Select Term" on the top of the page.
+                    </Typography>
+                  } />
                 </ListItem>
               </List>
             </Box>

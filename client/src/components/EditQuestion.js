@@ -319,8 +319,11 @@ function EditQuestion(props) {
                     <Box sx={{
                         backgroundColor: '#F2F2F2',
                         px: 2,
+                        border: 1, 
+                        borderRadius: 3,
+                        borderColor: "#cccccc",
                     }}>
-                        <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 8, mb: 2, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
+                        <Typography variant='h5' sx={{ textDecoration: 'underline', mt: 2, mb: 1, fontWeight: 'bold', py: 2 }} >Suggested Questions:</Typography>
                         {suggestedQuestions.map((e, idx) => {
                             return (
                                 <Button

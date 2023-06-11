@@ -584,6 +584,9 @@ function EditAnnouncement() {
               sx={{
                 backgroundColor: "#F2F2F2",
                 p: 2,
+                border: 1, 
+                borderRadius: 3,
+                borderColor: "#cccccc",
               }}
             >
               <Typography variant="h6" sx={{ fontWeight: "bold" }}>
@@ -630,7 +633,11 @@ function EditAnnouncement() {
                   <ListItemIcon sx={{ minWidth: "unset", marginRight: "8px" }}>
                     <FiberManualRecordIcon fontSize="inherit" />
                   </ListItemIcon>
-                  <ListItemText primary={`Currently selected term: "${term}". If you want to change it, please use the selection on the top of the page.`} />
+                  <ListItemText primary={
+                    <Typography variant="body1">
+                      Currently selected term: <strong>"{term}"</strong>. If you want to change it, please use "Select Term" on the top of the page.
+                    </Typography>
+                  } />
                 </ListItem>
               </List>
             </Box>

@@ -22,6 +22,8 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import SendIcon from "@mui/icons-material/Send";
+import CloseIcon from "@mui/icons-material/Close";
 import { useSelector } from "react-redux";
 
 const ApplyPage = (props) => {
@@ -166,12 +168,12 @@ const ApplyPage = (props) => {
             <Typography variant="h5">Questions</Typography>
           </Grid>
           {questions &&
-            questions.map((question) => (
+            questions.map((question, index) => (
               <Grid item container direction="column" sx={{ border: 1, borderRadius: 3, borderColor: "#cccccc", backgroundColor: "#f5f5f5", marginY: 2, p: 2 }}>
                 <Grid item sx={{ m: 1 }}>
-                  <Typography>{question.question}:</Typography>
+                  <Typography>Question {index + 1} - {question.question}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid item sx={{ m: 1 }}>
                   {question.type === "Multiple Choice" && (
                     <FormControl>
                       <RadioGroup
@@ -223,12 +225,12 @@ const ApplyPage = (props) => {
           </Grid>
           <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={12}>
             <Grid item>
-              <Button variant="contained" onClick={() => navigate("/home", { replace: true })} color="error">
+              <Button variant="contained" startIcon={<CloseIcon />} onClick={() => navigate("/home", { replace: true })} color="error">
                 Cancel
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="success" onClick={onSubmit}>
+              <Button variant="contained" startIcon={<SendIcon />} color="success" onClick={onSubmit}>
                 Submit
               </Button>
             </Grid>

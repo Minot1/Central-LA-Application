@@ -19,6 +19,8 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import UpdateIcon from '@mui/icons-material/Update';
+import CloseIcon from "@mui/icons-material/Close";
 import Sidebar from "../components/Sidebar";
 import AppBarHeader from "../components/AppBarHeader";
 import { useNavigate, useParams } from "react-router";
@@ -246,9 +248,9 @@ function EditApplyPage() {
             questions.map((question, index) => (
               <Grid item container direction="column" sx={{ border: 1, borderRadius: 3, borderColor: "#cccccc", backgroundColor: "#f5f5f5", marginY: 2, p: 2 }}>
                 <Grid item sx={{ m: 1 }}>
-                  <Typography>{question.question}:</Typography>
+                  <Typography>Question {index + 1} - {question.question}</Typography>
                 </Grid>
-                <Grid item>
+                <Grid item sx={{ m: 1 }}>
                   {question.type === "Multiple Choice" && (
                     <FormControl>
                       <RadioGroup
@@ -311,13 +313,13 @@ function EditApplyPage() {
           </Grid>
           <Grid item container direction="rows" alignItems="center" justifyContent="center" spacing={12}>
             <Grid item>
-              <Button variant="contained" onClick={() => navigate("/home", { replace: true })} color="error">
+              <Button variant="contained" startIcon={<CloseIcon />} onClick={() => navigate("/home", { replace: true })} color="error">
                 Cancel
               </Button>
             </Grid>
             <Grid item>
-              <Button variant="contained" color="success" onClick={onSubmit}>
-                Submit
+              <Button variant="contained" startIcon={<UpdateIcon />} color="success" onClick={onSubmit}>
+                Update
               </Button>
             </Grid>
           </Grid>
